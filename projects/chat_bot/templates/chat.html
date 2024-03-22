@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot Interface</title>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    {% load static %}
+    <link href="{% static 'css/app.css' %}" rel="stylesheet">
+</head>
+<body>
+    <!-- Chatbot button -->
+    <div class="chatbot-button">
+        <button id="openChatbot">チャットボットを使う</button>
+    </div>
+    <!-- Chatbot window -->
+    <div class="chatbot-window">
+        <div class="chatbot-header">
+            <p>チャットボット サポート</p>
+            <button id="closeChatbot">x</button>
+        </div>
+        <div class="chatbot-messages" id="messages"></div>
+        <div class="chatbot-area">
+            <div class="chatbot-input">
+                <input type="text" id="userInput" placeholder="質問...">
+                <button id="sendMessage">送信</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#openChatbot').click(function() {
+                $('#openChatbot').fadeOut();
+                $('.chatbot-window').fadeIn();
+            });
+            $('#closeChatbot').click(function() {
+                $('.chatbot-window').fadeOut();
+                $('#openChatbot').fadeIn();
+            });
+            $('#sendMessage').click(function() {
+                let message = $('#userInput').val();
+                $('#messages').append('<div>あなた: ' + message + '</div>');
+                $.post( "{% url 'ask' %}" , { message: message, csrfmiddlewaretoken: '{{ csrf_token }}' }, function(data) {
+                    $('#messages').append('<div>Bot: ' + data.message + '</div>');
+                });
+                $('#userInput').val(''); // clear input
+            });
+        });
+    </script>
+</body>
+</html>

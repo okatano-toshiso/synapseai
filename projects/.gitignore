@@ -1,4 +1,5 @@
 node_modules/
-core/
+core/*
+!core/urls.py
 .env
 VENV_NAME/
