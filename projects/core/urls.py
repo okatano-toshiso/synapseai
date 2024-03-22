@@ -20,5 +20,6 @@ urlpatterns = [
     path('chat_app/', include('chat_app.urls')),
     path("polls/", include("polls.urls")),
     path('admin/', admin.site.urls),
-    path('chat_bot/', include('chat_bot.urls'))
+    path('chat_bot/', include('chat_bot.urls')),
+    path('generate_image/', include('generate_image.urls'))
 ]
