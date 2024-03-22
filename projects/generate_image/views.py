@@ -18,7 +18,7 @@ def index(request):
     """
 
     # 応答結果
-    img_results = ""
+    image_url = ""
 
     if request.method == "POST":
         # ChatGPTボタン押下時

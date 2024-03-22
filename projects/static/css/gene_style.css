@@ -1,0 +1,36 @@
+body {
+    width: calc(100% - 60px);
+    background-color: #000000;
+    color: #ffffff;
+}
+.title {
+    width: auto;
+    margin: 0 auto;
+    padding: 30px 15px;
+    text-align: center;
+}
+.main_area {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    margin: 0 auto;
+    width: 100%;
+    text-align: center;
+}
+.message_area {
+    width: 50%;
+}
+.message_area textarea{
+    width: calc(100% - 30px);
+}
+.image_area {
+    overflow: hidden;
+    width: 50%;
+    border-left: 2px solid #fff;
+    text-align: center;
+}
+.image_area > .image_size {
+    margin: 0 auto;
+    width: calc(100% - 200px);
+    max-width: 320px;
+}

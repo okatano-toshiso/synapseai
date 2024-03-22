@@ -2,15 +2,28 @@
 
 <head>
     <meta charset='utf-8' />
+    {% load static %}
+    <link href="{% static 'css/gene_style.css' %}" rel="stylesheet">
 </head>
 
 <body>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">画像生成</button>
-    </form>
-    <img src="{{ img_results }}" style = "width:640px" />
+    <h1 class="title">画像生成</h1>
+    <main class="main_area">
+        <section class="message_area">
+            <form method="POST">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">画像生成</button>
+            </form>
+        </section>
+        <section class="image_area">
+            {% if img_results %}
+                <img src="{{ img_results }}" class = "image_size" />
+            {% else %}
+                <p>画像が出力されます。</p>
+            {% endif %}
+        </section>
+    </main>
 </body>
 
 </html>
