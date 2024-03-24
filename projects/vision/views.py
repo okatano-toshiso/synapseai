@@ -38,10 +38,10 @@ def index(request):
             client = OpenAI(
                 api_key = OPENAI_API_KEY,
             )
+            image_path = "uploads/demo.jpg"
             def encode_image(image_path):
                 with open(image_path, "rb") as image_file:
                     return base64.b64encode(image_file.read()).decode('utf-8')
-            image_path = "uploads/demo.jpg"
             base64_image = encode_image(image_path)
             headers = {
             "Content-Type": "application/json",
