@@ -1,0 +1,37 @@
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    {% load static %}
+    <link href="{% static 'css/gene_style.css' %}" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <a href="{{ domain }}" class="btn btn-primary">TOP</a>
+    </header>
+    <h1 class="title">画像解析</h1>
+    <main class="main_area">
+        <section class="image_area">
+            {% if image_path %}
+                <img src="{{ domain }}{{ image_path }}" class = "image_size" />
+            {% else %}
+                <form method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <input type="file" name="image" accept="image/jpeg">
+                    <button type="submit">アップロード</button>
+                </form>
+            {% endif %}
+        </section>
+        <section class="message_area">
+            {% if img_results %}
+                {{ img_results }}
+            {% else %}
+                <p>説明が出力されます。</p>
+            {% endif %}
+        </section>
+    </main>
+</body>
+
+</html>

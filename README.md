@@ -25,7 +25,9 @@ python manage.py runserver
  deactivate
 ```
 
-4.　create app
+4. create app
 
-
+```
+ python manage.py startapp {myapp}
+```
 

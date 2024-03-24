@@ -5,3 +5,5 @@ VENV_NAME/
 */migrations/*
 */__pycache__/*
 test
+*/*/*.pyc
+*.pyc
