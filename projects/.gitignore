@@ -1,6 +1,5 @@
 node_modules/
-core/*
-!core/urls.py
+core/wsgi.py
 .env
 VENV_NAME/
 */migrations/*
