@@ -18,7 +18,7 @@ def index(request):
     """
     生成AI画像解析
     """
-
+    domain = request.build_absolute_uri('/')
     file_path = 'demo.jpg'
     if default_storage.exists(file_path):
         default_storage.delete(file_path)
@@ -39,7 +39,7 @@ def index(request):
                 api_key = OPENAI_API_KEY,
             )
 
-            image_path = "uploads/demo.jpg"
+            image_path = domain + "uploads/demo.jpg"
             def encode_image(image_path):
                 with open(image_path, "rb") as image_file:
                     return base64.b64encode(image_file.read()).decode('utf-8')
@@ -76,7 +76,7 @@ def index(request):
     else:
         form = ChatForm()
 
-    domain = request.build_absolute_uri('/')
+
     template = loader.get_template('vision/index.html')
     context = {
         'form': form,
