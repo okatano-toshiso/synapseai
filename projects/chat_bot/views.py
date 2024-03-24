@@ -46,4 +46,5 @@ def ask(request):
     request.session['conversation'] = conversation     # 更新された会話をセッションに保存
     return JsonResponse({'message': bot_response})
 def chat_view(request):
-    return render(request, 'chat.html')
+    full_url = request.build_absolute_uri('/')
+    return render(request, 'chat.html', {'domain': full_url})

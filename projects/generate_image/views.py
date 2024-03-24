@@ -51,9 +51,11 @@ def index(request):
     else:
         form = ChatForm()
 
+    domain = request.build_absolute_uri('/')
     template = loader.get_template('gene_img/index.html')
     context = {
         'form': form,
+        'domain': domain,
         'img_results': image_url
     }
     return HttpResponse(template.render(context, request))

@@ -11,10 +11,13 @@
     <form method="POST">
         {% csrf_token %}
         {{ form.as_p }}
-        <button type="submit">ChatGPT</button>
+        <button type="submit">校正する</button>
     </form>
 
     {{ chat_results }}
+
+    <hr />
+    あとでPOSTするAPIを実装する。（pip install tweepy）
 </body>
 
 </html>

@@ -24,3 +24,8 @@ python manage.py runserver
 ```
  deactivate
 ```
+
+4.　create app
+
+
+

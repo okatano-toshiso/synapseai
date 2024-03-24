@@ -10,7 +10,7 @@ def index(request):
         load_dotenv(dotenv_path)
 
     # Access the API key from the environment
-    OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
+    OPENAI_API_KEY = os.environ['OPENAI_API_SNS_KEY']
     """
     チャット画面
     """
@@ -34,11 +34,22 @@ def index(request):
             )
             # ChatGPT
             response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
+                model="gpt-4",
                 messages=[
                     {
                         "role": "system",
-                        "content": "日本語で応答してください"
+                        "content": """
+                        下記規則に従って文章を書き直してください。
+                        ・日本語で応答してください。
+                        ・140文字以内に書き直してください。
+                        ・差別的な表現があったら書き直してください。
+                        ・不適切な表現があったら書き直してください。
+                        ・暴力的な表現があれば削除してください。
+                        ・性的な表現があれば削除してください。
+                        ・できるだけ丁寧な言葉遣いに書き直してください。
+                        そして校正した文章だけ回答してください。説明などは一切しないでください。
+                        なおした文章だけを返してください。
+                        """
                     },
                     {
                         "role": "user",
@@ -53,7 +64,7 @@ def index(request):
         form = ChatForm()
 
     domain = request.build_absolute_uri('/')
-    template = loader.get_template('chat_app/index.html')
+    template = loader.get_template('sns_texts/index.html')
     context = {
         'form': form,
         'domain': domain,
