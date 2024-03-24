@@ -26,7 +26,7 @@ def index(request):
     # 応答結果
     img_results = ""
     image_path = ""
-
+    domain = request.build_absolute_uri('/')
     if request.method == "POST":
         form = ChatForm(request.POST, request.FILES)
         if form.is_valid():
@@ -38,7 +38,7 @@ def index(request):
             client = OpenAI(
                 api_key = OPENAI_API_KEY,
             )
-            image_path = "uploads/demo.jpg"
+            image_path = domain + "/uploads/demo.jpg"
             def encode_image(image_path):
                 with open(image_path, "rb") as image_file:
                     return base64.b64encode(image_file.read()).decode('utf-8')
