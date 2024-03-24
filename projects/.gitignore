@@ -3,3 +3,6 @@ core/*
 !core/urls.py
 .env
 VENV_NAME/
+*/migrations/*
+*/__pycache__/*
+test
