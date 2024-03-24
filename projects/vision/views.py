@@ -26,7 +26,7 @@ def index(request):
     # 応答結果
     img_results = ""
     image_path = ""
-    domain = request.build_absolute_uri('/')
+
     if request.method == "POST":
         form = ChatForm(request.POST, request.FILES)
         if form.is_valid():
@@ -41,7 +41,7 @@ def index(request):
             def encode_image(image_path):
                 with open(image_path, "rb") as image_file:
                     return base64.b64encode(image_file.read()).decode('utf-8')
-            image_path = domain + "uploads/demo.jpg"
+            image_path = "uploads/demo.jpg"
             base64_image = encode_image(image_path)
             headers = {
             "Content-Type": "application/json",
