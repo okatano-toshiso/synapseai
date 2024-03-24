@@ -39,9 +39,9 @@ def index(request):
                 api_key = OPENAI_API_KEY,
             )
 
-            image_path = domain + "uploads/demo.jpg"
+            image_path = "uploads/demo.jpg"
             def encode_image(image_path):
-                with open(domain + "uploads/demo.jpg", "rb") as image_file:
+                with open(image_path, "rb") as image_file:
                     return base64.b64encode(image_file.read()).decode('utf-8')
             base64_image = encode_image(image_path)
             headers = {
