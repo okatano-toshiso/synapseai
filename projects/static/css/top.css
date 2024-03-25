@@ -29,7 +29,7 @@ body {
     width: calc(100% - 160px);
     max-width: 1028px;
     margin: 0 auto;
-    padding: 60px 0;
+    padding: 60px 0 180px;
 }
 .contents_area {
     display: flex;
