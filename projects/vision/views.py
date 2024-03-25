@@ -41,7 +41,7 @@ def index(request):
             )
 
             image_path = "uploads/demo.jpg"
-            full_path = os.path.join(settings.MEDIA_ROOT, mage_path)
+            full_path = os.path.join(settings.MEDIA_ROOT, image_path)
 
             if os.path.exists(full_path):
                 def encode_image(image_path):
