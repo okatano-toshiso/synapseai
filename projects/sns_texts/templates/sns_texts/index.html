@@ -2,22 +2,38 @@
 
 <head>
     <meta charset='utf-8' />
+    {% load static %}
+    <link href="{% static 'css/top.css' %}" rel="stylesheet">
+    <link href="{% static 'css/layout.css' %}" rel="stylesheet">
 </head>
 
-<body>
-    <header>
-        <a href="{{ domain }}" class="btn btn-primary">TOP</a>
-    </header>
-    <form method="POST">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">校正する</button>
-    </form>
-
-    {{ chat_results }}
-
-    <hr />
-    あとでPOSTするAPIを実装する。（pip install tweepy）
+<body class="layout">
+    <main>
+        <header class="header">
+            <a href="{{ domain }}" class="link"><h1 class="title">Synapse AI</h1></a>
+            <h2 class="title">CorrectSNS</h2>
+        </header>
+        <section class="contents">
+            <div class="contents_area">
+                <article class="sentence">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit">FIX</button>
+                    </form>
+                </article>
+                <article class="result">
+                    <p class="result_box_text">
+                        {{ chat_results }}
+                    </p>
+                    <p>※ SNS_APIで送信できるようにする</p>
+                </article>
+            </div>
+        </section>
+        <footer class="footer">
+            <p class="text">toshihiro.okada</p>
+        </footer>
+    </main>
 </body>
 
 </html>
