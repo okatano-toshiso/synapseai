@@ -18,6 +18,8 @@ jobs:
           key: ${{ secrets.DEPLOY_PRIVATE_KEY }}
           script: |
             cd ${{ secrets.DEPLOY_DIR }}
+            git checkout .
             git pull origin main
             sudo /opt/bitnami/ctlscript.sh restart apache
-            
+            chmod 767 /opt/bitnami/synapseai/synapseai/projects
+            chmod 646 /opt/bitnami/synapseai/synapseai/projects/db.sqlite3

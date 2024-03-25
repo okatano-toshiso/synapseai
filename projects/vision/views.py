@@ -40,10 +40,14 @@ def index(request):
             )
 
             image_path = "uploads/demo.jpg"
-            def encode_image(image_path):
-                with open(image_path, "rb") as image_file:
-                    return base64.b64encode(image_file.read()).decode('utf-8')
-            base64_image = encode_image(image_path)
+            full_path = os.path.join(settings.MEDIA_ROOT, mage_path)
+
+            if os.path.exists(full_path):
+                def encode_image(image_path):
+                    with open(image_path, "rb") as image_file:
+                        return base64.b64encode(image_file.read()).decode('utf-8')
+                base64_image = encode_image(image_path)
+
             headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {OPENAI_API_KEY}"

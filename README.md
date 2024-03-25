@@ -31,3 +31,8 @@ python manage.py runserver
  python manage.py startapp {myapp}
 ```
 
+5. venv start
+
+```
+ source test/bin/activate
+```
