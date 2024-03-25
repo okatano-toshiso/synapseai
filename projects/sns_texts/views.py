@@ -10,7 +10,7 @@ def index(request):
         load_dotenv(dotenv_path)
 
     # Access the API key from the environment
-    OPENAI_API_KEY = os.environ['OPENAI_API_SNS_KEY']
+    OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
     """
     チャット画面
     """
@@ -34,7 +34,7 @@ def index(request):
             )
             # ChatGPT
             response = client.chat.completions.create(
-                model="gpt-4",
+                model="gpt-3.5-turbo",
                 messages=[
                     {
                         "role": "system",
