@@ -14,7 +14,7 @@
     <main class="main_area">
         <section class="image_area">
             {% if image_path %}
-                <img src="{{ domain }}{{ image_path }}" class = "image_size" />
+                <img src="{{ domain }}uploads/demo.jpg" class = "image_size" />
             {% else %}
                 <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}

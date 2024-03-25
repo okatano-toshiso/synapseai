@@ -40,10 +40,9 @@ def index(request):
                 api_key = OPENAI_API_KEY,
             )
 
-            image_path = "uploads/demo.jpg"
-            # full_path = os.path.join(settings.MEDIA_ROOT, image_path)
+            image_path = settings.BASE_DIR / "uploads/demo.jpg"
 
-            # if os.path.exists(full_path):
+            print(image_path)
             def encode_image(image_path):
                 with open(image_path, "rb") as image_file:
                     return base64.b64encode(image_file.read()).decode('utf-8')
