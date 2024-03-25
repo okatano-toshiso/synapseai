@@ -1,51 +1,62 @@
 <html>
-  <head> </head>
-  <body>
-    <h1>生成AI（デザインは考案中）</h1>
-    <section>
-      <ul>
-        <li>
-          <p>
-            <a href="/chat_app/">文章生成</a>
-          </p>
-          <p>
-            文章生成AIを使用したシンプルなアプリ
-          </p>
-        </li>
-        <li>
-          <p>
-            <a href="/generate_image/">画像生成</a>
-          </p>
-          <p>
-            画像生成AI。指定したものを描画してくれる
-          </p>
-        </li>
-
-        <li>
-          <p>
-            <a href="/sns_texts/">SNS文章校正_X用</a>
-          </p>
-          <p>
-            SNS炎上防止用に文章を校正してPOSTしてくれる（X用）
-          </p>
-        </li>
-        <li>
-          <p>
-            <a href="/chat_bot/chat/">チャットボット</a>
-          </p>
-          <p>
-            会話型文章生成AI。名前、電話番号などを聴取するようにプロンプトに加えれば、情報入手フォームになれる
-          </p>
-        </li>
-        <li>
-          <p>
-            <a href="/vision/">画像解析</a></li>
-          </p>
-          <p>
-            アップした画像が何の画像なのかを解析してくれる。
-            冷蔵庫の中身を写真に撮って、何の料理ができるのか、レシートを撮影して家計簿アプリとか。いろいろできそう。
-          </p>
-      </ul>
-    </section>
-  </body>
+    <head>
+        <meta charset='utf-8' />
+        {% load static %}
+        <link href="{% static 'css/top.css' %}" rel="stylesheet">
+    </head>
+    <body>
+        <main class="main">
+            <header class="header">
+                <h1 class="title">Synapse AI</h1>
+            </header>
+            <figure class="key_visual">
+                <img src="{% static 'img/ai.jpg' %}" class="image_size" alt="" />
+            </figure>
+            <section class="contents">
+                <div class="row">
+                    <h2 class="title">テキスト生成</h2>
+                    <ul class="contents_area">
+                        <li class="contents_box">
+                            <p>
+                                <a href="/chat_app/">文章生成</a>
+                            </p>
+                            <p class="text">文章生成AIを使用したシンプルなアプリ</p>
+                        </li>
+                        <li class="contents_box">
+                            <p>
+                                <a href="/sns_texts/">SNS文章校正_X用</a>
+                            </p>
+                            <p class="text">SNS炎上防止用に文章を校正してPOSTしてくれる（X用）</p>
+                        </li>
+                        <li class="contents_box">
+                            <p>
+                                <a href="/chat_bot/chat/">チャットボット</a>
+                            </p>
+                            <p class="text">会話型文章生成AI。名前、電話番号などを聴取するようにプロンプトに加えれば、情報入手フォームになれる</p>
+                        </li>
+                    </ul>
+                </div>
+                <div class="row">
+                    <h2 class="title">画像生成</h2>
+                    <ul class="contents_area">
+                        <li class="contents_box">
+                            <p>
+                                <a href="/generate_image/">画像生成</a>
+                            </p>
+                            <p class="text">画像生成AI。指定したものを描画してくれる</p>
+                        </li>
+                        <li class="contents_box">
+                            <p>
+                                <a href="/vision/">画像解析</a>
+                            </p>
+                            <p class="text">アップした画像が何の画像なのかを解析してくれる。 冷蔵庫の中身を写真に撮って、何の料理ができるのか、レシートを撮影して家計簿アプリとか。いろいろできそう。</p>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <footer class="footer">
+                <p class="text">toshihiro.okada</p>
+            </footer>
+        </main>
+    </body>
 </html>
