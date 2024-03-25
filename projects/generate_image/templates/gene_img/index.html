@@ -3,30 +3,38 @@
 <head>
     <meta charset='utf-8' />
     {% load static %}
-    <link href="{% static 'css/gene_style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/top.css' %}" rel="stylesheet">
+    <link href="{% static 'css/layout.css' %}" rel="stylesheet">
 </head>
 
-<body>
-    <header>
-        <a href="{{ domain }}" class="btn btn-primary">TOP</a>
-    </header>
-    <h1 class="title">画像生成</h1>
-    <main class="main_area">
-        <section class="message_area">
-            <form method="POST">
-                {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit">画像生成</button>
-            </form>
-        </section>
-        <section class="image_area">
-            {% if img_results %}
-                <img src="{{ img_results }}" class = "image_size" />
-            {% else %}
-                <p>画像が出力されます。</p>
-            {% endif %}
+<body class="layout">
+    <main>
+        <header class="header">
+            <a href="{{ domain }}" class="link"><h1 class="title">Synapse AI</h1></a>
+            <h2 class="title">画像生成</h2>
+        </header>
+        <section class="contents">
+            <div class="contents_area">
+                <article class="sentence">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit">CREATE</button>
+                    </form>
+                </article>
+                <article class="result">
+                    {% if img_results %}
+                        <img src="{{ img_results }}" class = "image_size" />
+                    {% else %}
+                        <p>画像が出力されます。</p>
+                    {% endif %}
+                </article>
+            </div>
         </section>
     </main>
+    <footer class="footer">
+        <p class="text">toshihiro.okada</p>
+    </footer>
 </body>
 
 </html>

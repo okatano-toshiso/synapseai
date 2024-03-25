@@ -22,3 +22,25 @@
 .result_box_text{
     padding: 10px;
 }
+
+.image_size {
+    width: 480px;
+    margin: 0 auto;
+}
+
+.result_box_message {
+    width: calc(100% - 60px);
+    height: 640px;
+    padding: 10px;
+    margin: 0 auto;
+    background-color: #fff;
+    overflow-y: scroll;
+    text-align: left;
+}
+
+.analys .contents_box {
+    position: relative;
+    display: block;
+    width: calc(100% / 2);
+    text-align: center;
+}
