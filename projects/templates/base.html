@@ -1,0 +1,35 @@
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset='utf-8' />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% load static %}
+        <link href="{% static 'css/top.css' %}" rel="stylesheet">
+        <link href="{% static 'css/layout.css' %}" rel="stylesheet">
+        <link href="{% static 'css/base.css' %}" rel="stylesheet">
+        {% if app_name == "chat_bot" %}
+            <link href="{% static 'css/app.css' %}" rel="stylesheet">
+        {% endif %}
+    </head>
+    <body class="layout">
+        <header class="header">
+            <div class="header_area">
+                <div class="logo_title">
+                    <img src="{% static 'img/logo.png' %}" class="logo_size" alt="" />
+                </div>
+                <h1 class="site_title">
+                    <a href="{{ domain }}" class="link">Synapse AI</a>
+                </h1>
+            </div>
+        </header>
+        {% block content %}
+        {% endblock %}
+        {% if not app_name == "chat_bot" %}
+            <footer class="footer">
+                <p class="text">nuevo.jp</p>
+            </footer>
+        {% endif %}
+    </body>
+</html>

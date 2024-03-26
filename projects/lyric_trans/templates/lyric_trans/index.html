@@ -1,41 +1,25 @@
-<html>
-
-<head>
-    <meta charset='utf-8' />
-    {% load static %}
-    <link href="{% static 'css/top.css' %}" rel="stylesheet">
-    <link href="{% static 'css/layout.css' %}" rel="stylesheet">
-</head>
-
-<body class="lyric_trans layout">
-    <main>
-        <header class="header">
-            <a href="{{ domain }}" class="link"><h1 class="title">Synapse AI</h1></a>
-            <h2 class="title">Lyric_Trans</h2>
-        </header>
-        <section class="contents">
-            <p>DEEPLのAPIを使って洋楽の英語の歌詞の翻訳を読みやすい形でアウトプット。上限は2000文字まで</p>
-            <div class="contents_area">
-                <article class="sentence">
-                    <h3>英語歌詞</h2>
-                    <form method="POST">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit">翻訳</button>
-                    </form>
-                </article>
-                <article class="result">
-                    <h3>翻訳後（元文と翻訳文）</h2>
-                    <p class="result_box_text">
-                        {{ chat_results|safe }}
-                    </p>
-                </article>
-            </div>
-        </section>
-    </main>
-    <footer class="footer">
-        <p class="text">nuevo.jp</p>
-    </footer>
-</body>
-
-</html>
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+<main class="{{ app_name }}" >
+    <section class="contents">
+        <p class="message">DEEPLのAPIを使って洋楽の英語の歌詞の翻訳を読みやすい形でアウトプット。上限は2000文字まで</p>
+        <div class="contents_area">
+            <article class="sentence">
+                <h3>Lyrics</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">translation</button>
+                </form>
+            </article>
+            <article class="result">
+                <h3>Original and Transfer</h2>
+                <p class="result_box_text">
+                    {{ chat_results|safe }}
+                </p>
+            </article>
+        </div>
+    </section>
+</main>
+{% endblock %}

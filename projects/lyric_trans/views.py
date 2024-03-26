@@ -40,9 +40,11 @@ def index(request):
     trans_results = trans_results.replace("\n", "<br>")
     domain = request.build_absolute_uri('/')
     template = loader.get_template('lyric_trans/index.html')
+    app_name = 'lyric_trans'
     context = {
         'form': form,
         'domain': domain,
+        'app_name': app_name,
         'chat_results': trans_results
     }
     return HttpResponse(template.render(context, request))

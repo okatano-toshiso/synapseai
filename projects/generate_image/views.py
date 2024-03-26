@@ -56,6 +56,7 @@ def index(request):
     context = {
         'form': form,
         'domain': domain,
+        'app_name': "generate_image",
         'img_results': image_url
     }
     return HttpResponse(template.render(context, request))

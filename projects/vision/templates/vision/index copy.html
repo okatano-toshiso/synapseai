@@ -1,26 +1,17 @@
-<!-- templates/base.html -->
-<!DOCTYPE html>
-<html lang="ja">
+<html>
+
 <head>
     <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     {% load static %}
     <link href="{% static 'css/top.css' %}" rel="stylesheet">
     <link href="{% static 'css/layout.css' %}" rel="stylesheet">
-    <link href="{% static 'css/base.css' %}" rel="stylesheet">
 </head>
+
 <body class="analys layout">
     <main>
         <header class="header">
-            <div class="header_area">
-                <div class="logo_title">
-                    <img src="{% static 'img/logo.png' %}" class="logo_size" alt="" />
-                </div>
-                <h1 class="site_title">
-                    <a href="{{ domain }}" class="link">Synapse AI</a>
-                </h1>
-            </div>
+            <a href="{{ domain }}" class="link"><h1 class="title">Synapse AI</h1></a>
+            <h2 class="title">画像解析</h2>
         </header>
         <section class="contents">
             <div class="contents_area">

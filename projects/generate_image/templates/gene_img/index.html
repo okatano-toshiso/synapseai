@@ -1,40 +1,28 @@
-<html>
-
-<head>
-    <meta charset='utf-8' />
-    {% load static %}
-    <link href="{% static 'css/top.css' %}" rel="stylesheet">
-    <link href="{% static 'css/layout.css' %}" rel="stylesheet">
-</head>
-
-<body class="layout">
-    <main>
-        <header class="header">
-            <a href="{{ domain }}" class="link"><h1 class="title">Synapse AI</h1></a>
-            <h2 class="title">画像生成</h2>
-        </header>
-        <section class="contents">
-            <div class="contents_area">
-                <article class="sentence">
-                    <form method="POST">
-                        {% csrf_token %}
-                        {{ form.as_p }}
-                        <button type="submit">CREATE</button>
-                    </form>
-                </article>
-                <article class="result">
-                    {% if img_results %}
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+<main class="{{ app_name }} lyric_trans" >
+    <section class="contents">
+        <p class="message">Image Generation API</p>
+        <div class="contents_area">
+            <article class="sentence">
+                <h3>Prompt</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">create</button>
+                </form>
+            </article>
+            <article class="result">
+                {% if img_results %}
+                    <figure class="image_frame">
                         <img src="{{ img_results }}" class = "image_size" />
-                    {% else %}
-                        <p>画像が出力されます。</p>
-                    {% endif %}
-                </article>
-            </div>
-        </section>
-    </main>
-    <footer class="footer">
-        <p class="text">nuevo.jp</p>
-    </footer>
-</body>
-
-</html>
+                    </figure>
+                {% else %}
+                    <p>Image</p>
+                {% endif %}
+            </article>
+        </div>
+    </section>
+</main>
+{% endblock %}

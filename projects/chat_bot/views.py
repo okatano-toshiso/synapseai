@@ -47,4 +47,5 @@ def ask(request):
     return JsonResponse({'message': bot_response})
 def chat_view(request):
     full_url = request.build_absolute_uri('/')
-    return render(request, 'chat.html', {'domain': full_url})
+    app_name = "chat_bot"
+    return render(request, 'chat.html', {'domain': full_url,'app_name': app_name})
