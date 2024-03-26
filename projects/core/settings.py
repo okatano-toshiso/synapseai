@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'top',
     'sns_texts',
     'vision',
+    'lyric_trans',
     'generate_image'
 ]
 
