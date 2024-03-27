@@ -58,7 +58,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'generate_image.middleware.BasicAuthMiddleware',
-    'vision.middleware.BasicAuthMiddleware',
+    # 'vision.middleware.BasicAuthMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
