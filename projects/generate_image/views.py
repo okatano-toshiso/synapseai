@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template import loader
 from .forms import ChatForm
@@ -6,6 +7,7 @@ from openai import OpenAI
 import requests
 import json
 
+@login_required
 def index(request):
     dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
     if os.path.exists(dotenv_path):

@@ -57,8 +57,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'generate_image.middleware.BasicAuthMiddleware',
-    'vision.middleware.BasicAuthMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -81,7 +79,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'core.wsgi.application'
 
-
+LOGIN_URL = '/admin/'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
