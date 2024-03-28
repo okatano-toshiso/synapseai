@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', include('top.urls')),
     path('vision/', include('vision.urls')),
+    path('whispar/', include('whispar.urls')),
     path('lyric_trans/', include('lyric_trans.urls')),
     path('sns_texts/', include('sns_texts.urls')),
     path('chat_app/', include('chat_app.urls')),
