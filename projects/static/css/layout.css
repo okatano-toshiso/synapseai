@@ -1,3 +1,8 @@
+ul {
+    padding: 0;
+}
+
+
 .sentence {
     text-align: center;
 }
@@ -10,9 +15,15 @@
 
 .layout .contents_area {
     display: flex;
-    justify-content:space-between;
-    flex-wrap: nowrap;
+    justify-content:flex-start;
+    flex-wrap: wrap;
     width: 100%;
+}
+
+@media only screen and (max-width:768px) {
+    .layout .contents_area {
+        flex-wrap: wrap;
+    }
 }
 
 #id_sentence {
@@ -103,6 +114,12 @@
     width: calc(50% - 10px);
     height: 640px;
 }
+@media only screen and (max-width:768px) {
+    .lyric_trans .sentence ,.lyric_trans .result {
+        width: calc(100% - 10px);
+        height: auto;
+    }
+}
 
 .lyric_trans .sentence p{
     margin: 0;
@@ -151,4 +168,11 @@
     display: block;
     width: 100%;
     height: 100%;
+}
+
+.contents_area {
+    display: flex;
+    justify-content:flex-start;
+    flex-wrap: wrap;
+    list-style: none;
 }

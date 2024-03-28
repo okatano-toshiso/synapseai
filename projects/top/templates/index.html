@@ -3,11 +3,20 @@
         <meta charset='utf-8' />
         {% load static %}
         <link href="{% static 'css/top.css' %}" rel="stylesheet">
+        <link href="{% static 'css/base.css' %}" rel="stylesheet">
+        <link href="{% static 'css/layout.css' %}" rel="stylesheet">
     </head>
-    <body>
+    <body class="layout">
         <main class="main">
             <header class="header">
-                <h1 class="title">Synapse AI</h1>
+                <div class="header_area">
+                    <div class="logo_title">
+                        <img src="{% static 'img/logo.png' %}" class="logo_size" alt="" />
+                    </div>
+                    <h1 class="site_title">
+                        <a href="{{ domain }}" class="link">Synapse AI</a>
+                    </h1>
+                </div>
             </header>
             <figure class="key_visual">
                 <img src="{% static 'img/ai.jpg' %}" class="image_size" alt="" />
@@ -34,10 +43,6 @@
                                 <p>チャットボット</p>
                             </a>
                         </li>
-                    </ul>
-                </div>
-                <div class="row">
-                    <ul class="contents_area">
                         <li class="contents_box">
                             <a href="/lyric_trans/" class="link link_range">
                                 <img src="{% static 'img/icon_trans_ai.png' %}" class="image_size" alt="" />
