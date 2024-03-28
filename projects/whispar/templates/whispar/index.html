@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+{% load static %}
+<form id="uploadForm">
+    {% csrf_token %}
+</form>
+<main class="{{ app_name }} lyric_trans" >
+    <section class="contents">
+        <p class="message">Whispar</p>
+        <div class="contents_area">
+            <article class="sentence">
+                <h3>REC</h2>
+                <button id="startRecord">録音開始</button>
+                <button id="stopRecord" disabled>録音停止</button>
+                <audio id="audioPlayback" controls></audio>
+                <script src="{% static 'js/whispar_script.js' %}"></script>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" id="translateButton">to TEXT</button>
+                </form>
+            </article>
+            <article class="result">
+                <h3>TEXT</h2>
+                <p class="result_box_text copy-target">
+                    {{ chat_results|safe }}
+                </p>
+                <div class="button_area">
+                    <button id="copyButton">COPY</button>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+
+{% endblock %}
