@@ -7,26 +7,22 @@
 </form>
 <main class="{{ app_name }} lyric_trans" >
     <section class="contents">
-        <p class="message">Talk</p>
-        <div class="contents_area">
-            <article class="sentence">
-                <h3>REC</h2>
-                <button id="startRecord">録音開始</button>
-                <button id="stopRecord" disabled>録音停止</button>
+        <p class="message">start で録音 stopで停止 Let's Talk で会話開始</p>
+        <article class="talk_area">
+            <audio id="myAudio" controls>
+                <source src='/uploads/talk/system.mp3' type="audio/mpeg">
+            </audio>
+            <div class="user">
+                <button id="startRecord">Start</button>
+                <button id="stopRecord" disabled>Stop</button>
                 <audio id="audioPlayback" controls></audio>
                 <script src="{% static 'js/talk_script.js' %}"></script>
                 <form method="post">
                     {% csrf_token %}
-                    <button type="submit" id="translateButton">to TEXT</button>
+                    <button type="submit" id="translateButton">Let's Talk</button>
                 </form>
-            </article>
-            <article class="result">
-                <h3>Speech</h2>
-                <audio id="myAudio" controls>
-                    <source src='/uploads/talk/system.mp3' type="audio/mpeg">
-                </audio>
-            </article>
-        </div>
+            </div>
+        </article>
     </section>
 </main>
 <script>
@@ -39,7 +35,7 @@
         }
     });
 </script>
-{% comment %} <script>
+<script>
     var formSubmitted = false;
     document.querySelectorAll('form').forEach(form => {
         form.addEventListener('submit', () => {
@@ -54,5 +50,5 @@
             navigator.sendBeacon('/talk/delete-file', data);
         }
     });
-</script> {% endcomment %}
+</script>
 {% endblock %}

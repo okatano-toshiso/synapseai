@@ -54,9 +54,11 @@ def index(request):
     domain = request.build_absolute_uri('/')
     template = loader.get_template('talk/index.html')
     auto_play = True
+    app_name = "talk"
     context = {
         'domain': domain,
         'chat_results': chat_results,
+        'app_name': app_name,
         'auto_play': auto_play
     }
     return HttpResponse(template.render(context, request))
@@ -75,16 +77,15 @@ def upload_audio(request):
     return JsonResponse({'message': 'ファイルが正常にアップロードされました。'})
 def delete_file(request):
     # 削除したいファイルのパス
-    file_path = settings.BASE_DIR / "uploads/talk/user.wav"
-    if os.path.exists(file_path):
-        os.remove(file_path)
-        return HttpResponse("File deleted successfully", status=200)
-    else:
-        return HttpResponse("File not found", status=404)
+    files = [
+        settings.BASE_DIR / "uploads/talk/system.mp3",
+        settings.BASE_DIR / "uploads/talk/user.wav"
+    ]
+    responses = []
+    for file_path in files:
+        if os.path.exists(file_path):
+            os.remove(file_path)
+            return HttpResponse("File deleted successfully", status=200)
+        else:
+            return HttpResponse("File not found", status=404)
 
-    file_path = settings.BASE_DIR / "uploads/talk/system.mp3"
-    if os.path.exists(file_path):
-        os.remove(file_path)
-        return HttpResponse("File deleted successfully", status=200)
-    else:
-        return HttpResponse("File not found", status=404)

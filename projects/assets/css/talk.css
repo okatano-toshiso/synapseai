@@ -1,0 +1,44 @@
+.talk_area {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 80px);
+    text-align: center;
+    background-image: url("../img/kv_talk.jpg");
+    background-repeat: none;
+    background-size: cover;
+    background-position:center;
+}
+.user {
+    position: fixed;
+    bottom: 100px;
+    width: calc(100% - 160px);
+    height: 80pz;
+    text-align: center;
+}
+
+#translateButton {
+    position: absolute;
+    display: block;
+    top:-50%;
+    left: 51%;
+}
+#startRecord {
+    position: absolute;
+    display: block;
+    top:-50%;
+    left: 40%;
+}
+#stopRecord{
+    position: absolute;
+    display: block;
+    top:-50%;
+    left: 45%;
+}
+#audioPlayback {
+    opacity: 0.2;
+    left: calc(50% - 150px);
+}
+#myAudio {
+    opacity: 0.4;
+}
+
