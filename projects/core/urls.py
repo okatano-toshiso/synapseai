@@ -21,6 +21,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('', include('top.urls')),
     path('tts/', include('tts.urls')),
+    path('english/', include('english.urls')),
     path('talk/', include('talk.urls')),
     path('vision/', include('vision.urls')),
     path('whispar/', include('whispar.urls')),

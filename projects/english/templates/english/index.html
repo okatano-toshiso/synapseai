@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+{% load static %}
+<form id="uploadForm">
+    {% csrf_token %}
+</form>
+<main class="{{ app_name }} lyric_trans talk" >
+    <section class="contents">
+        <p class="message">start で録音 stopで停止 Let's english で会話開始</p>
+        <article class="talk_area">
+            <audio id="myAudio" controls>
+                <source src='/uploads/english/system.mp3' type="audio/mpeg">
+            </audio>
+            <div class="user">
+                <button id="startRecord">Start</button>
+                <button id="stopRecord" disabled>Stop</button>
+                <audio id="audioPlayback" controls></audio>
+                <script src="{% static 'js/english_script.js' %}"></script>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" id="translateButton">Let's english</button>
+                </form>
+            </div>
+        </article>
+    </section>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var autoPlay = {{ auto_play|lower }};
+        if (autoPlay) {
+            var audio = document.getElementById('myAudio');
+            audio.play()
+                .catch(error => console.log('Playback was prevented. Error:', error));
+        }
+    });
+</script>
+<script>
+    var formSubmitted = false;
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', () => {
+            formSubmitted = true;
+        });
+    });
+    var csrfToken = '{{ csrf_token }}';
+    window.addEventListener('beforeunload', function(event) {
+        if (!formSubmitted) {
+            var data = new FormData();
+            data.append('csrfmiddlewaretoken', csrfToken);
+            navigator.sendBeacon('/english/delete-file', data);
+        }
+    });
+</script>
+{% endblock %}

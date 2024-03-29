@@ -8,6 +8,14 @@
     background-size: cover;
     background-position:center;
 }
+
+.english .talk_area {
+    background-image: url("../img/kv_english.png");
+    background-repeat: none;
+    background-size: cover;
+    background-position:center;
+}
+
 .user {
     position: fixed;
     bottom: 100px;

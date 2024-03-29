@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+<main class="{{ app_name }} lyric_trans" >
+    <section class="contents">
+        <p class="message">Calibrate SNS POST</p>
+        <div class="contents_area">
+            <article class="sentence">
+                <h3>POST</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Calibrate</button>
+                </form>
+            </article>
+            <article class="result">
+                <h3>After Calibration</h2>
+                <p class="result_box_text copy-target">
+                    {{ chat_results|safe }}
+                </p>
+                <button id="copyButton">COPY</button>
+            </article>
+        </div>
+    </section>
+</main>
+{% load static %}
+<script type="text/javascript" src="{% static 'js/click_copy.js' %}" rel="stylesheet"></script>
+
+{% endblock %}

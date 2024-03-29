@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'tts',
     'talk',
     'whispar',
+    'english',
     'generate_image'
 ]
 
