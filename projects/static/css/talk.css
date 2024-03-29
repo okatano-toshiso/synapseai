@@ -23,6 +23,13 @@
     height: 80pz;
     text-align: center;
 }
+@media only screen and (max-width:768px) {
+    .user {
+        bottom: 0px;
+        width: 100%;
+        z-index: 3;
+    }
+}
 
 #translateButton {
     position: absolute;
@@ -30,11 +37,30 @@
     top:-50%;
     left: 51%;
 }
+@media only screen and (max-width:768px) {
+    #translateButton {
+        position: absolute;
+        display: block;
+        top:-105%;
+        left: auto;
+        right: 15px;
+        padding: 15px 30px;
+    }
+}
 #startRecord {
     position: absolute;
     display: block;
     top:-50%;
-    left: 40%;
+    left: calc(50% - 45px);
+}
+@media only screen and (max-width:768px) {
+    #startRecord {
+        position: absolute;
+        display: block;
+        top:-105%;
+        left: 0%;
+        padding: 15px 30px;
+    }
 }
 #stopRecord{
     position: absolute;
@@ -42,9 +68,25 @@
     top:-50%;
     left: 45%;
 }
+@media only screen and (max-width:768px) {
+    #stopRecord{
+        position: absolute;
+        display: block;
+        top:-105%;
+        left: 40%;
+        padding: 15px 30px;
+    }
+}
 #audioPlayback {
     opacity: 0.2;
     left: calc(50% - 150px);
+}
+@media only screen and (max-width:768px) {
+    #audioPlayback {
+        opacity: 0.5;
+        width: 100%;
+        left: 0;
+    }
 }
 #myAudio {
     opacity: 0.4;
