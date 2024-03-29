@@ -22,6 +22,7 @@ def index(request):
                 api_key = OPENAI_API_KEY,
             )
             audio_file_path = settings.BASE_DIR / "uploads/uploads/recording.wav"
+            print(audio_file_path)
             audio_file= open(audio_file_path , "rb")
             transcription = client.audio.transcriptions.create(
                 model="whisper-1",
@@ -59,16 +60,12 @@ def upload_audio(request):
 
     return JsonResponse({'message': 'ファイルが正常にアップロードされました。'})
 
-def delete_audio(request):
-    if request.method == "POST":
-        try:
-            audio_file_path = settings.BASE_DIR / "uploads/uploads/recording.wav"
-            if default_storage.exists(audio_file_path):
-                default_storage.delete(audio_file_path)
-                return JsonResponse({"message": "ファイルが削除されました。"}, status=200)
-            else:
-                return JsonResponse({"error": "ファイルが見つかりません。"}, status=404)
-        except Exception as e:
-            return JsonResponse({"error": str(e)}, status=500)
+def delete_file(request):
+    # 削除したいファイルのパス
+    file_path = settings.BASE_DIR / "uploads/uploads/recording.wav"
+
+    if os.path.exists(file_path):
+        os.remove(file_path)
+        return HttpResponse("File deleted successfully", status=200)
     else:
-        return JsonResponse({"error": "無効なリクエストです。"}, status=400)
+        return HttpResponse("File not found", status=404)

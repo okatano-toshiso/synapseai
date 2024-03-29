@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+<main class="{{ app_name }} lyric_trans" >
+    <section class="contents">
+        <p class="message">TTS</p>
+        <div class="contents_area">
+            <article class="sentence">
+                <h3>Texts</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">send</button>
+                </form>
+            </article>
+            <article class="result">
+                <h3>Speech</h2>
+                <audio id="myAudio" controls>
+                    <source src='/uploads/tts/speech.mp3' type="audio/mpeg">
+                </audio>
+            </article>
+        </div>
+    </section>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var autoPlay = {{ auto_play|lower }};
+        if (autoPlay) {
+            var audio = document.getElementById('myAudio');
+            audio.play()
+                .catch(error => console.log('Playback was prevented. Error:', error));
+        }
+    });
+</script>
+<script>
+    var csrfToken = '{{ csrf_token }}';
+    window.addEventListener('beforeunload', function(event) {
+        var data = new FormData();
+        data.append('csrfmiddlewaretoken', csrfToken);
+        navigator.sendBeacon('/tts/delete-file', data);
+    });
+</script>
+{% endblock %}

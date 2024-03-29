@@ -32,5 +32,20 @@
         </div>
     </section>
 </main>
-
+<script>
+    var formSubmitted = false;
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', () => {
+            formSubmitted = true;
+        });
+    });
+    var csrfToken = '{{ csrf_token }}';
+    window.addEventListener('beforeunload', function(event) {
+        if (!formSubmitted) {
+            var data = new FormData();
+            data.append('csrfmiddlewaretoken', csrfToken);
+            navigator.sendBeacon('/whispar/delete-file', data);
+        }
+    });
+</script>
 {% endblock %}
