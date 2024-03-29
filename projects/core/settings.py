@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'vision',
     'lyric_trans',
     'tts',
+    'talk',
     'whispar',
     'generate_image'
 ]

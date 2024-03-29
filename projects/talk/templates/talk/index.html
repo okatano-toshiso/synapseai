@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+{% load static %}
+<form id="uploadForm">
+    {% csrf_token %}
+</form>
+<main class="{{ app_name }} lyric_trans" >
+    <section class="contents">
+        <p class="message">Talk</p>
+        <div class="contents_area">
+            <article class="sentence">
+                <h3>REC</h2>
+                <button id="startRecord">録音開始</button>
+                <button id="stopRecord" disabled>録音停止</button>
+                <audio id="audioPlayback" controls></audio>
+                <script src="{% static 'js/talk_script.js' %}"></script>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" id="translateButton">to TEXT</button>
+                </form>
+            </article>
+            <article class="result">
+                <h3>Speech</h2>
+                <audio id="myAudio" controls>
+                    <source src='/uploads/talk/system.mp3' type="audio/mpeg">
+                </audio>
+            </article>
+        </div>
+    </section>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var autoPlay = {{ auto_play|lower }};
+        if (autoPlay) {
+            var audio = document.getElementById('myAudio');
+            audio.play()
+                .catch(error => console.log('Playback was prevented. Error:', error));
+        }
+    });
+</script>
+{% comment %} <script>
+    var formSubmitted = false;
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', () => {
+            formSubmitted = true;
+        });
+    });
+    var csrfToken = '{{ csrf_token }}';
+    window.addEventListener('beforeunload', function(event) {
+        if (!formSubmitted) {
+            var data = new FormData();
+            data.append('csrfmiddlewaretoken', csrfToken);
+            navigator.sendBeacon('/talk/delete-file', data);
+        }
+    });
+</script> {% endcomment %}
+{% endblock %}

@@ -12,3 +12,4 @@ db.sqlite3
 uploads/demo.jpg
 uploads/uploads/recording.wav
 uploads/tts/*
+uploads/*/*

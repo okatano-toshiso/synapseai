@@ -36,3 +36,10 @@ python manage.py runserver
 ```
  source test/bin/activate
 ```
+
+6. collect Static
+```
+python manage.py collectstatic --noinput
+```
+
+7.
