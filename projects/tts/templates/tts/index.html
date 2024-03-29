@@ -33,11 +33,19 @@
     });
 </script>
 <script>
+    var formSubmitted = false;
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', () => {
+            formSubmitted = true;
+        });
+    });
     var csrfToken = '{{ csrf_token }}';
     window.addEventListener('beforeunload', function(event) {
-        var data = new FormData();
-        data.append('csrfmiddlewaretoken', csrfToken);
-        navigator.sendBeacon('/tts/delete-file', data);
+        if (!formSubmitted) {
+            var data = new FormData();
+            data.append('csrfmiddlewaretoken', csrfToken);
+            navigator.sendBeacon('/tts/delete-file', data);
+        }
     });
 </script>
 {% endblock %}
