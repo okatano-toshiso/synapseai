@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'talk',
     'whispar',
     'english',
+    'icon',
     'generate_image'
 ]
 

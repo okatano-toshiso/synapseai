@@ -44,15 +44,20 @@
 .contents_box {
     position: relative;
     display: block;
-    width: calc(100% / 3);
+    width: calc(100% / 4);
     text-align: center;
 }
-
 @media only screen and (max-width:768px) {
+    .contents_box {
+        width: calc(100% / 3);
+    }
+}
+@media only screen and (max-width:481px) {
     .contents_box {
         width: calc(100% / 2);
     }
 }
+
 
 .title {
     width: 100%;

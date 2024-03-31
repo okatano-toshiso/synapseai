@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+<main class="{{ app_name }} lyric_trans" >
+    <section class="contents">
+        <p class="message">ICON　色と背景色とイメージを伝えるとアイコン生成</p>
+        <div class="contents_area">
+            <article class="sentence">
+                <h3>Prompt</h2>
+                <div class="select_area">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit">create</button>
+                    </form>
+                </div>
+            </article>
+            <article class="result">
+                {% if img_results %}
+                    <figure class="image_frame">
+                        <img src="{{ img_results }}" class = "image_size" />
+                    </figure>
+                {% else %}
+                    <p>Image</p>
+                {% endif %}
+            </article>
+        </div>
+    </section>
+</main>
+{% endblock %}

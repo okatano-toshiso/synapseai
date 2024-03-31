@@ -176,3 +176,13 @@ ul {
     flex-wrap: wrap;
     list-style: none;
 }
+
+.select_area {
+    width: calc(100% - 60px);
+    margin: 0 auto;
+    text-align: left;
+}
+
+.select_area p{
+    padding: 10px 0;
+}
