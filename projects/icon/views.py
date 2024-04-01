@@ -30,7 +30,7 @@ def index(request):
             )
             response =  client.images.generate(
                 model   = "dall-e-3",
-                prompt = f"""Design a pictogram-style app icon, using only two HEX color codes: ‘{color}’ for the icon itself and ‘{background}’ for the background. The theme is based around {image}, and the icon should feature a single, central symbolic element related to {image}. The design must strictly adhere to using only these two specified colors, creating a clear and simple two-tone image that effectively communicates the theme.""",
+                prompt = f"""Design a pictogram-style app icon, using only two HEX color codes: ‘{color}’ for the icon itself and ‘{background}’ for the background. The theme is based around {image}, and the icon should feature a single, central symbolic element related to {image}. The design must strictly adhere to using only these two specified colors, creating a clear and simple two-tone image that effectively communicates the theme.No drop shadow and no gradient.""",
                 size="1024x1024"
             )
             image_url = response.data[0].url

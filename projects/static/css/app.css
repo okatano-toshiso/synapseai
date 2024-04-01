@@ -128,6 +128,16 @@ main.area {
     background-color: #ffffff;
     color: #000000;
 }
+.right.casper {
+    background-color: yellow;
+}
+.right.balthazar {
+    color: #ffffff;
+    background-color: green;
+}
+.right.melchior {
+    background-color:aquamarine;
+}
 .right:before {
     position: absolute;
     top:5px;
@@ -139,6 +149,16 @@ main.area {
     font-weight: 900;
     font-family: 'Font Awesome 5 Free';
     content: '\f544';
+}
+.right.casper:before {
+    background-color: yellow;
+}
+.right.balthazar:before {
+    color: #ffffff;
+    background-color: green;
+}
+.right.melchior:before {
+    background-color:aquamarine;
 }
 
 

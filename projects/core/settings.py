@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'chat_app',
     'chat_bot',
+    'chat_interaction',
     'top',
     'sns_texts',
     'vision',

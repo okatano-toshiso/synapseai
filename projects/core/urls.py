@@ -28,10 +28,11 @@ urlpatterns = [
     path('whispar/', include('whispar.urls')),
     path('lyric_trans/', include('lyric_trans.urls')),
     path('sns_texts/', include('sns_texts.urls')),
-    path('chat_app/', include('chat_app.urls')),
     path("polls/", include("polls.urls")),
     path('admin/', admin.site.urls),
+    path('chat_app/', include('chat_app.urls')),
     path('chat_bot/', include('chat_bot.urls')),
+    path('chat_interaction/', include('chat_interaction.urls')),
     path('generate_image/', include('generate_image.urls')),
 ]
 
