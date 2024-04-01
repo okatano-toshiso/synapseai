@@ -1,5 +1,5 @@
-body {
-    background-color: #f5f5f5;
+body.chat_bot {
+    background-color: #7595c4;
     font-family: Arial, sans-serif;
 }
 p {
@@ -27,9 +27,9 @@ p {
     top: -2px;
 }
 .chatbot-window {
-    width: 100%;
+    width: auto;
     height: auto;
-    background-color: #f5f5f5;
+    background-color: #7595c4;
     display: block; /* initially hidden */
 }
 .chatbot-area {
@@ -41,28 +41,40 @@ p {
 }
 .chatbot-header {
     padding: 10px;
-    background-color: #333;
+    background-color: #263147;
     color: white;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
+    text-align: center;
 }
 .chatbot-messages {
-    padding: 10px;
     overflow-y: scroll;
+    width: calc(100% - 33px);
     height: 100%;
+    max-height: 750px;
+    padding: 10px;
+    background-color: #7595c4;
+
 }
+.chatbot-messages::-webkit-scrollbar {
+    width: 5px;
+    height: 8px;
+    background-color: #7595c4;/* またはトラックに追加 */
+  }
+
 .chatbot-input {
     position: fixed;
     bottom: 0;
     padding: 30px;
     width: 100%;
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
+    background-color: #7595c4;
 }
 .chatbot-input input {
     width: 80%;
     padding: 5px;
-    border: 1px solid #ccc;
+    border: 1px solid #7595c4;
     border-radius: 5px;
 }
 #sendMessage {
@@ -71,9 +83,78 @@ p {
 .chatbot-input button {
     padding: 5px 15px;
     border: none;
-    background-color: #007bff;
-    color: white;
+    background-color: #f5f5f5;
+    color: #666;
     border-radius: 5px;
     cursor: pointer;
     width: 80px;
 }
+main.area {
+    width: 100%;
+    height: 100%;
+    background-color: #7595c4;
+}
+.left {
+    position: relative;
+    float: left;
+    max-width: 60%;
+    margin-left: 60px;
+    margin-bottom: 30px;
+    padding: 10px;
+    border-radius: 16px;
+    background-color: #85e24a;
+    color: #000000;
+}
+.left:before {
+    position: absolute;
+    top:5px;
+    left:-40px;
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    font-weight: 900;
+    font-family: 'Font Awesome 5 Free';
+    content: '\f007';
+}
+.right {
+    position: relative;
+    float: right;
+    max-width: 60%;
+    margin-bottom: 30px;
+    margin-right: 80px;
+    padding: 10px;
+    border-radius: 16px;
+    background-color: #ffffff;
+    color: #000000;
+}
+.right:before {
+    position: absolute;
+    top:5px;
+    right:-60px;
+    padding: 10px;
+    margin-right: 10px;
+    border-radius: 50%;
+    background-color: #ffffff;
+    font-weight: 900;
+    font-family: 'Font Awesome 5 Free';
+    content: '\f544';
+}
+
+
+
+
+
+
+.clearfix {
+    clear: both;
+}
+
+.icon-left:before {
+    content: url('icon-image-url.png');
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    vertical-align: middle;
+  }
