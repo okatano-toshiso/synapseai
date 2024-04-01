@@ -41,9 +41,10 @@ def ask(request):
             },
         ],
     )
-    bot_response = response.choices[0].message.content    # Botの応答を会話に追加
+    bot_response = response.choices[0].message.content
+    bot_response = bot_response.replace("\n", "<br>")
     conversation.append(bot_response)
-    request.session['conversation'] = conversation     # 更新された会話をセッションに保存
+    request.session['conversation'] = conversation
     return JsonResponse({'message': bot_response})
 def chat_view(request):
     full_url = request.build_absolute_uri('/')
