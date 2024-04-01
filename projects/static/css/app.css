@@ -105,6 +105,10 @@ main.area {
     background-color: #85e24a;
     color: #000000;
 }
+.left.balthazar {
+    color: #ffffff;
+    background-color: green;
+}
 .left:before {
     position: absolute;
     top:5px;
@@ -116,6 +120,10 @@ main.area {
     font-weight: 900;
     font-family: 'Font Awesome 5 Free';
     content: '\f007';
+}
+.left.balthazar:before {
+    color: #ffffff;
+    background-color: green;
 }
 .right {
     position: relative;
@@ -131,10 +139,7 @@ main.area {
 .right.casper {
     background-color: yellow;
 }
-.right.balthazar {
-    color: #ffffff;
-    background-color: green;
-}
+
 .right.melchior {
     background-color:aquamarine;
 }
@@ -152,10 +157,6 @@ main.area {
 }
 .right.casper:before {
     background-color: yellow;
-}
-.right.balthazar:before {
-    color: #ffffff;
-    background-color: green;
 }
 .right.melchior:before {
     background-color:aquamarine;

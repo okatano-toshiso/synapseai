@@ -54,7 +54,7 @@
                 $.post( "{% url 'topic' %}" , { message: message, csrfmiddlewaretoken: '{{ csrf_token }}' }, function(data) {
                     console.log(data.message);
                     $('#messages').append('<div class="right casper">' + data.message[0].response + '</div><div class="clearfix"></div>');
-                    $('#messages').append('<div class="right balthazar">' + data.message[1].response + '</div><div class="clearfix"></div>');
+                    $('#messages').append('<div class="left balthazar">' + data.message[1].response + '</div><div class="clearfix"></div>');
                     $('#messages').append('<div class="right melchior">' + data.message[2].response + '</div><div class="clearfix"></div>');
                 });
                 $('#userInput').val(''); // clear input
