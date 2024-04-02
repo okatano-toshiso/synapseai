@@ -124,6 +124,7 @@ main.area {
 .left.balthazar:before {
     color: #ffffff;
     background-color: green;
+    content: '\f6e2';
 }
 .right {
     position: relative;
@@ -157,9 +158,11 @@ main.area {
 }
 .right.casper:before {
     background-color: yellow;
+    content: '\f392';
 }
 .right.melchior:before {
     background-color:aquamarine;
+    content: '\f508';
 }
 
 
