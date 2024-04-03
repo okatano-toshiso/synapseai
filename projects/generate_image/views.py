@@ -2,6 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from django.template import loader
 from .forms import ChatForm
+import deepl
 import os
 from openai import OpenAI
 import requests
@@ -9,50 +10,34 @@ import json
 
 @login_required
 def index(request):
-    dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
-    if os.path.exists(dotenv_path):
-        load_dotenv(dotenv_path)
-
-    # Access the API key from the environment
     OPENAI_API_KEY = os.environ['OPENAI_API_IMAGE_KEY']
-    """
-    生成AI画像作成画面
-    """
-
-    # 応答結果
+    DEEPL_API_KEY = os.environ['DEEPL_API_KEY']
     image_url = ""
-
     if request.method == "POST":
-        # ChatGPTボタン押下時
-
         form = ChatForm(request.POST)
         if form.is_valid():
-
+            initial_message = 'I NEED to test how the tool works with extremely simple prompts. DO NOT add any detail, just use it AS-IS:'
             sentence = form.cleaned_data['sentence']
-
-            # TODO: APIキーのハードコーディングは避ける
-            # openai.api_key = "APIキー"
+            def translate_text_with_deepl(text, auth_key):
+                translator = deepl.Translator(auth_key)
+                result = translator.translate_text(text, target_lang="EN-US")
+                return result.text
+            sentence = translate_text_with_deepl(sentence, DEEPL_API_KEY)
+            sentence = initial_message + sentence
+            print(sentence)
             client = OpenAI(
-                # This is the default and can be omitted
                 api_key = OPENAI_API_KEY,
             )
-            # ChatGPT
             response =  client.images.generate(
-                model   = "dall-e-3",   # モデル  
-                prompt  = sentence,         # 画像生成に用いる説明文章         
-                n       = 1,            # 何枚の画像を生成するか  
-                size="1024x1024"        # 画像サイズ
+                model   = "dall-e-3",
+                prompt  = sentence,
+                n       = 1,
+                size="1024x1024",
             )
-
-            # API応答から画像URLを指定
             image_url = response.data[0].url
-            # 画像をローカルに保存
-            # img_response = requests.get(image_url)
-            # image_path = '/static/img/chat-gpt-generated-image.jpg'
-
+            print(response.data)
     else:
         form = ChatForm()
-
     domain = request.build_absolute_uri('/')
     template = loader.get_template('gene_img/index.html')
     context = {
