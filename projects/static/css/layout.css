@@ -37,7 +37,8 @@ ul {
 }
 
 .image_size {
-    width: 480px;
+    width: calc(100% - 30px);
+    max-width: 480px;
     margin: 0 auto;
 }
 
