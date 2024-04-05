@@ -52,9 +52,9 @@ def index(request):
                     "type": "text",
                     "text": """
                         What’s in this image?
-                        Just tell me the name of the vegetable in the image.
-                        Please do not answer except for the name of the vegetable.
-                        If there are no vegetables in the picture, please return the message No vegetables.
+                        Just tell me the name of the ingredients in the image.
+                        Please do not answer except for the name of the ingredients.
+                        If there are no ingredients in the picture, please return the message No ingredients.
                         """
                     },
                     {
