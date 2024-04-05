@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'whispar',
     'english',
     'icon',
+    'recipe',
     'generate_image'
 ]
 

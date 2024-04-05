@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+<main class="{{ app_name }} vision lyric_trans" >
+    <section class="contents">
+        <p class="message">Recipe APP アップロードした画像からレシピを提案してくれます。</p>
+        <div class="contents_area">
+            <article class="sentence">
+                {% if image_path %}
+                    <img src="{{ domain }}uploads/recipe.jpg" class = "image_size" />
+                {% else %}
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="file" name="image" accept="image/jpeg">
+                        <button type="submit">アップロード</button>
+                    </form>
+                {% endif %}
+            </article>
+            <article class="result">
+                <p class="result_box_message">
+                    {% if img_results %}
+                        食材：{{ img_results }}<br />
+                        レシピ<br />
+                        {{ recipe_results|safe }}
+                    {% else %}
+                        食材の写真をアップしてください。<br />
+                        その食材から料理可能なレシピを紹介します
+                    {% endif %}
+                </p>
+            </article>
+        </div>
+    </section>
+</main>
+{% endblock %}
+
+
+
+
