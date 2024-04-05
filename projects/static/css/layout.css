@@ -41,16 +41,6 @@ ul {
     margin: 0 auto;
 }
 
-.result_box_message {
-    width: calc(100% - 60px);
-    height: 640px;
-    padding: 10px;
-    margin: 0 auto;
-    background-color: #fff;
-    overflow-y: scroll;
-    text-align: left;
-}
-
 .analys .contents_box {
     position: relative;
     display: block;
@@ -114,6 +104,9 @@ ul {
     width: calc(50% - 10px);
     height: 640px;
 }
+.vision.lyric_trans .sentence ,.vision.lyric_trans .result {
+    padding-top: 30px;
+}
 @media only screen and (max-width:768px) {
     .lyric_trans .sentence ,.lyric_trans .result {
         width: calc(100% - 10px);
@@ -129,6 +122,17 @@ ul {
     width: calc(100% - 0px);
     height: 640px;
     padding: 10px;
+    margin: 0 auto;
+    background-color: #fff;
+    overflow-y: scroll;
+    text-align: left;
+}
+
+.vision.lyric_trans .result_box_message {
+    width: calc(100% - 60px);
+    height: 450px;
+    padding: 15px;
+    margin: 15px;
     margin: 0 auto;
     background-color: #fff;
     overflow-y: scroll;

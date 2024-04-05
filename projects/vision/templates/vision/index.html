@@ -1,56 +1,36 @@
-<!-- templates/base.html -->
-<!DOCTYPE html>
-<html lang="ja">
-<head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% load static %}
-    <link href="{% static 'css/top.css' %}" rel="stylesheet">
-    <link href="{% static 'css/layout.css' %}" rel="stylesheet">
-    <link href="{% static 'css/base.css' %}" rel="stylesheet">
-</head>
-<body class="analys layout">
-    <main>
-        <header class="header">
-            <div class="header_area">
-                <div class="logo_title">
-                    <img src="{% static 'img/logo.png' %}" class="logo_size" alt="" />
-                </div>
-                <h1 class="site_title">
-                    <a href="{{ domain }}" class="link">Synapse AI</a>
-                </h1>
-            </div>
-        </header>
-        <section class="contents">
-            <div class="contents_area">
-                <article class="contents_box">
-                    {% if image_path %}
-                        <img src="{{ domain }}uploads/demo.jpg" class = "image_size" />
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+<main class="{{ app_name }} vision lyric_trans" >
+    <section class="contents">
+        <p class="message">Visionary APP</p>
+        <div class="contents_area">
+            <article class="sentence">
+                {% if image_path %}
+                    <img src="{{ domain }}uploads/demo.jpg" class = "image_size" />
+                {% else %}
+                    <form method="POST" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <input type="file" name="image" accept="image/jpeg">
+                        <button type="submit">アップロード</button>
+                    </form>
+                {% endif %}
+            </article>
+            <article class="result">
+                <p class="result_box_message">
+                    {% if img_results %}
+                        {{ img_results }}
                     {% else %}
-                        <form method="POST" enctype="multipart/form-data">
-                            {% csrf_token %}
-                            {{ form.as_p }}
-                            <input type="file" name="image" accept="image/jpeg">
-                            <button type="submit">アップロード</button>
-                        </form>
+                        説明が出力されます。
                     {% endif %}
-                </article>
-                <article class="contents_box">
-                    <p class="result_box_message">
-                        {% if img_results %}
-                            {{ img_results }}
-                        {% else %}
-                            説明が出力されます。
-                        {% endif %}
-                    </p>
-                </article>
-            </div>
-        </section>
-    </main>
-    <footer class="footer">
-        <p class="text">nuevo.jp</p>
-    </footer>
-</body>
+                </p>
+            </article>
+        </div>
+    </section>
+</main>
+{% endblock %}
 
-</html>
+
+
+

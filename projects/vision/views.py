@@ -11,44 +11,29 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.conf import settings
 
-@login_required
 def index(request):
-
-    # Access the API key from the environment
     OPENAI_API_KEY = os.environ['OPENAI_API_IMAGE_KEY']
-
-    """
-    生成AI画像解析
-    """
     domain = request.build_absolute_uri('/')
     file_path = 'demo.jpg'
     if default_storage.exists(file_path):
         default_storage.delete(file_path)
-
-    # 応答結果
     img_results = ""
     image_path = ""
-
     if request.method == "POST":
         form = ChatForm(request.POST, request.FILES)
         if form.is_valid():
-
             image_file = request.FILES['image']
             image_content = image_file.read()
             default_storage.save('demo.jpg', ContentFile(image_content))
-
             client = OpenAI(
                 api_key = OPENAI_API_KEY,
             )
-
             image_path = settings.BASE_DIR / "uploads/demo.jpg"
-
             print(image_path)
             def encode_image(image_path):
                 with open(image_path, "rb") as image_file:
                     return base64.b64encode(image_file.read()).decode('utf-8')
             base64_image = encode_image(image_path)
-
             headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {OPENAI_API_KEY}"
@@ -74,14 +59,10 @@ def index(request):
             ],
             "max_tokens": 300
             }
-
             response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
             img_results = (response.json().get("choices")[0]["message"]["content"])
-
     else:
         form = ChatForm()
-
-
     template = loader.get_template('vision/index.html')
     context = {
         'form': form,
