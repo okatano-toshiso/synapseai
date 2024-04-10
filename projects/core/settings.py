@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'english',
     'icon',
     'recipe',
+    'send_mail',
     'generate_image'
 ]
 

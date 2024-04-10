@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+{% load static %}
+
+<main class="{{ app_name }} lyric_trans" >
+    <section class="contents">
+        <p class="message">条件を入れた送信メッセージを校正する 会社名と名前はChatGPTに送信されません。</p>
+        <div class="contents_area">
+            <article class="sentence">
+                <h3>POST</h2>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">校正</button>
+                </form>
+            </article>
+            <article class="result">
+                <h3>After Calibration</h2>
+                <p class="result_box_text copy-target">
+                    {{ chat_results|safe }}
+                </p>
+                <div class="button_area">
+                    <button id="copyButton">COPY</button>
+                    <p class="sns_btn">
+                        <a href="https://twitter.com/" target="_blank" class="full"><img src="{% static 'img/x-logo-black.png' %}" class="x_logo"/></a>
+                    </p>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+<script type="text/javascript" src="{% static 'js/click_copy.js' %}" rel="stylesheet"></script>
+
+{% endblock %}

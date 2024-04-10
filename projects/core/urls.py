@@ -33,6 +33,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('chat_app/', include('chat_app.urls')),
     path('chat_bot/', include('chat_bot.urls')),
+    path('send_mail/', include('send_mail.urls')),
     path('chat_interaction/', include('chat_interaction.urls')),
     path('generate_image/', include('generate_image.urls')),
 ]
