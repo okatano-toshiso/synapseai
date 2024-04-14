@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'chat_app',
     'chat_bot',
     'chat_interaction',
+    'magi_system',
     'top',
     'sns_texts',
     'vision',
