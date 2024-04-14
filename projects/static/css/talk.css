@@ -16,6 +16,16 @@
     background-position:center;
 }
 
+.callcenter .talk_area {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 80px);
+    text-align: center;
+    background-image: url("../img/kv_callcenter.png");
+    background-repeat: none;
+    background-size: cover;
+    background-position:center;
+}
 .user {
     position: fixed;
     bottom: 100px;
@@ -48,33 +58,17 @@
     }
 }
 #startRecord {
-    position: absolute;
-    display: block;
-    top:-50%;
-    left: calc(50% - 45px);
+
+
 }
 @media only screen and (max-width:768px) {
     #startRecord {
-        position: absolute;
-        display: block;
-        top:-105%;
-        left: 0%;
-        padding: 15px 30px;
     }
 }
 #stopRecord{
-    position: absolute;
-    display: block;
-    top:-50%;
-    left: 45%;
 }
 @media only screen and (max-width:768px) {
     #stopRecord{
-        position: absolute;
-        display: block;
-        top:-105%;
-        left: 40%;
-        padding: 15px 30px;
     }
 }
 #audioPlayback {

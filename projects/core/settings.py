@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'lyric_trans',
     'tts',
     'talk',
+    'callcenter',
     'whispar',
     'english',
     'icon',

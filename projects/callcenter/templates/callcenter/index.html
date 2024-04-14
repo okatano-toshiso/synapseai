@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+{% load static %}
+<form id="uploadForm">
+    {% csrf_token %}
+</form>
+<main class="{{ app_name }} talk lyric_trans" >
+    <section class="contents">
+        <p class="message">コールセンター問い合わせ　start で録音 stopで停止 Let's Talk で会話開始</p>
+        <p class="message">この浄水器は、家庭用に設計されており、価格は4800円です。寿命は1年間有効で、交換用のフィルターが必要になります。デザインはコンパクトでモダンなものを想定し、主にキッチンカウンターに置くことを考慮したスタイルです。この浄水器は、蛇口に直接取り付けるタイプであり、取り付けはユーザー自身で簡単にできるように設計されています。浄水機能としては、塩素、重金属、細菌を効率的に除去し、水道水を安全で美味しい飲料水に変換します。また、エコフレンドリーな素材を使用し、環境に優しい製品となっています。</p>
+        <article class="talk_area">
+            <audio id="myAudio" controls>
+                <source src='/uploads/callcenter/system.mp3' type="audio/mpeg">
+            </audio>
+            <div class="user">
+                <button id="startRecord">Start</button>
+                <button id="stopRecord" disabled>Stop</button>
+                <audio id="audioPlayback" controls></audio>
+                <script src="{% static 'js/callcenter_script.js' %}"></script>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" id="translateButton">Let's Talk</button>
+                </form>
+            </div>
+        </article>
+    </section>
+</main>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var autoPlay = {{ auto_play|lower }};
+        if (autoPlay) {
+            var audio = document.getElementById('myAudio');
+            audio.play()
+                .catch(error => console.log('Playback was prevented. Error:', error));
+        }
+    });
+</script>
+<script>
+    var formSubmitted = false;
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', () => {
+            formSubmitted = true;
+        });
+    });
+    var csrfToken = '{{ csrf_token }}';
+    window.addEventListener('beforeunload', function(event) {
+        if (!formSubmitted) {
+            var data = new FormData();
+            data.append('csrfmiddlewaretoken', csrfToken);
+            navigator.sendBeacon('/callcenter/delete-file', data);
+        }
+    });
+</script>
+{% endblock %}

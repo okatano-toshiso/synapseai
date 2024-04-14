@@ -24,6 +24,7 @@ urlpatterns = [
     path('english/', include('english.urls')),
     path('recipe/', include('recipe.urls')),
     path('talk/', include('talk.urls')),
+    path('callcenter/', include('callcenter.urls')),
     path('vision/', include('vision.urls')),
     path('icon/', include('icon.urls')),
     path('whispar/', include('whispar.urls')),
