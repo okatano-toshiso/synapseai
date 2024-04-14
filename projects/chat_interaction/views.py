@@ -9,87 +9,45 @@ from openai import OpenAI
 def topic(request):
 
     OPENAI_API_KEY = os.environ['OPENAI_API_IMAGE_KEY']
-    user_message = request.POST.get('message')
-    print(user_message)
+    prompt = request.POST.get('message')
     interactions = []
 
-    conversation = request.session.get('conversation', [])
-    conversation.append(user_message)
-    prompt = " ".join(conversation)
+    def discussion(OPENAI_API_KEY, prompt, message):
+        client = OpenAI(
+            api_key = OPENAI_API_KEY,
+        )
+        response = client.chat.completions.create(
+            model="gpt-4",
+            messages=[
+                {
+                    "role": "system",
+                    "content": message
+                },
+                {
+                    "role": "user",
+                    "content": prompt
+                },
+            ],
+            temperature=0.3,
+            max_tokens=512
+        )
+        response = response.choices[0].message.content
+        response = response.replace("\n", "<br>")
+        return response
 
-    client = OpenAI(
-        api_key = OPENAI_API_KEY,
-    )
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {
-                "role": "system",
-                "content": """
-                    日本語で応答してください
-                    課題に対して1000文字以内で主張してください
-                """
-            },
-            {
-                "role": "user",
-                "content": prompt
-            },
-        ],
-        temperature=0.7,
-        max_tokens=1024
-    )
-    casper_response = response.choices[0].message.content
-    casper_response = casper_response.replace("\n", "<br>")
-    interactions.append({'input': user_message, 'response': casper_response})
-    conversation.append(casper_response)
-    request.session['conversation'] = conversation
-    # return JsonResponse({'message': casper_response})
+    message = """日本語で応答してください。あなたは議論に対して、肯定的な意見を主張する役割です。500文字前後で主張してください"""
+    casper_response = discussion(OPENAI_API_KEY, prompt, message)
+    interactions.append({'input': "議論の課題は" + prompt + "です。", 'response': casper_response})
 
-    response = client.chat.completions.create(
-        model="gpt-4",
-        messages=[
-            {
-                "role": "system",
-                "content": "日本語で応答してください。1000文字以内で反論してください。"
-            },
-            {
-                "role": "user",
-                "content": casper_response
-            },
-        ],
-        temperature=0.7,
-        max_tokens=1024
-    )
-    balthazar_response = response.choices[0].message.content
-    balthazar_response = balthazar_response.replace("\n", "<br>")
-    interactions.append({'input': casper_response, 'response': balthazar_response})
-    conversation.append(balthazar_response)
-    request.session['conversation'] = conversation
+    message =  """日本語で応答してください。あなたは意見に対して、反論意見を主張する役割です。500文字前後で主張してください"""
+    balthazar_response = discussion(OPENAI_API_KEY, casper_response, message)
+    interactions.append({'input': casper_response, 'response':  balthazar_response})
 
-    response = client.chat.completions.create(
-        model="gpt-4",
-        messages=[
-            {
-                "role": "system",
-                "content": "日本語で応答してください。1000文字以内でまとめてください。"
-            },
-            {
-                "role": "user",
-                "content": balthazar_response
-            },
-        ],
-        temperature=0.7,
-        max_tokens=1024
-    )
-    melchior_response = response.choices[0].message.content
-    melchior_response = melchior_response.replace("\n", "<br>")
+    message = """日本語で応答してください。あなたは意見に対して、意見まとめる役割です。500文字前後で、まとめた意見を主張してください"""
+    melchior_response = discussion(OPENAI_API_KEY, balthazar_response, message)
     interactions.append({'input': balthazar_response, 'response': melchior_response})
-    conversation.append(melchior_response)
-    request.session['conversation'] = conversation
-    print(interactions)
+
     return JsonResponse({'message': interactions})
-
-
 
 def discussion(request):
     full_url = request.build_absolute_uri('/')
