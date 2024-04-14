@@ -112,9 +112,11 @@ ul {
 }
 
 .send_mail.lyric_trans .sentence {
-    width: calc(50% - 200px);
-    height: 640px;
+    width: calc(50% - 60px);
+    height: auto;
+    min-height: 640px;
     margin: 0 auto;
+    padding-bottom: 30px;
 }
 
 .send_mail.lyric_trans .sentence form p{
@@ -122,9 +124,9 @@ ul {
     text-align: left;
 }
 
-.send_mail.lyric_trans .sentence form input, .send_mail.lyric_trans .sentence form select {
+.send_mail.lyric_trans .sentence form input, .send_mail.lyric_trans .sentence form select, .sentence form textarea {
     width: 100%;
-    max-width: 300px;
+    max-width: 640px;
 }
 
 .vision.lyric_trans .sentence ,.vision.lyric_trans .result {
@@ -212,4 +214,8 @@ ul {
 
 .select_area p{
     padding: 10px 0;
+}
+
+label {
+    display: block;
 }

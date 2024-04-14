@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'icon',
     'recipe',
     'send_mail',
+    'response_mail',
     'generate_image'
 ]
 
