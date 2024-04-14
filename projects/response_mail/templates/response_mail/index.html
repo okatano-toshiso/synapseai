@@ -8,7 +8,7 @@
         <p class="message">受信メールの返信を生成・校正してくれるアプリ 会社名と名前はChatGPTに送信されません。</p>
         <div class="contents_area">
             <article class="sentence">
-                <h3>POST</h2>
+                <h3>REQUEST</h2>
                 <form method="POST">
                     {% csrf_token %}
                     {{ form.as_p }}
@@ -16,15 +16,12 @@
                 </form>
             </article>
             <article class="result">
-                <h3>After Calibration</h2>
+                <h3>RESPONSE</h2>
                 <p class="result_box_text copy-target">
                     {{ chat_results|safe }}
                 </p>
                 <div class="button_area">
                     <button id="copyButton">COPY</button>
-                    <p class="sns_btn">
-                        <a href="https://twitter.com/" target="_blank" class="full"><img src="{% static 'img/x-logo-black.png' %}" class="x_logo"/></a>
-                    </p>
                 </div>
             </article>
         </div>
