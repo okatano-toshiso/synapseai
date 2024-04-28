@@ -1,3 +1,4 @@
+from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import loader
 from .forms import ChatForm
@@ -5,38 +6,41 @@ import os
 from openai import OpenAI
 
 def index(request):
-    dotenv_path = os.path.join(os.path.dirname(__file__), '.env')
-    if os.path.exists(dotenv_path):
-        load_dotenv(dotenv_path)
-
-    # Access the API key from the environment
-    OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
-    """
-    チャット画面
-    """
+    try:
+        OPENAI_API_KEY = os.environ['OPENAI_API_KEY']
+    except KeyError:
+        return HttpResponse("APIキーが設定されていません。", status=500)
     chat_results = ""
     if request.method == "POST":
         form = ChatForm(request.POST)
         if form.is_valid():
-            sentence = form.cleaned_data['sentence']
-            client = OpenAI(
-                api_key = OPENAI_API_KEY,
-            )
-            response = client.chat.completions.create(
-                model="gpt-3.5-turbo",
-                messages=[
-                    {
-                        "role": "system",
-                        "content": "日本語で応答してください"
-                    },
-                    {
-                        "role": "user",
-                        "content": sentence
-                    },
-                ],
-            )
-            chat_results = response.choices[0].message.content
-            chat_results = chat_results.replace("\n", "<br>")
+            try:
+                sentence = form.cleaned_data['sentence']
+            except Exception as e:
+                return HttpResponse("フォームが取得できませんでした", status=400)
+            try:
+                client = OpenAI(
+                    api_key = OPENAI_API_KEY,
+                )
+                response = client.chat.completions.create(
+                    model="gpt-3.5-turbo",
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": "日本語で応答してください。"
+                        },
+                        {
+                            "role": "user",
+                            "content": sentence
+                        },
+                    ],
+                )
+                chat_results = response.choices[0].message.content
+                chat_results = chat_results.replace("\n", "<br>")
+            except Exception as e:
+                return HttpResponse(f"API呼び出し中にエラーが発生しました: {str(e)}", status=500)
+        else:
+            return HttpResponse("フォームのデータが無効です。", status=400)
     else:
         form = ChatForm()
     domain = request.build_absolute_uri('/')
