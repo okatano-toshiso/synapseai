@@ -6,7 +6,7 @@
         <p class="message">DEEPLのAPIを使って洋楽の英語の歌詞の翻訳を読みやすい形でアウトプット。上限は2000文字まで</p>
         <div class="contents_area">
             <article class="sentence">
-                <h3>Lyrics</h2>
+                <h3>Lyrics</h3>
                 <form method="POST">
                     {% csrf_token %}
                     {{ form.as_p }}
@@ -14,7 +14,7 @@
                 </form>
             </article>
             <article class="result">
-                <h3>Original and Transfer</h2>
+                <h3>Original and Transfer</h3>
                 <p class="result_box_text">
                     {{ chat_results|safe }}
                 </p>

@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'recipe',
     'send_mail',
     'response_mail',
+    'book_review',
     'generate_image'
 ]
 

@@ -6,7 +6,7 @@
         <p class="message">TTS</p>
         <div class="contents_area">
             <article class="sentence">
-                <h3>Texts</h2>
+                <h3>Texts</h3>
                 <form method="POST">
                     {% csrf_token %}
                     {{ form.as_p }}
@@ -14,7 +14,7 @@
                 </form>
             </article>
             <article class="result">
-                <h3>Speech</h2>
+                <h3>Speech</h3>
                 <audio id="myAudio" controls>
                     <source src='/uploads/tts/speech.mp3' type="audio/mpeg">
                 </audio>

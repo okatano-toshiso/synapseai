@@ -6,7 +6,7 @@
         <p class="message">gpt-3.5-turbo API Simple</p>
         <div class="contents_area">
             <article class="sentence">
-                <h3>User</h2>
+                <h3>User</h3>
                 <form method="POST">
                     {% csrf_token %}
                     {{ form.as_p }}
@@ -14,7 +14,7 @@
                 </form>
             </article>
             <article class="result">
-                <h3>ChatGpt</h2>
+                <h3>ChatGpt</h3>
                 <p class="result_box_text">
                     {{ chat_results|safe }}
                 </p>

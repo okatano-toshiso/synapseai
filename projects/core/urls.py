@@ -39,6 +39,7 @@ urlpatterns = [
     path('chat_interaction/', include('chat_interaction.urls')),
     path('magi_system/', include('magi_system.urls')),
     path('generate_image/', include('generate_image.urls')),
+    path('book_review/', include('book_review.urls')),
 ]
 
 if settings.DEBUG:

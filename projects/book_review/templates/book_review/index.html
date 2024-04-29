@@ -1,29 +1,32 @@
 {% extends "base.html" %}
 {% block title %}Home Page{% endblock %}
 {% block content %}
+{% load static %}
+
 <main class="{{ app_name }} lyric_trans" >
     <section class="contents">
-        <p class="message">Calibrate SNS POST</p>
+        <p class="message">読書感想文をフレームワークに合わせて、出力してくれるアプリ</p>
         <div class="contents_area">
             <article class="sentence">
-                <h3>POST</h3>
+                <h3>REQUEST</h3>
                 <form method="POST">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button type="submit">Calibrate</button>
+                    <button type="submit">校正</button>
                 </form>
             </article>
             <article class="result">
-                <h3>After Calibration</h3>
-                <p class="result_box_text copy-target">
+                <h3>RESPONSE</h3>
+                <div class="result_box_text copy-target" style="height:auto; min-height:450px;">
                     {{ chat_results|safe }}
-                </p>
-                <button id="copyButton">COPY</button>
+                </div>
+                <div class="button_area">
+                    <button id="copyButton">COPY</button>
+                </div>
             </article>
         </div>
     </section>
 </main>
-{% load static %}
 <script type="text/javascript" src="{% static 'js/click_copy.js' %}" rel="stylesheet"></script>
 
 {% endblock %}
