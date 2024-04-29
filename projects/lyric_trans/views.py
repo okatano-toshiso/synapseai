@@ -5,12 +5,18 @@ import deepl
 import os
 
 def index(request):
-    API_KEY = os.environ['DEEPL_API_KEY']
+    try:
+        API_KEY = os.environ['DEEPL_API_KEY']
+    except KeyError:
+        return HttpResponse("APIキーが設定されていません。", status=500)
     trans_results = ""
     if request.method == "POST":
         form = ChatForm(request.POST)
         if form.is_valid():
-            sentence = form.cleaned_data['sentence']
+            try:
+                sentence = form.cleaned_data['sentence']
+            except Exception as e:
+                return HttpResponse("フォームが取得できませんでした", status=400)
             if len(sentence) < 20001:
                 def translate_text_with_deepl(text, auth_key):
                     translator = deepl.Translator(auth_key)
@@ -30,6 +36,8 @@ def index(request):
                     trans_results += result + "\n"
             else:
                 trans_results = '文字数オーバーです'
+        else:
+            return HttpResponse("フォームのデータが無効です。", status=400)
     else:
         form = ChatForm()
     trans_results = trans_results.replace("\n", "<br>")
