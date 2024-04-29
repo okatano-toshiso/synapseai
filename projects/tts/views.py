@@ -7,25 +7,31 @@ from django.core.files import File  # ファイル操作のためにインポー
 from django.conf import settings  # 設定値を取得するためにインポート
 
 def index(request):
-
-    # Access the API key from the environment
-    OPENAI_API_KEY = os.environ['OPENAI_API_IMAGE_KEY']
+    try:
+        OPENAI_API_KEY = os.environ['OPENAI_API_IMAGE_KEY']
+    except KeyError:
+        return HttpResponse("APIキーが設定されていません。", status=500)
     chat_results = ""
     if request.method == "POST":
         form = TtsForm(request.POST)
         if form.is_valid():
             sentence = form.cleaned_data['sentence']
-            client = OpenAI(
-                api_key = OPENAI_API_KEY,
-            )
-            speech_file_path = settings.BASE_DIR / "uploads/tts/speech.mp3"
-            response = client.audio.speech.create(
-                model="tts-1",
-                voice="alloy",
-                input=sentence
-            )
-            response.stream_to_file(speech_file_path)
-            chat_results = speech_file_path
+            try:
+                client = OpenAI(
+                    api_key = OPENAI_API_KEY,
+                )
+                speech_file_path = settings.BASE_DIR / "uploads/tts/speech.mp3"
+                response = client.audio.speech.create(
+                    model="tts-1",
+                    voice="alloy",
+                    input=sentence
+                )
+                response.stream_to_file(speech_file_path)
+                chat_results = speech_file_path
+            except Exception as e:
+                return HttpResponse(f"API呼び出し中にエラーが発生しました: {str(e)}", status=500)
+        else:
+            return HttpResponse("フォームのデータが無効です。", status=400)
     else:
         form = TtsForm()
     domain = request.build_absolute_uri('/')
@@ -40,9 +46,7 @@ def index(request):
     return HttpResponse(template.render(context, request))
 
 def delete_file(request):
-    # 削除したいファイルのパス
     file_path = settings.BASE_DIR / "uploads/tts/speech.mp3"
-
     if os.path.exists(file_path):
         os.remove(file_path)
         return HttpResponse("File deleted successfully", status=200)
