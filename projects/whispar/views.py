@@ -13,24 +13,32 @@ from django.core.files.storage import default_storage
 
 @csrf_exempt
 def index(request):
-    OPENAI_API_KEY = os.environ['OPENAI_API_IMAGE_KEY']
+    try:
+        OPENAI_API_KEY = os.environ['OPENAI_API_IMAGE_KEY']
+    except KeyError:
+        return HttpResponse("APIキーが設定されていません。", status=500)
     chat_results = ""
     if request.method == "POST":
         form = TranscribeForm(request.POST)
         if form.is_valid():
-            client = OpenAI(
-                api_key = OPENAI_API_KEY,
-            )
-            audio_file_path = settings.BASE_DIR / "uploads/uploads/recording.wav"
-            print(audio_file_path)
-            audio_file= open(audio_file_path , "rb")
-            transcription = client.audio.transcriptions.create(
-                model="whisper-1",
-                file=audio_file
-            )
-            chat_results = transcription.text
-            # if default_storage.exists(audio_file_path):
-            #     default_storage.delete(audio_file_path)
+            try:
+                client = OpenAI(
+                    api_key = OPENAI_API_KEY,
+                )
+                audio_file_path = settings.BASE_DIR / "uploads/uploads/recording.wav"
+                print(audio_file_path)
+                audio_file= open(audio_file_path , "rb")
+                transcription = client.audio.transcriptions.create(
+                    model="whisper-1",
+                    file=audio_file
+                )
+                chat_results = transcription.text
+                # if default_storage.exists(audio_file_path):
+                #     default_storage.delete(audio_file_path)
+            except Exception as e:
+                return HttpResponse(f"API呼び出し中にエラーが発生しました: {str(e)}", status=500)
+        else:
+            return HttpResponse("フォームのデータが無効です。", status=400)
     else:
         form = TranscribeForm()
     domain = request.build_absolute_uri('/')
