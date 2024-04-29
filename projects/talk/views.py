@@ -13,48 +13,56 @@ from django.core.files.storage import default_storage
 
 @csrf_exempt
 def index(request):
-    OPENAI_API_KEY = os.environ['OPENAI_API_IMAGE_KEY']
+    try:
+        OPENAI_API_KEY = os.environ['OPENAI_API_IMAGE_KEY']
+    except KeyError:
+        return HttpResponse("APIキーが設定されていません。", status=500)
     chat_results = ""
     if request.method == "POST":
         form = TranscribeForm(request.POST)
         if form.is_valid():
-            client = OpenAI(
-                api_key = OPENAI_API_KEY,
-            )
-            audio_file_path = settings.BASE_DIR / "uploads/talk/user.wav"
-            audio_file= open(audio_file_path , "rb")
-            transcription = client.audio.transcriptions.create(
-                model="whisper-1",
-                file=audio_file
-            )
-            response = client.chat.completions.create(
-                model="gpt-4",
-                messages=[
-                    {
-                        "role": "system",
-                        "content": """
-                        新しいひとがやってきます
-                        日本語で応答してください
-                        あなたは私の友人の役を演じます。
-                        勉強ができなくて異性が大好き。遊んでばかりいます。
-                        でも面倒見がよくて元気がいい
-                        """
-                    },
-                    {
-                        "role": "user",
-                        "content": transcription.text
-                    },
-                ],
-            )
-            text_results = response.choices[0].message.content
-            speech_file_path = settings.BASE_DIR / "uploads/talk/system.mp3"
-            response = client.audio.speech.create(
-                model="tts-1",
-                voice="alloy",
-                input=text_results
-            )
-            response.stream_to_file(speech_file_path)
-            chat_results = speech_file_path
+            try:
+                client = OpenAI(
+                    api_key = OPENAI_API_KEY,
+                )
+                audio_file_path = settings.BASE_DIR / "uploads/talk/user.wav"
+                audio_file= open(audio_file_path , "rb")
+                transcription = client.audio.transcriptions.create(
+                    model="whisper-1",
+                    file=audio_file
+                )
+                response = client.chat.completions.create(
+                    model="gpt-4",
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": """
+                            新しいひとがやってきます
+                            日本語で応答してください
+                            あなたは私の友人の役を演じます。
+                            勉強ができなくて異性が大好き。遊んでばかりいます。
+                            でも面倒見がよくて元気がいい
+                            """
+                        },
+                        {
+                            "role": "user",
+                            "content": transcription.text
+                        },
+                    ],
+                )
+                text_results = response.choices[0].message.content
+                speech_file_path = settings.BASE_DIR / "uploads/talk/system.mp3"
+                response = client.audio.speech.create(
+                    model="tts-1",
+                    voice="alloy",
+                    input=text_results
+                )
+                response.stream_to_file(speech_file_path)
+                chat_results = speech_file_path
+            except Exception as e:
+                return HttpResponse(f"API呼び出し中にエラーが発生しました: {str(e)}", status=500)
+        else:
+            return HttpResponse("フォームのデータが無効です。", status=400)
     else:
         form = TranscribeForm()
     domain = request.build_absolute_uri('/')
