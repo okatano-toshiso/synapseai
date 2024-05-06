@@ -19,8 +19,11 @@ def index(request):
             distributing = form.cleaned_data['distributing']
             music = form.cleaned_data['music']
             casts = form.cleaned_data['casts']
-            release = form.cleaned_data['release']
-            release = release.strftime('%Y-%m-%d')
+            if 'release' in form.cleaned_data and form.cleaned_data['release'] is not None:
+                release = form.cleaned_data['release']
+                release = release.strftime('%Y-%m-%d')
+            else:
+                release = ''
             introduction = form.cleaned_data['introduction']
             summary = form.cleaned_data['summary']
             impressions = form.cleaned_data['impressions']

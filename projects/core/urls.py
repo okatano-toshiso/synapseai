@@ -41,6 +41,7 @@ urlpatterns = [
     path('generate_image/', include('generate_image.urls')),
     path('book_review/', include('book_review.urls')),
     path('movie_review/', include('movie_review.urls')),
+    path('music_review/', include('music_review.urls')),
 ]
 
 if settings.DEBUG:

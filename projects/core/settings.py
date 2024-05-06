@@ -59,6 +59,7 @@ INSTALLED_APPS = [
     'response_mail',
     'book_review',
     'movie_review',
+    'music_review',
     'generate_image'
 ]
 

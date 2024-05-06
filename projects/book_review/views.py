@@ -16,8 +16,11 @@ def index(request):
             title = form.cleaned_data['title']
             author = form.cleaned_data['author']
             publisher = form.cleaned_data['publisher']
-            release = form.cleaned_data['release']
-            release = release.strftime('%Y-%m-%d')
+            if 'release' in form.cleaned_data and form.cleaned_data['release'] is not None:
+                release = form.cleaned_data['release']
+                release = release.strftime('%Y-%m-%d')
+            else:
+                release = ''
             introduction = form.cleaned_data['introduction']
             summary = form.cleaned_data['summary']
             impressions = form.cleaned_data['impressions']
