@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+{% load static %}
+
+<main class="{{ app_name }} lyric_trans" >
+    <section class="contents">
+        <p class="message">映画レビュー・フレームワークに合わせて、出力してくれるアプリ</p>
+        <div class="contents_area">
+            <article class="sentence">
+                <h3>REQUEST</h3>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">校正</button>
+                </form>
+            </article>
+            <article class="result">
+                <h3>RESPONSE</h3>
+                <div class="result_box_text copy-target" style="height:auto; min-height:450px;">
+                    {{ chat_results|safe }}
+                </div>
+                <div class="button_area">
+                    <button id="copyButton">COPY</button>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+<script type="text/javascript" src="{% static 'js/click_copy.js' %}" rel="stylesheet"></script>
+
+{% endblock %}

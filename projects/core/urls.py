@@ -40,6 +40,7 @@ urlpatterns = [
     path('magi_system/', include('magi_system.urls')),
     path('generate_image/', include('generate_image.urls')),
     path('book_review/', include('book_review.urls')),
+    path('movie_review/', include('movie_review.urls')),
 ]
 
 if settings.DEBUG:

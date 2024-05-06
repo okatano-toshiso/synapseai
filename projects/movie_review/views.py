@@ -14,8 +14,11 @@ def index(request):
         form = ChatForm(request.POST)
         if form.is_valid():
             title = form.cleaned_data['title']
-            author = form.cleaned_data['author']
-            publisher = form.cleaned_data['publisher']
+            director = form.cleaned_data['director']
+            playwright = form.cleaned_data['playwright']
+            distributing = form.cleaned_data['distributing']
+            music = form.cleaned_data['music']
+            casts = form.cleaned_data['casts']
             release = form.cleaned_data['release']
             release = release.strftime('%Y-%m-%d')
             introduction = form.cleaned_data['introduction']
@@ -32,33 +35,31 @@ def index(request):
                         {
                             "role": "system",
                             "content": f"""
-                            読んだ本のタイトル{title}と著者名{author}を紹介します。
                             導入部
                             \nーーーーーーーーーーーーーーーーーーーーーー\n
                             {introduction}
                             \nーーーーーーーーーーーーーーーーーーーーーー\n
-                            この本を読んだきっかけを書いてありますので、300文字以内に綺麗に校正してまとめてください。
+                            この映像作品を読んだきっかけを書いてありますので、300文字以内に綺麗に校正してまとめてください。
                             """
                         }
                     ],
                 )
                 introduction_result = introduction_review.choices[0].message.content
                 introduction_result = introduction_result.replace("\n", "<br>")
-
                 summary_review = client.chat.completions.create(
                     model="gpt-3.5-turbo",
                     messages=[
                         {
                             "role": "system",
                             "content": f"""
-                            あなたは日本語が詳しい優秀な書評家です。
+                            あなたは日本語が詳しい優秀な映像作品評論家です。
                             内容の要約
                             \nーーーーーーーーーーーーーーーーーーーーーー\n
                             {summary}
                             \nーーーーーーーーーーーーーーーーーーーーーー\n
                             主要な登場人物、設定、ストーリーの流れを簡潔に要約してあります。
-                            本の中で特に印象に残った場面やテーマについて触れています。
-                            この本の要約を書いてありますので、300文字以内に綺麗に校正してまとめてください。
+                            映像作品の中で特に印象に残った場面やテーマについて触れています。
+                            この映像作品の要約を書いてありますので、300文字以内に綺麗に校正してまとめてください。
                             """
                         }
                     ],
@@ -72,13 +73,13 @@ def index(request):
                         {
                             "role": "system",
                             "content": f"""
-                            あなたは日本語が詳しい優秀な書評家です。
+                            あなたは日本語が詳しい優秀な映像作品評論家です。
                             感想・考察
                             \nーーーーーーーーーーーーーーーーーーーーーー\n
                             {impressions}
                             \nーーーーーーーーーーーーーーーーーーーーーー\n
                             物語から何を感じ取ったか、どのような考えを持ったかのかが書かれています。
-                            この本の感想・考察を書いてありますので、300文字以内に綺麗に校正してまとめてください。
+                            この映像作品の感想・考察を書いてありますので、300文字以内に綺麗に校正してまとめてください。
                             """
                         }
                     ],
@@ -92,21 +93,23 @@ def index(request):
                         {
                             "role": "system",
                             "content": f"""
-                            あなたは日本語が詳しい優秀な書評家です。
+                            あなたは日本語が詳しい優秀な像作品評論家です。
                             結論
                             \nーーーーーーーーーーーーーーーーーーーーーー\n
                             {conclusion}
                             \nーーーーーーーーーーーーーーーーーーーーーー\n
                             物語から何を感じ取ったか、どのような考えを持ったかを述べています。
                             物語のテーマやメッセージが自分の人生にどのように活かしていくかを書いています。
-                            この本の結論を書いてありますので、300文字以内に綺麗に校正してまとめてください。
+                            この映像作品の結論を書いてありますので、300文字以内に綺麗に校正してまとめてください。
                             """
                         }
                     ],
                 )
                 conclusion_result = conclusion_review.choices[0].message.content
                 conclusion_result = conclusion_result.replace("\n", "<br>")
-                chat_results = "作品名:" + title + "<br>著作者:" + author + "<br>出版社:" + publisher + "<br>発行日:" + release + "<br><br>導入部：<br>" + introduction_result + "<br><br>内容の要約：<br>" + summary_result + "<br><br>感想・考察：<br>" + impressions_result + "<br><br>結論：<br>" + conclusion_result
+                casts = casts.replace("\n", "<br>")
+                chat_results = "作品名:" + title + "<br>監督:" + director + "<br>脚本家:" + playwright + "<br>配給会社:" + distributing + "<br>公開日:" + release + "<br>主題歌:" + music + "<br><br>出演者:<br>" + casts + "<br><br>導入部：<br>" + introduction_result + "<br><br>内容の要約：<br>" + summary_result + "<br><br>感想・考察：<br>" + impressions_result + "<br><br>結論：<br>" + conclusion_result
+
             except Exception as e:
                 return HttpResponse(f"API呼び出し中にエラーが発生しました: {str(e)}", status=500)
         else:
@@ -115,7 +118,7 @@ def index(request):
         form = ChatForm()
 
     domain = request.build_absolute_uri('/')
-    template = loader.get_template('book_review/index.html')
+    template = loader.get_template('movie_review/index.html')
     context = {
         'form': form,
         'domain': domain,
