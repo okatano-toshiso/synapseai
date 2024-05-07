@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     'book_review',
     'movie_review',
     'music_review',
+    'aphorism',
     'generate_image'
 ]
 

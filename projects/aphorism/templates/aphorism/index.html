@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+<main class="{{ app_name }} lyric_trans" >
+    <section class="contents">
+        <p class="message">格言検索</p>
+        <div class="contents_area">
+            <article class="sentence">
+                <h3>Prompt</h3>
+                <div class="select_area">
+                    <form method="POST">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                        <button type="submit">search</button>
+                    </form>
+                </div>
+            </article>
+            <article class="result">
+                <h3>RESPONSE</h3>
+                <div class="result_box_text copy-target" style="height:auto; min-height:450px;">
+                    {{ english_result|safe }}<br /><hr /><br />
+                    {{ japanese_result|safe }}
+                </div>
+                <div class="button_area">
+                    <button id="copyButton">COPY</button>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+{% endblock %}

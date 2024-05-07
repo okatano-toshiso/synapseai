@@ -19,29 +19,39 @@ def index(request):
     except KeyError:
         return HttpResponse("DEEPL_APIキーが設定されていません。", status=500)
     translator = ""
-    image_url = ""
+    english_result = ""
+    japanese_result = ""
     if request.method == "POST":
         form = ChatForm(request.POST)
         if form.is_valid():
-            color = form.cleaned_data['color']
-            background = form.cleaned_data['background']
-            image = form.cleaned_data['image']
+            category = form.cleaned_data['category']
+            details = form.cleaned_data['texts']
             try:
                 def translate_text(text, auth_key, source_lang, target_lang):
                     translator = deepl.Translator(auth_key)
                     result = translator.translate_text(text, source_lang = source_lang, target_lang = target_lang)
                     return result.text
-                image = translate_text(image, API_KEY, 'JA', 'EN-GB')
-
+                details = translate_text(details, API_KEY, 'JA', 'EN-GB')
                 client = OpenAI(
                     api_key = OPENAI_API_KEY,
                 )
-                response =  client.images.generate(
-                    model   = "dall-e-3",
-                    prompt = f"""Design a pictogram-style app icon, using only two HEX color codes: ‘{color}’ for the icon itself and ‘{background}’ for the background. The theme is based around {image}, and the icon should feature a single, central symbolic element related to {image}. The design must strictly adhere to using only these two specified colors, creating a clear and simple two-tone image that effectively communicates the theme.No drop shadow and no gradient.""",
-                    size="1024x1024"
+                response = client.chat.completions.create(
+                    model="gpt-4",
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": f"""
+                            You are a historian.
+                            What are some sayings of famous people from the past and present and what is the name of the famous person?
+                            category is {category} And about {details}
+                            Please pick three aphorisms.
+                            Please output in the form of ' aphorisms <br /> by speaker '.
+                            """
+                        },
+                    ],
                 )
-                image_url = response.data[0].url
+                english_result = response.choices[0].message.content
+                japanese_result = translate_text(english_result, API_KEY, 'EN', 'JA')
             except Exception as e:
                 return HttpResponse(f"API呼び出し中にエラーが発生しました: {str(e)}", status=500)
         else:
@@ -49,11 +59,14 @@ def index(request):
     else:
         form = ChatForm()
     domain = request.build_absolute_uri('/')
-    template = loader.get_template('icon/index.html')
+    template = loader.get_template('aphorism/index.html')
+    english_result = english_result.replace("\n", "<br>")
+    japanese_result = japanese_result.replace("\n", "<br>")
     context = {
         'form': form,
         'domain': domain,
-        'app_name': "icon",
-        'img_results': image_url
+        'app_name': "aphorism",
+        'english_result': english_result,
+        'japanese_result': japanese_result
     }
     return HttpResponse(template.render(context, request))
