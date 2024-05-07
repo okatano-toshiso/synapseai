@@ -8,7 +8,6 @@ import requests
 import json
 import deepl
 
-@login_required
 def index(request):
     try:
         OPENAI_API_KEY = os.environ['OPENAI_API_IMAGE_KEY']
