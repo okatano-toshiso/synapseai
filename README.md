@@ -41,5 +41,3 @@ python manage.py runserver
 ```
 python manage.py collectstatic --noinput
 ```
-
-7.
