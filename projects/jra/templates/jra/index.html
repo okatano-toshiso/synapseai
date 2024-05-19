@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+{% load static %}
+<style>
+    .send_mail.lyric_trans .sentence form input, .send_mail.lyric_trans .sentence form select, .sentence form textarea {
+        width: auto;
+        max-width: 240px;
+    }
+    .send_mail.lyric_trans .sentence form p {
+        margin: 10px;
+        text-align: left;
+    }
+    .form-row {
+        display: flex;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    .form-row > label {
+        margin-right: 10px;
+        min-width: 100px;  /* 必要に応じて調整 */
+    }
+    .form-row > input {
+        flex: 1;
+    }
+    .racehorse-field {
+        margin-right: 10px;
+    }
+    .racehorse-group {
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+    .info_block {
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+    }
+    .info_block_tag {
+        width:75px;
+        font-size:12px;
+        line-height:24px;
+    }
+    .info_block_form input{
+        width:auto;
+        min-width:150px;
+        font-size:12px;
+    }
+    .horse_info {
+        width:100%;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        list-style:none;
+    }
+    .racehorse-frame, .racehorse-number, .racehorse-age, .racehorse-weight, .racehorse-body, .racehorse-odds, .racehorse-fluctuation {
+        width:80px !important;
+    }
+    .racehorse-name {
+        width:200px !important;
+    }
+    .racehorse-jockey, .racehorse-barn {
+        width:100px !important;
+    }
+</style>
+<main class="{{ app_name }} lyric_trans" >
+    <section class="contents">
+        <p class="message">競馬予想アプリ</p>
+        <div class="contents_area">
+            <article class="sentence">
+                <h3>レース＆馬情報</h3>
+                <form method="POST">
+                    {% csrf_token %}
+                    <h4>レース情報</h4>
+                    <div class="info_block">
+                        <p class="info_block_tag">{{ form.rase.label_tag }}</p>
+                        <p class="info_block_form">{{ form.rase }}</p>
+                        <p class="info_block_tag">{{ form.date.label_tag }}</p>
+                        <p class="info_block_form">{{ form.date }}</p>
+                    </div>
+                    <div class="info_block">
+                        <p class="info_block_tag">{{ form.distance.label_tag }}</p>
+                        <p class="info_block_form">{{ form.distance }}</p>
+                        <p class="info_block_tag">{{ form.course.label_tag }}</p>
+                        <p class="info_block_form">{{ form.course }}</p>
+                        <p class="info_block_tag">{{ form.orientation.label_tag }}</p>
+                        <p class="info_block_form">{{ form.orientation }}</p>
+                    </div>
+                    <h4>競馬場情報</h4>
+                    <div class="info_block">
+                        <p class="info_block_tag">{{ form.place.label_tag }}</p>
+                        <p class="info_block_form">{{ form.place }}</p>
+                        <p class="info_block_tag">{{ form.weather.label_tag }} </p>
+                        <p class="info_block_form">{{ form.weather }}</p>
+                    </div>
+                    <div class="info_block">
+                        <p class="info_block_tag">{{ form.condition.label_tag }}</p>
+                        <p class="info_block_form">{{ form.condition }}</p>
+                        <p class="info_block_tag">{{ form.betting.label_tag }} </p>
+                        <p class="info_block_form">{{ form.betting }}</p>
+                    </div>
+                    <h4>出走馬情報</h4>
+                    <div>
+                        <ul class="horse_info">
+                            <li>枠</li>
+                            <li>番</li>
+                            <li>馬名</li>
+                            <li>性</li>
+                            <li>齢</li>
+                            <li>騎手</li>
+                            <li>重</li>
+                            <li>厩舎</li>
+                            <li>馬体重</li>
+                            <li>差分</li>
+                            <li>オッズ</li>
+                        </ul>
+                        <ul class="horse_info">
+                            {% for field in form %}
+                                {% if field.name|slice:":10" == "Racehorse_" %}
+                                    <li>{{ field }}</li>
+                                {% endif %}
+                                {% if forloop.counter == 20 or forloop.counter == 31 or forloop.counter == 42 or forloop.counter == 53 or forloop.counter == 64 or forloop.counter == 75 or forloop.counter == 86 or forloop.counter == 97 or forloop.counter == 108 or forloop.counter == 119 or forloop.counter == 130 or forloop.counter == 141 or forloop.counter == 152 or forloop.counter == 163 or forloop.counter == 174 or forloop.counter == 185 or forloop.counter == 196 or forloop.counter == 207 or forloop.counter == 218 or forloop.counter == 229 or forloop.counter == 240 or forloop.counter == 251 %}
+                                    </ul>
+                                    <ul class="horse_info">
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    <button type="submit">予想</button>
+                </form>
+            </article>
+            <article class="result">
+                <h3>予想結果</h3>
+                <div class="result_box_text copy-target" style="height:auto; min-height:450px;">
+                    {{ chat_results|safe }}
+                </div>
+                <div class="button_area">
+                    <button id="copyButton">COPY</button>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+<script type="text/javascript" src="{% static 'js/click_copy.js' %}" rel="stylesheet"></script>
+
+{% endblock %}

@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'movie_review',
     'music_review',
     'aphorism',
+    'jra',
     'generate_image'
 ]
 

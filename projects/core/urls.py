@@ -43,6 +43,7 @@ urlpatterns = [
     path('movie_review/', include('movie_review.urls')),
     path('music_review/', include('music_review.urls')),
     path('aphorism/', include('aphorism.urls')),
+    path('jra/', include('jra.urls')),
 ]
 
 if settings.DEBUG:
