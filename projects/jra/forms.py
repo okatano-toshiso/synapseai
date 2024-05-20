@@ -7,7 +7,7 @@ class ChatForm(forms.Form):
         widget=forms.DateInput(attrs={'type': 'date'}),  # ブラウザの日付選択ウィジェットを使用
         required=False
     )
-    distance = forms.CharField(label='距離', widget=forms.TextInput(), required=False)
+    distance = forms.IntegerField(label='距離', widget=forms.NumberInput(attrs={'min': 0, 'max': 9999}), required=False)
     CHOICES = [
         ('turf', '芝'),
         ('dirt', 'ダート'),
