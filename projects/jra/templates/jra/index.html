@@ -107,33 +107,15 @@
                         <p class="info_block_tag">{{ form.betting.label_tag }} </p>
                         <p class="info_block_form">{{ form.betting }}</p>
                     </div>
-                    <h4>出走馬情報</h4>
-                    <div>
-                        <ul class="horse_info">
-                            <li>枠</li>
-                            <li>番</li>
-                            <li>馬名</li>
-                            <li>性</li>
-                            <li>齢</li>
-                            <li>騎手</li>
-                            <li>重</li>
-                            <li>厩舎</li>
-                            <li>馬体重</li>
-                            <li>変動</li>
-                            <li>オッズ</li>
-                        </ul>
-                        <ul class="horse_info">
-                            {% for field in form %}
-                                {% if field.name|slice:":10" == "Racehorse_" %}
-                                    <li>{{ field }}</li>
-                                {% endif %}
-                                {% if forloop.counter == 20 or forloop.counter == 31 or forloop.counter == 42 or forloop.counter == 53 or forloop.counter == 64 or forloop.counter == 75 or forloop.counter == 86 or forloop.counter == 97 or forloop.counter == 108 or forloop.counter == 119 or forloop.counter == 130 or forloop.counter == 141 or forloop.counter == 152 or forloop.counter == 163 or forloop.counter == 174 or forloop.counter == 185 or forloop.counter == 196 or forloop.counter == 207 or forloop.counter == 218 or forloop.counter == 229 or forloop.counter == 240 or forloop.counter == 251 %}
-                                    </ul>
-                                    <ul class="horse_info">
-                                {% endif %}
-                            {% endfor %}
-                        </ul>
+                    <h4>出走馬データ取得</h4>
+                    <div class="info_block">
+                        <p class="info_block_tag">{{ form.location.label_tag }}</p>
+                        <p class="info_block_form">{{ form.location }}</p>
+                        <p class="info_block_tag">{{ form.race_number.label_tag }} </p>
+                        <p class="info_block_form">{{ form.race_number }}</p>
                     </div>
+                    <br />
+                    <br />
                     <button type="submit">予想</button>
                 </form>
             </article>
