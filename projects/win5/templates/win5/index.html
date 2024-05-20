@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+{% load static %}
+<style>
+    .button_position {
+        width:100%;
+        text-align:center;
+    }
+    .lyric_trans .sentence ,.lyric_trans .result {
+        width: calc(50% - 70px);
+        height: 640px;
+        margin-left:60px;
+        text-align:left;
+    }
+    .lyric_trans .sentence input {
+        width:250px;
+    }
+
+</style>
+<main class="{{ app_name }} lyric_trans" >
+    <section class="contents">
+        <p class="message">WIN5予想アプリ</p>
+        <div class="contents_area">
+            <article class="sentence">
+                <h3>対象レース</h3>
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <div class="button_position">
+                        <button type="submit">予想</button>
+                    </div>
+                </form>
+            </article>
+            <article class="result">
+                <h3>予想結果</h3>
+                <div class="result_box_text copy-target" style="height:auto; min-height:450px;">
+                    {{ chat_results|safe }}
+                </div>
+                <div class="button_area">
+                    <button id="copyButton">COPY</button>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+<script type="text/javascript" src="{% static 'js/click_copy.js' %}" rel="stylesheet"></script>
+
+{% endblock %}
