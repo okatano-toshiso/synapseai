@@ -9,38 +9,50 @@ class ChatForm(forms.Form):
     )
     distance = forms.IntegerField(label='距離', widget=forms.NumberInput(attrs={'min': 0, 'max': 9999}), required=False)
     CHOICES = [
-        ('turf', '芝'),
-        ('dirt', 'ダート'),
-        ('obstacles', '障害物'),
+        ('芝', '芝'),
+        ('ダート', 'ダート'),
+        ('障害物', '障害物'),
     ]
     course = forms.ChoiceField(label='コース', choices=CHOICES, required=True)
     CHOICES = [
-        ('left', '左回り'),
-        ('right', '右回り')
+        ('左回り', '左回り'),
+        ('右回り', '右回り')
     ]
-    orientation = forms.ChoiceField(label='コース', choices=CHOICES, required=True)
-    place = forms.CharField(label='競馬場', widget=forms.TextInput(), required=False)
+    orientation = forms.ChoiceField(label='回り', choices=CHOICES, required=True)
     CHOICES = [
-        ('fine', '晴れ'),
-        ('cloudiness', '曇り'),
-        ('rain', '雨'),
+        ('札幌競馬場', '札幌競馬場'),
+        ('函館競馬場', '函館競馬場'),
+        ('福島競馬場', '福島競馬場'),
+        ('中山競馬場', '中山競馬場'),
+        ('東京競馬場', '東京競馬場'),
+        ('新潟競馬場', '新潟競馬場'),
+        ('中京競馬場', '中京競馬場'),
+        ('京都競馬場', '京都競馬場'),
+        ('阪神競馬場', '阪神競馬場'),
+        ('小倉競馬場', '小倉競馬場')
+    ]
+    place = forms.ChoiceField(label='中央競馬', choices=CHOICES, required=True)
+    CHOICES = [
+        ('晴れ', '晴れ'),
+        ('曇り', '曇り'),
+        ('雨', '雨'),
     ]
     weather = forms.ChoiceField(label='天候', choices=CHOICES, required=True)
     CHOICES = [
-        ('good', '良'),
-        ('semi-heavy', '稍重'),
-        ('heavy', '重'),
-        ('poor', '不良'),
+        ('良', '良'),
+        ('稍重', '稍重'),
+        ('重', '重'),
+        ('不良', '不良'),
     ]
     condition = forms.ChoiceField(label='馬場状態', choices=CHOICES, required=True)
     CHOICES = [
-        ('exacta', '単勝'),
-        ('place', '複勝'),
-        ('bracket_quinella', '枠連'),
-        ('quinella', '馬連'),
-        ('quinella_place', 'ワイド'),
-        ('tierce', '3連複'),
-        ('trio', '3連単'),
+        ('単勝', '単勝'),
+        ('複勝', '複勝'),
+        ('枠連', '枠連'),
+        ('馬連', '馬連'),
+        ('ワイド', 'ワイド'),
+        ('3連複', '3連複'),
+        ('3連単', '3連単'),
     ]
     betting = forms.ChoiceField(label='馬券の種類', choices=CHOICES, required=True)
 
