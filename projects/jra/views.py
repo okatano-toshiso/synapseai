@@ -26,7 +26,7 @@ from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
-
+from selenium.webdriver.support import expected_conditions as EC
 
 def index(request):
     # メイン処理
@@ -86,15 +86,15 @@ def index(request):
         service = ChromeService(ChromeDriverManager().install())
         browser = webdriver.Chrome(service=service, options=chrome_options)
 
-        # タイムアウトの設定
-        browser.set_page_load_timeout(600)
-        browser.implicitly_wait(10)
-        wait = WebDriverWait(browser, 600)
-
         # browser = webdriver.Chrome(ChromeDriverManager().install())
         # 競馬データベースを開く
         browser.get('https://www.jra.go.jp/')
         browser.implicitly_wait(20)  # 指定した要素が見つかるまでの待ち時間を20秒と設定する
+        browser.set_page_load_timeout(600)
+        wait = WebDriverWait(browser, 600)
+
+        element = wait.until(EC.presence_of_element_located((By.TAG_NAME, "body")))
+
         # 出馬表をクリック
         xpath = '//*[@id="quick_menu"]/div/ul/li[2]/a'
         elem_search = browser.find_element(By.XPATH, value=xpath)
