@@ -27,6 +27,11 @@ from bs4 import BeautifulSoup
 # プログレスバーを表示するためのライブラリを読み込む
 from tqdm import tqdm
 
+driver = webdriver.Chrome()
+driver.set_page_load_timeout(600)
+driver.implicitly_wait(600)
+
+
 def index(request):
     # メイン処理
     def main():
