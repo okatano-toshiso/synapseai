@@ -10,12 +10,6 @@ import urllib
 import requests
 import re
 
-
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service as ChromeService
-from selenium.webdriver.chrome.options import Options
-from webdriver_manager.chrome import ChromeDriverManager
-
 # スクレイピングで使用するライブラリを読み込む
 # from webdriver_manager.chrome import ChromeDriverManager
 
@@ -27,10 +21,24 @@ from bs4 import BeautifulSoup
 # プログレスバーを表示するためのライブラリを読み込む
 from tqdm import tqdm
 
-# driver = webdriver.Chrome()
-# driver.set_page_load_timeout(600)
-# driver.implicitly_wait(600)
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service as ChromeService
+from selenium.webdriver.chrome.options import Options
+from webdriver_manager.chrome import ChromeDriverManager
 
+# Chromeのオプションを設定
+options = Options()
+options.add_argument("--headless")  # ヘッドレスモードで実行する場合
+options.add_argument("--no-sandbox")
+options.add_argument("--disable-dev-shm-usage")
+
+# WebDriverをwebdriver-managerで管理
+service = ChromeService(ChromeDriverManager().install())
+driver = webdriver.Chrome(service=service, options=options)
+
+# タイムアウトの設定
+driver.set_page_load_timeout(600)
+driver.implicitly_wait(600)
 
 def index(request):
     # メイン処理
