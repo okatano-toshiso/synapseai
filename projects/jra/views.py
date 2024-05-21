@@ -3,30 +3,20 @@ from django.template import loader
 from .forms import ChatForm
 import os
 from openai import OpenAI
-
 # ライブラリの読み込み
 import pandas as pd
 import urllib
 import requests
 import re
-
-# スクレイピングで使用するライブラリを読み込む
-# from webdriver_manager.chrome import ChromeDriverManager
-
-# from selenium import webdriver
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
-# from selenium.webdriver.chrome.options import Options
-
 # プログレスバーを表示するためのライブラリを読み込む
 from tqdm import tqdm
-
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
-
 
 def index(request):
     # メイン処理
@@ -35,21 +25,17 @@ def index(request):
         soup = access_entries()
         # 開催場所のURLを取得する
         location_url = get_location_url(soup)
-
         # 開催場所ごとのラウンドのURLを取得する
         round_url = []
         for i in location_url:
             res = requests.get(i)
             soup = BeautifulSoup(res.content, 'html5lib')
             round_url.extend(get_round_url(soup))
-
         # 天候と馬場情報を取得する
         tokyo = riding_ground('東京')
         tokyo.get_weather_condition_info()
-
         kyoto = riding_ground('京都')
         kyoto.get_weather_condition_info()
-
         # レース情報の抽出と整形を行い、データフレームに追記保存する
         races_info = pd.DataFrame()
         print('レース情報の取得を開始します')
@@ -64,7 +50,6 @@ def index(request):
         # print(races_info)
         # 天候、馬場情報を設定する
         # races_info = set_weather_condition(races_info, tokyo, kyoto)
-
         # CSVにレース情報を保存する
         # file_name = settings.BASE_DIR / "uploads/win5/data.csv"
         # races_info.to_csv(file_name, encoding='utf-8', index=False, errors="ignore")
