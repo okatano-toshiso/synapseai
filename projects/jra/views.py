@@ -25,20 +25,8 @@ from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 from selenium.webdriver.chrome.options import Options
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.support.ui import WebDriverWait
 
-# Chromeのオプションを設定
-options = Options()
-options.add_argument("--headless")  # ヘッドレスモードで実行する場合
-options.add_argument("--no-sandbox")
-options.add_argument("--disable-dev-shm-usage")
-
-# WebDriverをwebdriver-managerで管理
-service = ChromeService(ChromeDriverManager().install())
-driver = webdriver.Chrome(service=service, options=options)
-
-# タイムアウトの設定
-driver.set_page_load_timeout(600)
-driver.implicitly_wait(600)
 
 def index(request):
     # メイン処理
@@ -97,6 +85,12 @@ def index(request):
         # ChromeDriverを設定
         service = ChromeService(ChromeDriverManager().install())
         browser = webdriver.Chrome(service=service, options=chrome_options)
+
+        # タイムアウトの設定
+        browser.set_page_load_timeout(600)
+        browser.implicitly_wait(10)
+        wait = WebDriverWait(browser, 600)
+
         # browser = webdriver.Chrome(ChromeDriverManager().install())
         # 競馬データベースを開く
         browser.get('https://www.jra.go.jp/')
