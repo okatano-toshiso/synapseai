@@ -61,6 +61,7 @@ INSTALLED_APPS = [
     'movie_review',
     'music_review',
     'aphorism',
+    'jra_scraping',
     'jra',
     'win5',
     'generate_image'

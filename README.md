@@ -22,19 +22,19 @@ python manage.py runserver
 3. virtual envelopment stop
 
 ```
- deactivate
+deactivate
 ```
 
 4. create app
 
 ```
- python manage.py startapp {myapp}
+python manage.py startapp {myapp}
 ```
 
 5. venv start
 
 ```
- source test/bin/activate
+source test/bin/activate
 ```
 
 6. collect Static

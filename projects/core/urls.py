@@ -44,6 +44,7 @@ urlpatterns = [
     path('music_review/', include('music_review.urls')),
     path('aphorism/', include('aphorism.urls')),
     path('jra/', include('jra.urls')),
+    path('jra_scraping/', include('jra_scraping.urls')),
     path('win5/', include('win5.urls')),
 ]
 

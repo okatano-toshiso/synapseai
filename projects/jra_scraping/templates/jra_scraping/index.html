@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+{% load static %}
+
+
+<style>
+.lyric_trans .sentence, .lyric_trans .result {
+    text-align: center;
+}
+.no_display {
+    display:none;
+}
+.SUCCESS {
+    display:block !important;
+}
+</style>
+
+<main class="{{ app_name }} lyric_trans" >
+    <section class="contents">
+        <p class="message">出走馬情報スクレイピングアプリ</p>
+        <p>JRA公式サイトから今週に開催されるレースの出走馬情報をスクレイピングしたデータをCSVダウンロードできるアプリ</p>
+        <div class="contents_area">
+            <article class="sentence">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <br />
+                    <br />
+                    <button type="submit">スクレイピング</button>
+                </form>
+            </article>
+            <article class="result">
+                <h3>結果</h3>
+                <br />
+                {{ chat_results|safe }}
+                <br />
+                <br />
+                <div class="no_display {{ chat_results|safe }}">
+                    <a href="{% url 'jra_scraping:download_file' 'data.csv' %}">
+                        <button>Download</button>
+                    </a>
+                </div>
+            </article>
+        </div>
+    </section>
+</main>
+<script type="text/javascript" src="{% static 'js/click_copy.js' %}" rel="stylesheet"></script>
+
+{% endblock %}
