@@ -57,7 +57,6 @@ def index(request):
                 (races_info['location'].str.contains(location))
             ]
             horse_names = races_info['horse'].tolist()
-            print(horse_names)
             # フィルタリング結果をコンソールに出力
             try:
                 client = OpenAI(
@@ -84,7 +83,7 @@ def index(request):
                             検索用サイト:https://dir.netkeiba.com/
                             馬券の種類は{betting}です。馬券の種類あわせた{betting}の予想の組み合わせを10パターンを出力してください。
                             当選確率が高いと思われる順に並べてください。
-                            その場合、馬名ではなく馬番で表示してください。解説も予想の後にしてください。
+                            その場合、馬名と馬番で表示してください。解説も予想の後にしてください。
                             例
                             馬券の種類
                             馬番-馬番-馬番
