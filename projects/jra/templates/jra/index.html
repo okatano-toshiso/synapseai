@@ -74,12 +74,11 @@
 <main class="{{ app_name }} lyric_trans" >
     <section class="contents">
         <p class="message">競馬予想アプリ</p>
-        <p>日付と開催地域とラウンドで、スクレイピングして、出走馬データをAIに読み込ませています</p>
-        <p>スクレイピングに時間がかかるため、TIMEOUT問題が発生しており、対応中</p>
+        <p>出走馬情報アプリで収集した今週のレースデータのCSVをアップロードすることで、予想いたします。</p>
         <div class="contents_area">
             <article class="sentence">
                 <h3>レース＆馬情報</h3>
-                <form method="POST">
+                <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                     <h4>レース情報</h4>
                     <div class="info_block">
@@ -116,6 +115,9 @@
                         <p class="info_block_tag">{{ form.race_number.label_tag }} </p>
                         <p class="info_block_form">{{ form.race_number }}</p>
                     </div>
+                    <br />
+                    <br />
+                    <input type="file" name="csv_file" required="" id="id_csv_file">
                     <br />
                     <br />
                     <button type="submit">予想</button>
