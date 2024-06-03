@@ -16,6 +16,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 from bs4 import BeautifulSoup
 from tqdm import tqdm
+from datetime import datetime
 
 @login_required
 def index(request):
@@ -46,12 +47,13 @@ def index(request):
             except BaseException as err:
                 print(err)
                 print('予測に必要なデータが掲載されていません')
-        # 天候、馬場情報を設定する
-        # races_info = set_weather_condition(races_info, tokyo, kyoto)
-        # CSVにレース情報を保存する
-        file_name = settings.BASE_DIR / "uploads/jra_scraping/data.csv"
-        races_info.to_csv(file_name, encoding='utf-8', index=False, errors="ignore")
-        return  races_info
+
+        current_datetime = datetime.now().strftime('%Y_%m_%d')
+
+        file_name = f"{settings.BASE_DIR}/uploads/jra_scraping/{current_datetime}_data.jsonl"  # f文字列を使用
+        races_info.to_json(file_name, orient='records', lines=True, force_ascii=False)
+
+        return races_info
     # chromeを起動し、jra.go.jpにアクセスして出走表を表示する
     # 直接、https://jra.go.jp/JRADB/accessD.htmlにアクセスするとエラーになるので、seleniumでアクセスする
     # 引数:なし
@@ -348,19 +350,23 @@ def index(request):
     else:
         form = ChatForm()
 
+    current_datetime = datetime.now().strftime('%Y_%m_%d')
     domain = request.build_absolute_uri('/')
     template = loader.get_template('jra_scraping/index.html')
     context = {
         'form': form,
         'domain': domain,
         'app_name': 'jra_scraping',
+        'current_datetime': current_datetime,
         'chat_results': chat_results
     }
     return HttpResponse(template.render(context, request))
 
 def download_file(request, file_name):
-    # ファイルのパスを設定
-    file_name = settings.BASE_DIR / "uploads/jra_scraping/data.csv"
+
+    current_datetime = datetime.now().strftime('%Y_%m_%d')
+    file_name = f"{settings.BASE_DIR}/uploads/jra_scraping/{current_datetime}_data.jsonl"  # f文字列を使用
+    print(file_name)
     file_path = os.path.join(file_name)
 
     # ファイルが存在するかチェック

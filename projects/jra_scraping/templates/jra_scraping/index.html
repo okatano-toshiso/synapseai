@@ -37,7 +37,7 @@
                 <br />
                 <br />
                 <div class="no_display {{ chat_results|safe }}">
-                    <a href="{% url 'jra_scraping:download_file' 'data.csv' %}">
+                    <a href="{% url 'jra_scraping:download_file' current_datetime %}">
                         <button>Download</button>
                     </a>
                 </div>
