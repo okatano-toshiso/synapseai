@@ -51,8 +51,10 @@ ul.lists {
       max-width: 250px;
       padding-right: 15px;
       text-align: right; }
-    ul.lists li input {
+    ul.lists li input, ul.lists li textarea {
       width: 80%; }
+    ul.lists li textarea {
+      height: 50px; }
   @media (max-width: 768px) {
     ul.lists li {
       display: flex;
@@ -64,7 +66,7 @@ ul.lists {
         max-width: 100%;
         padding-right: 0;
         text-align: left; }
-      ul.lists li input {
+      ul.lists li input, ul.lists li textarea {
         width: calc(100% - 20px); } }
 
 /*# sourceMappingURL=music_review.css.map */

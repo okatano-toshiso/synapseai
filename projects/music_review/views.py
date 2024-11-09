@@ -27,6 +27,10 @@ def index(request):
     if request.method == "POST":
         form = ChatForm(request.POST)
         if form.is_valid():
+            title = form.cleaned_data['title']
+            artist = form.cleaned_data['artist']
+            # print(artist)
+            comment = form.cleaned_data['comment']
             official_site_discography = form.cleaned_data['official_site_discography']
             official_site_biography = form.cleaned_data['official_site_biography']
             wiki_discography = form.cleaned_data['wiki_discography']
@@ -57,7 +61,10 @@ def index(request):
                 content_div = soup.find("div", class_="mw-content-ltr mw-parser-output")
                 if content_div:
                     paragraphs = content_div.find_all("p")
-                    first_paragraphs_text = "\n".join(p.get_text(strip=True) for p in paragraphs)
+                    if paragraphs:
+                        first_paragraphs_text = "\n".join(p.get_text(strip=True) for p in paragraphs)
+                    else:
+                        first_paragraphs_text = ""
                 combined_text = infobox_text + "\n\n" + first_paragraphs_text
                 return combined_text
 
@@ -121,10 +128,13 @@ def index(request):
                     if not publishers:  # If no plainlist items are found, check for itemprop="name"
                         name_elements = publisher_element.find_all(attrs={"itemprop": "name"})
                         publishers = [name.get_text(strip=True) for name in name_elements]
-
                     publisher_text = ", ".join(publishers)
                 else:
-                    data["label"] = publisher_element.get_text(strip=True)
+                    # plainlist_divs = publisher_element.find_all("div", class_="plainlist")
+                    if publisher_element:
+                        data["label"] = publisher_element.get_text(strip=True)
+                    else:
+                        publisher_text = ""
 
                 data["label"] = publisher_text
 
@@ -178,6 +188,11 @@ def index(request):
                             "role": "system",
                             "content": f"""
                             システムは優秀な音楽評論家です。下記の情報をもとに作品のレビューを書いてください。
+                            ユーザーのコメント
+                            \nーーーーーーーーーーーーーーーーーーーーーー\n
+                            {comment}
+                            お気に入りの曲は{recommend}です。
+                            \nーーーーーーーーーーーーーーーーーーーーーー\n
                             アーティストの情報
                             \nーーーーーーーーーーーーーーーーーーーーーー\n
                             {wiki_biography_contents}
@@ -206,16 +221,20 @@ def index(request):
                 review = review_result.replace("\n", "<br>")
 
                 print(data['genre'])
-
-                data['genre'] = ", ".join([f"#{genre.strip()}" for genre in data['genre'].split(",")])
-                data['label'] = ", ".join([f"#{genre.strip()}" for genre in data['label'].split(",")])
-                data['producer'] = ", ".join([f"#{genre.strip()}" for genre in data['producer'].split(",")])
-                format_title = data['title'].replace(" ", "")
-                format_artist = data['artist'].replace(" ", "")
+                if data['genre']:
+                    data['genre'] = ", ".join([f"#{genre.strip()}" for genre in data['genre'].split(",")])
+                if (data['label']):
+                    data['label'] = ", ".join([f"#{genre.strip()}" for genre in data['label'].split(",")])
+                if (data['producer']):
+                    data['producer'] = ", ".join([f"#{genre.strip()}" for genre in data['producer'].split(",")])
+                if (data['title']):
+                    format_title = data['title'].replace(" ", "")
+                if (data['artist']):
+                    format_artist = data['artist'].replace(" ", "")
 
                 chat_results = ""
-                if data.get('title') and data.get('artist'):
-                    chat_results += data['title'] + "／" + data['artist'] + "<br><br>"
+                if title and artist:
+                    chat_results += title + "／" + artist + "<br><br>"
                 if official_site_discography:
                     chat_results += official_site_discography + "<br>"
                 if spotyfi:

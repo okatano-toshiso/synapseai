@@ -67,8 +67,11 @@ ul.lists {
             padding-right: 15px;
             text-align: right;
         }
-        input {
+        input, textarea {
             width: 80%;
+        }
+        textarea {
+            height: 50px;
         }
     }
     // スマホサイズ用のブレイクポイント（最大幅 768px 以下）
@@ -84,7 +87,7 @@ ul.lists {
                 padding-right: 0;
                 text-align: left;
             }
-            input {
+            input, textarea {
                 width: calc(100% - 20px);
             }
         }
