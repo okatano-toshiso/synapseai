@@ -1,32 +1,35 @@
-{% extends "base.html" %}
+{% extends "custom.html" %}
 {% block title %}Home Page{% endblock %}
 {% block content %}
 {% load static %}
 
-<main class="{{ app_name }} lyric_trans" >
-    <section class="contents">
-        <p class="message">音楽評論</p>
-        <div class="contents_area">
-            <article class="sentence">
-                <h3>REQUEST</h3>
-                <form method="POST">
-                    {% csrf_token %}
-                    {{ form.as_p }}
-                    <button type="submit">校正</button>
-                </form>
-            </article>
-            <article class="result">
-                <h3>RESPONSE</h3>
-                <div class="result_box_text copy-target" style="height:auto; min-height:450px;">
-                    {{ chat_results|safe }}
-                </div>
-                <div class="button_area">
-                    <button id="copyButton">COPY</button>
-                </div>
-            </article>
+<section class="contents">
+    <h2 class="title">Music Review Generator</h2>
+    <p class="description">
+        Generate insightful music reviews effortlessly with our AI-powered tool. Perfect for critics, content creators, and music enthusiasts looking for quick, quality analysis.
+    </p>
+    <article class="review-editor">
+        <h3 class="label">EDITER AREA</h3>
+        <form method="POST">
+            {% csrf_token %}
+            <ul class="lists">
+                {{ form.as_ul }}
+            </ul>
+            <div class="submit_area">
+                <button type="submit" class="output">OUTPUT</button>
+            </div>
+        </form>
+    </article>
+    <article class="result">
+        <h3 class="label">RESPONSE</h3>
+        <div class="result_area copy-target">
+            {{ chat_results|safe }}
         </div>
-    </section>
-</main>
+        <div class="copy_area">
+            <button id="copyButton" class="copy">COPY</button>
+        </div>
+    </article>
+</section>
 <script type="text/javascript" src="{% static 'js/click_copy.js' %}" rel="stylesheet"></script>
 
 {% endblock %}

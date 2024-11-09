@@ -1,0 +1,53 @@
+h2.title {
+    font-size: 28px;
+    font-weight: 700;
+}
+h3.label {
+    font-size: 21px;
+    font-weight: 700;
+}
+article.review-editor, article.result {
+    width: calc(100% - 30px);
+    margin: 0 auto;
+    padding: 15px 0;
+    .submit_area, .copy_area {
+        width: 100%;
+        text-align: center;
+        .output, .copy {
+            width: 150px;
+            margin: 0 auto;
+            padding: 5px 0;
+        }
+    }
+    .result_area {
+        width: calc(100% - 20px);
+        min-height: 150px;
+        margin: 0 auto 15px;
+        padding: 10px;
+        border: 2px #cccccc solid;
+    }
+
+}
+ul.lists {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    li {
+        display: flex;
+        flex-wrap: nowrap;
+        width: 100%;
+        padding-bottom: 15px;
+        label {
+            width: calc(30% - 15px);
+            max-width: 250px;
+            padding-right: 15px;
+            text-align: right;
+        }
+        input {
+            width: 85%;
+        }
+    }
+}

@@ -1,0 +1,27 @@
+{% load sass_tags %}  <!-- sass_processorではなく、sass_tagsをロード -->
+
+<!-- templates/base.html -->
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        {% load static %}
+        <meta charset='utf-8' />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="{% sass_src 'scss/style.scss' %}">
+        <link rel="stylesheet" href="{% sass_src 'scss/music_review.scss' %}">
+    </head>
+    <body class="layout">
+        <header class="header">
+        </header>
+        <main>
+        {% block content %}
+        {% endblock %}
+        {% if not app_name == "chat_bot" %}
+            <!-- <footer class="footer">
+                <p class="text">nuevo.jp</p>
+            </footer> -->
+        {% endif %}
+        </main>
+    </body>
+</html>
