@@ -1,6 +1,14 @@
-$primary-color: #3498db;
+$primary-color: #fefefe;
 
 body {
     background-color: $primary-color;
     font-family: Arial, sans-serif;
+}
+main {
+    display:block;
+    position: relative;
+    width: calc(100% - 60px);
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 15px 0;
 }

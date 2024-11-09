@@ -23,7 +23,17 @@ article.review-editor, article.result {
     margin: 0 auto 15px;
     padding: 10px;
     border: 2px #cccccc solid; }
-
+  @media (max-width: 768px) {
+    article.review-editor, article.result {
+      width: 100%;
+      padding: 10px 0; }
+      article.review-editor .submit_area .output, article.review-editor .submit_area .copy, article.review-editor .copy_area .output, article.review-editor .copy_area .copy, article.result .submit_area .output, article.result .submit_area .copy, article.result .copy_area .output, article.result .copy_area .copy {
+        width: 120px;
+        padding: 4px 0; }
+      article.review-editor .result_area, article.result .result_area {
+        width: 100%;
+        padding: 8px;
+        min-height: 120px; } }
 ul.lists {
   display: flex;
   justify-content: space-between;
@@ -37,11 +47,24 @@ ul.lists {
     width: 100%;
     padding-bottom: 15px; }
     ul.lists li label {
-      width: calc(30% - 15px);
+      width: calc(20% - 15px);
       max-width: 250px;
       padding-right: 15px;
       text-align: right; }
     ul.lists li input {
-      width: 85%; }
+      width: 80%; }
+  @media (max-width: 768px) {
+    ul.lists li {
+      display: flex;
+      flex-wrap: wrap;
+      width: 100%;
+      padding-bottom: 10px; }
+      ul.lists li label {
+        width: calc(100% - 20px);
+        max-width: 100%;
+        padding-right: 0;
+        text-align: left; }
+      ul.lists li input {
+        width: calc(100% - 20px); } }
 
 /*# sourceMappingURL=music_review.css.map */
