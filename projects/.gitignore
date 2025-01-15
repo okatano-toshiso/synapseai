@@ -15,3 +15,6 @@ uploads/tts/*
 uploads/*/*
 uploads/recipe.jpg
 uploads/*
+.venv/*
+.python-version
+./projects/.python-version
