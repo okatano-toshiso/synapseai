@@ -172,6 +172,16 @@ def index(request):
                         list_items = hlist_div.find_all("li")
                         producers = [item.get_text(strip=True) for item in list_items]
                         producer_text = ", ".join(producers)
+                    
+                    # Additional condition for producer
+                    th_element = soup.find("th", class_="infobox-label")
+                    if th_element and th_element.find("a") and th_element.find("a").get_text(strip=True) == "Producer":
+                        td_element = th_element.find_next_sibling("td", class_="infobox-data hlist")
+                        if td_element:
+                            list_items = td_element.find_all("li")
+                            producers = [item.get_text(strip=True) for item in list_items]
+                            producer_text = ", ".join(producers)
+                            print("producer_text", producer_text)
                 data["producer"] = producer_text.replace(" ", "")
 
                 return data
