@@ -107,6 +107,9 @@ def index(request):
 
                 # release
                 date_published_element = soup.find("time", itemprop="datePublished")
+                if not date_published_element:
+                    date_published_element = soup.find("td", class_="infobox-data")
+                print(date_published_element)
                 if date_published_element:
                     plainlist_div = date_published_element.find("div", class_="plainlist")
                     if plainlist_div:
@@ -136,7 +139,17 @@ def index(request):
                     else:
                         publisher_text = ""
 
-                data["label"] = publisher_text
+                # 新しい条件を追加
+                if not publisher_text:
+                    hlist_element = soup.find("td", class_="infobox-data hlist")
+                    if hlist_element:
+                        a_elements = hlist_element.find_all("a")
+                        publisher_text = ", ".join([a.get_text(strip=True) for a in a_elements])
+                    print(publisher_text)
+                    if hlist_element:
+                        publisher_text = hlist_element.get_text(strip=True)
+
+                data["label"] = publisher_text.replace(" ", "")
 
                 # producer
                 producer_element = soup.find(attrs={"itemprop": "producer"})
@@ -152,7 +165,24 @@ def index(request):
                         name_elements = producer_element.find_all(attrs={"itemprop": "name"})
                         producers = [name.get_text(strip=True) for name in name_elements]
                         producer_text = ", ".join(producers)
-                data["producer"] = producer_text
+                else:
+                    # New condition for producer
+                    hlist_div = soup.find("div", class_="hlist")
+                    if hlist_div:
+                        list_items = hlist_div.find_all("li")
+                        producers = [item.get_text(strip=True) for item in list_items]
+                        producer_text = ", ".join(producers)
+                    
+                    # Additional condition for producer
+                    th_element = soup.find("th", class_="infobox-label")
+                    if th_element and th_element.find("a") and th_element.find("a").get_text(strip=True) == "Producer":
+                        td_element = th_element.find_next_sibling("td", class_="infobox-data hlist")
+                        if td_element:
+                            list_items = td_element.find_all("li")
+                            producers = [item.get_text(strip=True) for item in list_items]
+                            producer_text = ", ".join(producers)
+                            print("producer_text", producer_text)
+                data["producer"] = producer_text.replace(" ", "")
 
                 return data
 
@@ -220,17 +250,19 @@ def index(request):
                 review_result = review.choices[0].message.content
                 review = review_result.replace("\n", "<br>")
 
-                print(data['genre'])
-                if data['genre']:
+                print(data.get('genre', ''))
+                if data.get('genre'):
                     data['genre'] = ", ".join([f"#{genre.strip()}" for genre in data['genre'].split(",")])
-                if (data['label']):
+                if data.get('label'):
                     data['label'] = ", ".join([f"#{genre.strip()}" for genre in data['label'].split(",")])
-                if (data['producer']):
+                if data.get('producer'):
                     data['producer'] = ", ".join([f"#{genre.strip()}" for genre in data['producer'].split(",")])
-                if (data['title']):
-                    format_title = data['title'].replace(" ", "")
-                if (data['artist']):
-                    format_artist = data['artist'].replace(" ", "")
+                format_title = ""
+                format_artist = ""
+                if title:
+                    format_title = title.replace(" ", "")
+                if artist:
+                    format_artist = artist.replace(" ", "")
 
                 chat_results = ""
                 if title and artist:
@@ -243,13 +275,13 @@ def index(request):
                     chat_results += "<br><br>TITLE: #" + format_title
                 if format_artist:
                     chat_results += "<br>ARTIST: #" + format_artist
-                if data['genre']:
+                if data.get('genre'):
                     chat_results += "<br>GENRE: " + data['genre']
-                if data['producer']:
+                if data.get('producer'):
                     chat_results += "<br>PRODUCER: " + data['producer']
-                if data['label']:
+                if data.get('label'):
                     chat_results += "<br>LABEL: " + data['label']
-                if data['release']:
+                if data.get('release'):
                     chat_results += "<br>RELEASE: " + data['release']
                 if youtube:
                     chat_results += "<br>YOUTUBE: " + youtube
