@@ -1,0 +1,97 @@
+h2.title {
+    font-size: 28px;
+    font-weight: 700;
+}
+h3.label {
+    font-size: 21px;
+    font-weight: 700;
+}
+article.review-editor, article.result {
+    width: calc(100% - 30px);
+    margin: 0 auto;
+    padding: 15px 0;
+
+    .submit_area, .copy_area {
+        width: 100%;
+        text-align: center;
+
+        .output, .copy {
+            width: 150px;
+            margin: 0 auto;
+            padding: 5px 0;
+        }
+    }
+
+    .result_area {
+        width: calc(100% - 20px);
+        min-height: 150px;
+        margin: 0 auto 15px;
+        padding: 10px;
+        border: 2px #cccccc solid;
+    }
+
+    // スマホサイズ用のブレイクポイント（最大幅 768px 以下）
+    @media (max-width: 768px) {
+        width: 100%;
+        padding: 10px 0;
+
+        .submit_area, .copy_area {
+            .output, .copy {
+                width: 120px; // 幅を小さく調整
+                padding: 4px 0;
+            }
+        }
+
+        .result_area {
+            width: 100%;
+            padding: 8px;
+            min-height: 120px; // 最小高さを小さく調整
+        }
+    }
+}
+ul.lists {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    li {
+        display: flex;
+        flex-wrap: nowrap;
+        width: 100%;
+        padding-bottom: 15px;
+        label {
+            width: calc(20% - 15px);
+            max-width: 250px;
+            padding-right: 15px;
+            text-align: right;
+        }
+        input, textarea {
+            width: 80%;
+        }
+        textarea {
+            height: 50px;
+        }
+    }
+    // スマホサイズ用のブレイクポイント（最大幅 768px 以下）
+    @media (max-width: 768px) {
+        li {
+            display: flex;
+            flex-wrap: wrap;
+            width: 100%;
+            padding-bottom: 10px;
+            label {
+                width: calc(100% - 20px);
+                max-width: 100%;
+                padding-right: 0;
+                text-align: left;
+            }
+            input, textarea {
+                width: calc(100% - 20px);
+            }
+        }
+    }
+
+
+}

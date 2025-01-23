@@ -1,0 +1,34 @@
+main li, main ul {
+    list-style: none;
+}
+main.music_review {
+    display: block;
+    position: relative;
+    margin: 0 auto;
+    width: 100%;
+    background-color: #efefef;
+}
+main.music_review section.contents {
+    width: calc(100% - 40px);
+    margin: 0 auto;
+}
+main.music_review h1.title {
+    width: auto;
+    padding: 15px 0 0;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 27px;
+}
+
+.input_form {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: nowrap;
+}
+.input_form dt{
+    width: 40%;
+    max-width: 120%;
+}
+.input_form dd{
+    width: 60%;
+}

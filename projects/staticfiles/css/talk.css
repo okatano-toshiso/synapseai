@@ -1,0 +1,88 @@
+.talk_area {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 80px);
+    text-align: center;
+    background-image: url("../img/kv_talk.jpg");
+    background-repeat: none;
+    background-size: cover;
+    background-position:center;
+}
+
+.english .talk_area {
+    background-image: url("../img/kv_english.png");
+    background-repeat: none;
+    background-size: cover;
+    background-position:center;
+}
+
+.callcenter .talk_area {
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 80px);
+    text-align: center;
+    background-image: url("../img/kv_callcenter.png");
+    background-repeat: none;
+    background-size: cover;
+    background-position:center;
+}
+.user {
+    position: fixed;
+    bottom: 100px;
+    width: calc(100% - 160px);
+    height: 80pz;
+    text-align: center;
+}
+@media only screen and (max-width:768px) {
+    .user {
+        bottom: 0px;
+        width: 100%;
+        z-index: 3;
+    }
+}
+
+#translateButton {
+    position: absolute;
+    display: block;
+    top:-50%;
+    left: 51%;
+}
+@media only screen and (max-width:768px) {
+    #translateButton {
+        position: absolute;
+        display: block;
+        top:-105%;
+        left: auto;
+        right: 15px;
+        padding: 15px 30px;
+    }
+}
+#startRecord {
+
+
+}
+@media only screen and (max-width:768px) {
+    #startRecord {
+    }
+}
+#stopRecord{
+}
+@media only screen and (max-width:768px) {
+    #stopRecord{
+    }
+}
+#audioPlayback {
+    opacity: 0.2;
+    left: calc(50% - 150px);
+}
+@media only screen and (max-width:768px) {
+    #audioPlayback {
+        opacity: 0.5;
+        width: 100%;
+        left: 0;
+    }
+}
+#myAudio {
+    opacity: 0.4;
+}
+
