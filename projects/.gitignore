@@ -18,3 +18,4 @@ uploads/*
 .venv/*
 .python-version
 ./projects/.python-version
+synapse/

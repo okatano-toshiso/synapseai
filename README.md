@@ -5,8 +5,8 @@
 
 ```
 conda activate
-python -m venv .venv
-source django/bin/.venv
+python -m venv synapse
+source synapse/bin/activate
 python3 -m pip install --upgrade pip
 pip install django
 pip freeze > requirements.txt
@@ -41,3 +41,5 @@ source test/bin/activate
 ```
 python manage.py collectstatic --noinput
 ```
+
+
