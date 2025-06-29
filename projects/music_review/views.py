@@ -40,17 +40,19 @@ def index(request):
             recommend = form.cleaned_data['recommend']
 
             def get_body_text(url):
+                if not url.strip():
+                    return ""
                 try:
                     response = requests.get(url)
-                    response.raise_for_status()  # HTTPエラーが発生した場合に例外を発生させる
+                    response.raise_for_status()
                     soup = BeautifulSoup(response.content, 'html.parser')
-                    body_text = soup.body.get_text()
-                    return body_text
-
+                    return soup.body.get_text()
                 except requests.exceptions.RequestException as e:
                     return f"エラーが発生しました: {e}"
 
             def wiki_scrape_article(url):
+                if not url.strip():
+                    return ""
                 response = requests.get(url)
                 response.encoding = response.apparent_encoding
                 soup = BeautifulSoup(response.text, "html.parser")
@@ -69,6 +71,8 @@ def index(request):
                 return combined_text
 
             def wiki_get_data(url):
+                if not url.strip():
+                    return {}
                 data = {}  
                 response = requests.get(url)
                 response.encoding = response.apparent_encoding
@@ -187,12 +191,16 @@ def index(request):
                 return data
 
             def scrape_tracklist(url):
-                response = requests.get(url)
-                response.encoding = response.apparent_encoding
-                soup = BeautifulSoup(response.text, "html.parser")
-                encore_text_elements = soup.find_all(class_='encore-text-body-medium')
-                encore_text_list = [element.get_text(strip=True) for element in encore_text_elements]
-                return encore_text_list
+                if not url.strip():
+                    return []
+                try:
+                    response = requests.get(url)
+                    response.encoding = response.apparent_encoding
+                    soup = BeautifulSoup(response.text, "html.parser")
+                    encore_text_elements = soup.find_all(class_='encore-text-body-medium')
+                    return [element.get_text(strip=True) for element in encore_text_elements]
+                except Exception:
+                    return []
 
             official_discography = ""
             if official_site_discography != "":
@@ -217,34 +225,52 @@ def index(request):
                         {
                             "role": "system",
                             "content": f"""
-                            システムは優秀な音楽評論家です。下記の情報をもとに作品のレビューを書いてください。
-                            ユーザーのコメント
-                            \nーーーーーーーーーーーーーーーーーーーーーー\n
-                            {comment}
-                            お気に入りの曲は{recommend}です。
-                            \nーーーーーーーーーーーーーーーーーーーーーー\n
-                            アーティストの情報
-                            \nーーーーーーーーーーーーーーーーーーーーーー\n
-                            {wiki_biography_contents}
-                            \nーーーーーーーーーーーーーーーーーーーーーー\n
-                            作品の情報
-                            \nーーーーーーーーーーーーーーーーーーーーーー\n
-                            {wiki_discography_contents}
-                            \nーーーーーーーーーーーーーーーーーーーーーー\n
-                            公式サイトの作品テキスト
-                            \nーーーーーーーーーーーーーーーーーーーーーー\n
-                            {official_discography}
-                            \nーーーーーーーーーーーーーーーーーーーーーー\n
-                            公式サイトのアーティスト情報
-                            \nーーーーーーーーーーーーーーーーーーーーーー\n
-                            {official_biography}
-                            \nーーーーーーーーーーーーーーーーーーーーーー\n
+                            あなたは一流の音楽評論家です。以下の情報をもとに、日本語で構成された音楽レビュー記事を執筆してください。
 
-                            アルバムの説明、アルバムの制作背景、収録曲、世評、社会に与えた影響などがあればレビューしてください。
-                            この音楽作品の評論を書いています。400文字以内に綺麗に校正してまとめてください。
-                            必ず日本語で回答してください。
+                            【ユーザーコメント】
+                            {comment}
+                            （お気に入りの曲：{recommend}）
+
+                            【アーティスト情報（Wikipedia）】
+                            {wiki_biography_contents}
+
+                            【ディスコグラフィ（Wikipedia）】
+                            {wiki_discography_contents}
+
+                            【アーティスト情報（公式サイト）】
+                            {official_biography}
+
+                            【ディスコグラフィ（公式サイト）】
+                            {official_discography}
+
+                            ---
+
+                            ◉ 執筆構成：
+
+                            記事は以下の3セクションで構成してください：
+
+                            ◆アーティストの紹介（200〜300文字程度）  
+                            - アーティストの出自、経歴、音楽スタイル、過去の代表作など  
+                            - Wikipedia・公式情報に基づき客観的かつ簡潔にまとめる  
+
+                            ◆アルバムの評論（700〜800文字程度）  
+                            - 【起】本作の立ち位置（転機、復帰作など）と全体印象  
+                            - 【承】サウンド、ジャンル、構成、プロダクション分析  
+                            - 【転】印象的な楽曲の解釈や歌詞の掘り下げ  
+                            - 【結】総評としての意義、リスナーへのメッセージ  
+
+
+                            ---
+
+                            ◉ 制約：
+                            - 「アーティストの紹介」というタイトルを入れてください 
+                            - 「アルバムの評論」というタイトルを入れてください 
+                            - 出力は**1000文字以内**に収めてください  
+                            - **日本語**で、評論文として自然で洗練された文体を使用してください  
+                            - ユーザーのコメントや推し曲情報も参考にしてください  
                             """
-                        }
+
+                        },
                     ],
                 )
                 review_result = review.choices[0].message.content
@@ -271,6 +297,8 @@ def index(request):
                     chat_results += official_site_discography + "<br>"
                 if spotyfi:
                     chat_results += spotyfi
+                if youtube:
+                    chat_results += "<br>YOUTUBE: " + youtube
                 if format_title:
                     chat_results += "<br><br>TITLE: #" + format_title
                 if format_artist:
@@ -283,8 +311,6 @@ def index(request):
                     chat_results += "<br>LABEL: " + data['label']
                 if data.get('release'):
                     chat_results += "<br>RELEASE: " + data['release']
-                if youtube:
-                    chat_results += "<br>YOUTUBE: " + youtube
                 if review_result:
                     chat_results += "<br><br>REVIEW<br>" + review
                 if recommend:
