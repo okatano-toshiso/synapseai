@@ -31,8 +31,8 @@ def index(request):
             artist = form.cleaned_data['artist']
             # print(artist)
             comment = form.cleaned_data['comment']
-            official_site_discography = form.cleaned_data['official_site_discography']
-            official_site_biography = form.cleaned_data['official_site_biography']
+            source1 = form.cleaned_data['source1']
+            source2 = form.cleaned_data['source2']
             wiki_discography = form.cleaned_data['wiki_discography']
             wiki_biography = form.cleaned_data['wiki_biography']
             spotyfi  = form.cleaned_data['spotyfi']
@@ -202,12 +202,12 @@ def index(request):
                 except Exception:
                     return []
 
-            official_discography = ""
-            if official_site_discography != "":
-                official_discography = get_body_text(official_site_discography)
-            official_biography = ""
-            if official_site_biography != "":
-                official_biography = get_body_text(official_site_biography)
+            source1_contents = ""
+            if source1:
+                source1_contents = get_body_text(source1)
+            source2_contents = ""
+            if source2:
+                source2_contents = get_body_text(source2)
             wiki_discography_contents = wiki_scrape_article(wiki_discography)
             wiki_biography_contents = wiki_scrape_article(wiki_biography)
             wiki_discography_contents = wiki_scrape_article(wiki_discography)
@@ -238,10 +238,10 @@ def index(request):
                             {wiki_discography_contents}
 
                             【アーティスト情報（公式サイト）】
-                            {official_biography}
+                            {source1_contents}
 
                             【ディスコグラフィ（公式サイト）】
-                            {official_discography}
+                            {source2_contents}
 
                             ---
 
@@ -293,8 +293,10 @@ def index(request):
                 chat_results = ""
                 if title and artist:
                     chat_results += title + "／" + artist + "<br><br>"
-                if official_site_discography:
-                    chat_results += official_site_discography + "<br>"
+                if source1:
+                    chat_results += source1 + "<br>"
+                if source2:
+                    chat_results += source2 + "<br>"
                 if spotyfi:
                     chat_results += spotyfi
                 if youtube:

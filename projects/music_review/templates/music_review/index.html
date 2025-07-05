@@ -17,6 +17,8 @@
             </ul>
             <div class="submit_area">
                 <button type="submit" class="output">OUTPUT</button>
+                <button type="reset" class="reset">RESET</button>
+                <button type="button" class="title-reset">TITLE_REST</button>
             </div>
         </form>
     </article>
@@ -31,5 +33,48 @@
     </article>
 </section>
 <script type="text/javascript" src="{% static 'js/click_copy.js' %}" rel="stylesheet"></script>
-
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+    const resetButton = document.querySelector('.reset');
+    const titleResetButton = document.querySelector('.title-reset');
+    
+    // 全リセット機能
+    resetButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const form = document.querySelector('form');
+        const inputs = form.querySelectorAll('input, textarea, select');
+        
+        inputs.forEach(function(input) {
+            if (input.type === 'text' || input.type === 'email' || input.type === 'password' || input.tagName === 'TEXTAREA') {
+                input.value = '';
+            } else if (input.type === 'checkbox' || input.type === 'radio') {
+                input.checked = false;
+            } else if (input.tagName === 'SELECT') {
+                input.selectedIndex = 0;
+            }
+        });
+        
+        const resultArea = document.querySelector('.result_area');
+        if (resultArea) {
+            resultArea.innerHTML = '';
+        }
+    });
+    
+    // TITLE、COMMENT、RECOMMEND、WIKI_DISCのみクリア
+    titleResetButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // 対象フィールドの名前リスト
+        const targetFields = ['title', 'comment', 'recommend', 'wiki_discography'];
+        
+        targetFields.forEach(function(fieldName) {
+            const field = document.querySelector(`[name="${fieldName}"]`);
+            if (field) {
+                field.value = '';
+            }
+        });
+    });
+});
+</script>
 {% endblock %}
