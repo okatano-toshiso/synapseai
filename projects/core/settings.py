@@ -65,6 +65,7 @@ INSTALLED_APPS = [
     'jra_scraping',
     'jra',
     'win5',
+    'diary',
     'generate_image'
 ]
 

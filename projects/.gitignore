@@ -19,3 +19,10 @@ uploads/*
 .python-version
 ./projects/.python-version
 synapse/
+
+# Google Calendar API 認証ファイル
+credentials.json
+token.pickle
+
+# 環境設定ファイル
+.env

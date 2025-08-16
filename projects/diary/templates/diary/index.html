@@ -1,0 +1,119 @@
+{% extends "custom.html" %}
+{% block title %}Home Page{% endblock %}
+{% block content %}
+{% load static %}
+
+<section class="contents">
+    <h2 class="title">Diary Generator</h2>
+    <p class="description">
+        Generate insightful diary entries effortlessly with our AI-powered tool. Perfect for writers, content creators, and anyone looking to document their thoughts and experiences.
+    </p>
+    
+    <!-- Google Calendar イベント表示 -->
+    {% if calendar_events %}
+    <article class="calendar-events">
+        <h3 class="label">TODAY'S SCHEDULE</h3>
+        <div class="events-list">
+            {% for event in calendar_events %}
+            <div class="event-item">
+                <div class="event-time">
+                    {% if event.start_time and event.end_time %}
+                        {{ event.start_time }} - {{ event.end_time }}
+                    {% elif event.start_time %}
+                        {{ event.start_time }}
+                    {% else %}
+                        終日
+                    {% endif %}
+                </div>
+                <div class="event-title">{{ event.title }}</div>
+                {% if event.location %}
+                <div class="event-location">📍 {{ event.location }}</div>
+                {% endif %}
+                {% if event.description %}
+                <div class="event-description">{{ event.description|truncatewords:10 }}</div>
+                {% endif %}
+            </div>
+            {% endfor %}
+        </div>
+    </article>
+    {% endif %}
+    
+    <article class="review-editor">
+        <h3 class="label">EDITER AREA</h3>
+        <form method="POST">
+            {% csrf_token %}
+            <ul class="lists">
+                {{ form.as_ul }}
+            </ul>
+            <div class="submit_area">
+                <button type="submit" class="output">OUTPUT</button>
+                <button type="reset" class="reset">RESET</button>
+                <button type="button" class="title-reset">TITLE_REST</button>
+                <button type="button" class="calendar-sync">SYNC CALENDAR</button>
+            </div>
+        </form>
+    </article>
+    <article class="result">
+        <h3 class="label">RESPONSE</h3>
+        <div class="result_area copy-target">
+            {{ chat_results|safe }}
+        </div>
+        <div class="copy_area">
+            <button id="copyButton" class="copy">COPY</button>
+        </div>
+    </article>
+</section>
+<script type="text/javascript" src="{% static 'js/click_copy.js' %}" rel="stylesheet"></script>
+<script type="text/javascript">
+document.addEventListener('DOMContentLoaded', function() {
+    const resetButton = document.querySelector('.reset');
+    const titleResetButton = document.querySelector('.title-reset');
+    
+    // 全リセット機能
+    resetButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        const form = document.querySelector('form');
+        const inputs = form.querySelectorAll('input, textarea, select');
+        
+        inputs.forEach(function(input) {
+            if (input.type === 'text' || input.type === 'email' || input.type === 'password' || input.tagName === 'TEXTAREA') {
+                input.value = '';
+            } else if (input.type === 'checkbox' || input.type === 'radio') {
+                input.checked = false;
+            } else if (input.tagName === 'SELECT') {
+                input.selectedIndex = 0;
+            }
+        });
+        
+        const resultArea = document.querySelector('.result_area');
+        if (resultArea) {
+            resultArea.innerHTML = '';
+        }
+    });
+    
+    // TITLE、COMMENT、RECOMMEND、WIKI_DISCのみクリア
+    titleResetButton.addEventListener('click', function(e) {
+        e.preventDefault();
+        
+        // 対象フィールドの名前リスト
+        const targetFields = ['title', 'comment', 'recommend', 'wiki_discography', 'spotyfi', 'youtube'];
+        
+        targetFields.forEach(function(fieldName) {
+            const field = document.querySelector(`[name="${fieldName}"]`);
+            if (field) {
+                field.value = '';
+            }
+        });
+    // カレンダー同期ボタン
+    const calendarSyncButton = document.querySelector('.calendar-sync');
+    if (calendarSyncButton) {
+        calendarSyncButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            // ページをリロードしてカレンダー情報を再取得
+            location.reload();
+        });
+    }
+});
+</script>
+{% endblock %}
