@@ -50,38 +50,111 @@ def index(request):
                 except requests.exceptions.RequestException as e:
                     return f"エラーが発生しました: {e}"
 
-            def wiki_scrape_article(url):
-                if not url.strip():
+            def wiki_scrape_article(url: str) -> str:
+                if not url or not url.strip():
                     return ""
-                response = requests.get(url)
-                response.encoding = response.apparent_encoding
-                soup = BeautifulSoup(response.text, "html.parser")
-                infobox_table = soup.find("table", class_="infobox")
+
+                headers = {
+                    "User-Agent": (
+                        "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+                        "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+                    ),
+                    "Accept-Language": "en-US,en;q=0.9,ja;q=0.8",
+                }
+
+                resp = requests.get(url.strip(), headers=headers, timeout=20)
+                resp.raise_for_status()
+                soup = BeautifulSoup(resp.text, "lxml")  # lxml推奨
+                # print("source", soup)
+                # print("******** 1 ******************")
+
+                # 脚注や編集リンクは削除
+                for sel in ["sup.reference", "span.mw-editsection", "span.mw-cite-backlink"]:
+                    for node in soup.select(sel):
+                        node.decompose()
+
+                # --- infobox ---
+                infobox_table = soup.select_one(".infobox ")
+                # print("infobox_table", infobox_table)
+                # print("********* 2 ****************")
+                if not infobox_table:
+                    infobox_table = soup.select_one("table.infobox")
+
+                infobox_text = ""
                 if infobox_table:
                     infobox_text = infobox_table.get_text(separator="\n", strip=True)
+                # print("infobox_text", infobox_text)
+                # print("********* 3 ****************")
+                # --- 本文 ---
+                content_div = soup.select_one("div.mw-parser-output")
+                # print("content_div", content_div)
+                # print("********* 4 ****************")
                 first_paragraphs_text = ""
-                content_div = soup.find("div", class_="mw-content-ltr mw-parser-output")
                 if content_div:
-                    paragraphs = content_div.find_all("p")
-                    if paragraphs:
-                        first_paragraphs_text = "\n".join(p.get_text(strip=True) for p in paragraphs)
-                    else:
-                        first_paragraphs_text = ""
-                combined_text = infobox_text + "\n\n" + first_paragraphs_text
+                    paragraphs = [
+                        p.get_text(" ", strip=True)
+                        for p in content_div.find_all("p", recursive=False)
+                        if p.get_text(strip=True)
+                    ]
+                    first_paragraphs_text = "\n".join(paragraphs)
+
+                combined_text = (infobox_text + "\n\n" + first_paragraphs_text).strip()
+                # print("combined_text", combined_text)
+                # print("********* 5 ****************")
                 return combined_text
 
-            def wiki_get_data(url):
-                if not url.strip():
-                    return {}
-                data = {}  
-                response = requests.get(url)
-                response.encoding = response.apparent_encoding
-                soup = BeautifulSoup(response.text, "html.parser")
 
-                # title
-                heading_element = soup.find("h1", class_="firstHeading")
+            # 共有のセッション（UA/言語を常に付ける）
+            SESSION = requests.Session()
+            SESSION.headers.update({
+                "User-Agent": (
+                    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 "
+                    "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+                ),
+                "Accept-Language": "en-US,en;q=0.9,ja;q=0.8",
+            })
+
+
+            def wiki_get_data(url: str) -> dict:
+                if not url or not url.strip():
+                    return {}
+
+                # 取得（エラーコードは例外にする）
+                resp = SESSION.get(url.strip(), timeout=20, allow_redirects=True)
+                resp.raise_for_status()
+
+                data = {}
+
+
+                # パーサは lxml があれば使う / なければ標準にフォールバック
+                parser = "lxml"
+                try:
+                    soup = BeautifulSoup(resp.text, parser)
+                except Exception:
+                    soup = BeautifulSoup(resp.text, "html.parser")
+
+                # 余計な脚注や編集リンクは除去（見つからなくてもOK）
+                for node in soup.select("sup.reference, span.mw-editsection, span.mw-cite-backlink"):
+                    node.decompose()
+
+                # --- 見出し（タイトル） ---
+                heading_element = (
+                    soup.find("h1", id="firstHeading")
+                    or soup.select_one("#firstHeading")
+                    or soup.select_one("h1.firstHeading")          # 念のためクラスでも
+                    or soup.select_one("h1.mw-first-heading")      # モバイル/新スキン対策
+                )
+
+                if heading_element is None:
+                    # ここに来るなら、記事ではなく別ページ（警告/同意/ブロック/429等）を掴んでいます
+                    # デバッグ出力で中身を確認してください
+                    print("DEBUG url:", resp.url, "status:", resp.status_code)
+                    print("DEBUG <title>:", soup.title.string if soup.title else None)
+                    print("DEBUG head snippet:", resp.text[:500])
+                    return {}
                 if heading_element:
                     data["title"] = heading_element.get_text(strip=True)
+                print("DEBUG title_text:", data["title"])
 
                 # artist
                 artist_span = soup.find("span", itemprop="byArtist")
@@ -91,23 +164,25 @@ def index(request):
                         data["artist"] = artist_link.get_text(strip=True)
 
                 # get genre
-                genre_element = soup.find(attrs={"itemprop": "genre"})
+                # infobox 内の "Genre" 行を探す
+                infobox = soup.select_one("table.infobox")
                 genres_text = ""
-                if genre_element:
-                    plainlist_div = genre_element.find(class_="plainlist")
-                    if plainlist_div:
-                        list_items = plainlist_div.find_all("li")
-                        genres = [item.get_text(strip=True) for item in list_items]
-                        genres_text = ", ".join(genres)
-                        data["genre"] = genres_text
-                    else:
-                        # If no plainlist class is found, get the text from all <a> tags
-                        genres  = [a.get_text(strip=True) for a in genre_element.find_all("a")]
-                        genres_text = ", ".join(genres)
-                        data["genre"] = genres_text
-                else:
-                    # If genre_element is not found, set genre to an empty list
-                    data["genre"] = []
+                if infobox:
+                    th = infobox.find("th", string=re.compile(r"^\s*Genre(s)?\s*$", re.I))
+                    if th:
+                        td = th.find_next("td")
+                        if td:
+                            # aタグを優先的に抽出
+                            links = td.select("a[href]")
+                            if links:
+                                genres = [a.get_text(strip=True) for a in links]
+                            else:
+                                # aタグが無い場合はテキストをカンマ/スラッシュ区切りで分割
+                                text = td.get_text(" ", strip=True)
+                                genres = re.split(r"\s*(?:,|/|;)\s*", text)
+                                genres = [g for g in genres if g]
+                            genres_text = ", ".join(genres)
+                data["genre"] = genres_text if genres_text else []
 
                 # release
                 date_published_element = soup.find("time", itemprop="datePublished")
@@ -176,7 +251,7 @@ def index(request):
                         list_items = hlist_div.find_all("li")
                         producers = [item.get_text(strip=True) for item in list_items]
                         producer_text = ", ".join(producers)
-                    
+
                     # Additional condition for producer
                     th_element = soup.find("th", class_="infobox-label")
                     if th_element and th_element.find("a") and th_element.find("a").get_text(strip=True) == "Producer":
@@ -343,3 +418,4 @@ def index(request):
 
 
 
+    return HttpResponse(template.render(context, request))
