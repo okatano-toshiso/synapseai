@@ -7,6 +7,7 @@
     text-align: center;
     font-size: 24px;
     font-weight: 700;
+    color: #e0e0e0;
 }
 .key_visual {
     overflow: hidden;
@@ -62,11 +63,13 @@
 .title {
     width: 100%;
     text-align: center;
+    color: #e0e0e0;
 }
 .text {
     width: calc(100% - 20px);
     margin: 0 auto;
     text-align: left;
+    color: #cccccc;
 }
 .footer {
     position: sticky;
@@ -82,7 +85,7 @@
 }
 .link {
     text-decoration: none;
-    color: #333;;
+    color: #bb86fc;
 }
 .link.link_range {
     font-weight: 700;
