@@ -44,7 +44,7 @@ button:hover {
     height: auto;
     max-height: 60px;
     margin: 0 auto;
-    border-bottom: 1px solid #333333;
+    border-bottom: 1px solid #cccccc;
     background-color: #1f1f1f;
     text-align: left;
 }
@@ -73,7 +73,7 @@ button:hover {
     position: relative;
     width: 100%;
     padding: 30px 0;
-    border-top: 1px solid #333333;
+    border-top: 1px solid #cccccc;
     background-color: #1f1f1f;
     color: #e0e0e0;
     text-align: center;

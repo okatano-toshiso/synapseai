@@ -28,7 +28,7 @@
       --selected-bg: #1b1b1b;
       --selected-row: #00363a;
   
-      --close-button-bg: #333333;
+      --close-button-bg: #cccccc;
       --close-button-hover-bg: #666666;
 
       color-scheme: dark;
@@ -65,7 +65,7 @@ html[data-theme="dark"] {
     --selected-bg: #1b1b1b;
     --selected-row: #00363a;
 
-    --close-button-bg: #333333;
+    --close-button-bg: #cccccc;
     --close-button-hover-bg: #666666;
 
     color-scheme: dark;
