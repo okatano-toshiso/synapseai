@@ -25,11 +25,11 @@ main {
 }
 
 h3 {
-    color: #bb86fc;
+    color: #999999;
 }
 
 button {
-    background-color: #bb86fc;
+    background-color: #999999;
     color: #121212;
     border: none;
     padding: 0.5rem 1rem;
@@ -39,7 +39,7 @@ button {
 }
 
 button:hover {
-    background-color: #9a67ea;
+    background-color: #999999;
 }
 
 .result_box_text {

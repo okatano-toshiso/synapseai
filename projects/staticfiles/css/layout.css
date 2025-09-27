@@ -107,8 +107,8 @@ ul {
 }
 
 .lyric_trans .sentence ,.lyric_trans .result {
-    width: calc(50% - 10px);
-    height: 640px;
+    width: calc(100% - 10px);
+    min-height: 640px;
 }
 
 .send_mail.lyric_trans .sentence {
@@ -126,7 +126,6 @@ ul {
 
 .send_mail.lyric_trans .sentence form input, .send_mail.lyric_trans .sentence form select, .sentence form textarea {
     width: 100%;
-    max-width: 640px;
 }
 
 .vision.lyric_trans .sentence ,.vision.lyric_trans .result {

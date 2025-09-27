@@ -22,8 +22,9 @@ def index(request):
                 client = OpenAI(
                     api_key = OPENAI_API_KEY,
                 )
+                selected_model = request.POST.get("model", "gpt-5")
                 response = client.chat.completions.create(
-                    model="gpt-3.5-turbo",
+                    model=selected_model,
                     messages=[
                         {
                             "role": "system",
@@ -37,6 +38,7 @@ def index(request):
                 )
                 chat_results = response.choices[0].message.content
                 chat_results = chat_results.replace("\n", "<br>")
+                chat_results += f" （{selected_model}）"
             except Exception as e:
                 return HttpResponse(f"API呼び出し中にエラーが発生しました: {str(e)}", status=500)
         else:
