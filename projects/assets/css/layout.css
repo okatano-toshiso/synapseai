@@ -75,7 +75,7 @@ ul {
 .lyric_trans .result h3{
     text-align: left;
     padding: 0 0 0 30px;
-    color: #cccccc;
+    color: #ccc;
     font-weight: 400;
 }
 
@@ -221,6 +221,32 @@ button:hover {
     height: 100%;
 }
 
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: #121212;
+    border-bottom: 1px solid #333;
+    z-index: 1000;
+}
+.header_area {
+    display: flex;
+    align-items: center;
+    padding: 10px 20px;
+}
+.site_title {
+    margin-left: 15px;
+    font-size: 1.2em;
+}
+.logo_size {
+    height: 40px;
+}
+
+main.lyric_trans {
+    margin-top: 80px; /* ヘッダーの高さ分余白を追加 */
+}
+
 .contents_area {
     display: flex;
     justify-content:flex-start;
@@ -239,5 +265,13 @@ button:hover {
 }
 
 label {
-    display: block;
+    display: inline-block;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+#model {
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 10px;
 }

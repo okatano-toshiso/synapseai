@@ -37,6 +37,7 @@ def index(request):
                     ],
                 )
                 chat_results = response.choices[0].message.content
+                chat_results = chat_results.lstrip()
                 chat_results = chat_results.replace("\n", "<br>")
                 chat_results += f" （{selected_model}）"
             except Exception as e:
