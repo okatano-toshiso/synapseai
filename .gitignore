@@ -1,2 +1,12 @@
 .vscode
 synapse
+
+# Environment files
+.env
+.env.*
+*.env
+*.env.*
+
+# Local settings and credentials
+projects/credentials.json
+credentials.json

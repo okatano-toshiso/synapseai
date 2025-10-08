@@ -1,0 +1,299 @@
+{% extends 'bond_checker/base.html' %}
+
+{% block title %}{{ bond_doc.file_name }} - 詳細{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="{% url 'bond_checker:index' %}" class="btn btn-outline-secondary">
+        ← ホームに戻る
+    </a>
+</div>
+
+<div class="upload-area">
+    <h2 class="mb-4">📄 ドキュメント詳細</h2>
+    
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h5>ファイル情報</h5>
+            <table class="table table-borderless">
+                <tr>
+                    <th width="120">ファイル名:</th>
+                    <td>{{ bond_doc.file_name }}</td>
+                </tr>
+                <tr>
+                    <th>ファイルタイプ:</th>
+                    <td>
+                        {% if bond_doc.file_type == 'pdf' %}
+                            📄 PDF
+                        {% else %}
+                            🖼️ 画像
+                        {% endif %}
+                    </td>
+                </tr>
+                <tr>
+                    <th>アップロード日時:</th>
+                    <td>{{ bond_doc.uploaded_at|date:"Y年m月d日 H:i:s" }}</td>
+                </tr>
+                <tr>
+                    <th>解析状況:</th>
+                    <td>
+                        {% if bond_doc.analysis_status == 'completed' %}
+                            <span class="status-badge status-completed">✓ 完了</span>
+                        {% elif bond_doc.analysis_status == 'processing' %}
+                            <span class="status-badge status-processing">⏳ 処理中</span>
+                        {% elif bond_doc.analysis_status == 'failed' %}
+                            <span class="status-badge status-failed">✗ 失敗</span>
+                        {% else %}
+                            <span class="status-badge status-pending">待機中</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% if bond_doc.analyzed_at %}
+                <tr>
+                    <th>解析完了日時:</th>
+                    <td>{{ bond_doc.analyzed_at|date:"Y年m月d日 H:i:s" }}</td>
+                </tr>
+                {% endif %}
+            </table>
+        </div>
+    </div>
+
+    {% if bond_doc.analysis_status == 'completed' %}
+    
+    <!-- 処理時間の比較 -->
+    <div class="mt-4">
+        <h5>⏱️ 処理時間の比較</h5>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6>Tesseract OCR</h6>
+                        {% if bond_doc.ocr_processing_time %}
+                            <h3 class="text-primary">{{ bond_doc.ocr_processing_time|floatformat:2 }}秒</h3>
+                            <span class="status-badge status-{{ bond_doc.ocr_status }}">{{ bond_doc.ocr_status }}</span>
+                        {% else %}
+                            <p class="text-muted">未実行</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6>生成AI ({{ bond_doc.ai_model_used|default:"GPT-4o" }})</h6>
+                        {% if bond_doc.ai_processing_time %}
+                            <h3 class="text-info">{{ bond_doc.ai_processing_time|floatformat:2 }}秒</h3>
+                            <span class="status-badge status-{{ bond_doc.ai_status }}">{{ bond_doc.ai_status }}</span>
+                        {% else %}
+                            <p class="text-muted">未実行</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- タブで切り替え可能な結果表示 -->
+    <div class="mt-4">
+        <h5>📊 認識結果の比較</h5>
+        <ul class="nav nav-tabs" id="resultTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="ocr-tab" data-bs-toggle="tab" data-bs-target="#ocr" type="button" role="tab">
+                    🔤 Tesseract OCR
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="ai-tab" data-bs-toggle="tab" data-bs-target="#ai" type="button" role="tab">
+                    🤖 生成AI ({{ bond_doc.ai_model_used|default:"GPT-4" }})
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="comparison-tab" data-bs-toggle="tab" data-bs-target="#comparison" type="button" role="tab">
+                    📈 比較分析
+                </button>
+            </li>
+        </ul>
+        <div class="tab-content mt-3" id="resultTabsContent">
+            <!-- OCR結果 -->
+            <div class="tab-pane fade show active" id="ocr" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">Tesseract OCR 抽出結果</h6>
+                    </div>
+                    <div class="card-body" style="background-color: #f8f9fa;">
+                        {% if bond_doc.ocr_result %}
+                            <div class="mb-2">
+                                <strong>文字数:</strong> {{ bond_doc.ocr_result|length }} 文字
+                            </div>
+                            <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: monospace; max-height: 500px; overflow-y: auto;">{{ bond_doc.ocr_result }}</pre>
+                        {% elif bond_doc.ocr_error %}
+                            <div class="alert alert-danger">
+                                エラー: {{ bond_doc.ocr_error }}
+                            </div>
+                        {% else %}
+                            <p class="text-muted">結果がありません</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 生成AI結果 -->
+            <div class="tab-pane fade" id="ai" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">生成AI ({{ bond_doc.ai_model_used|default:"GPT-4" }}) 解析結果</h6>
+                    </div>
+                    <div class="card-body" style="background-color: #f8f9fa;">
+                        {% if bond_doc.ai_result %}
+                            <div class="mb-2">
+                                <strong>文字数:</strong> {{ bond_doc.ai_result|length }} 文字
+                            </div>
+                            <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: monospace; max-height: 500px; overflow-y: auto;">{{ bond_doc.ai_result }}</pre>
+                        {% elif bond_doc.ai_error %}
+                            <div class="alert alert-danger">
+                                エラー: {{ bond_doc.ai_error }}
+                            </div>
+                        {% else %}
+                            <p class="text-muted">結果がありません</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 比較分析 -->
+            <div class="tab-pane fade" id="comparison" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">精度比較分析</h6>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>項目</th>
+                                    <th>Tesseract OCR</th>
+                                    <th>生成AI</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>ステータス</strong></td>
+                                    <td><span class="status-badge status-{{ bond_doc.ocr_status }}">{{ bond_doc.ocr_status }}</span></td>
+                                    <td><span class="status-badge status-{{ bond_doc.ai_status }}">{{ bond_doc.ai_status }}</span></td>
+                                </tr>
+                                <tr>
+                                    <td><strong>処理時間</strong></td>
+                                    <td>{{ bond_doc.ocr_processing_time|floatformat:2|default:"-" }} 秒</td>
+                                    <td>{{ bond_doc.ai_processing_time|floatformat:2|default:"-" }} 秒</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>抽出文字数</strong></td>
+                                    <td>{{ bond_doc.ocr_result|length|default:"0" }} 文字</td>
+                                    <td>{{ bond_doc.ai_result|length|default:"0" }} 文字</td>
+                                </tr>
+                                {% if bond_doc.correct_text %}
+                                <tr>
+                                    <td><strong>適合率</strong></td>
+                                    <td>
+                                        {% if bond_doc.ocr_accuracy %}
+                                            <h5 class="mb-0 {% if bond_doc.ocr_accuracy >= 80 %}text-success{% elif bond_doc.ocr_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                                {{ bond_doc.ocr_accuracy }}%
+                                            </h5>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if bond_doc.ai_accuracy %}
+                                            <h5 class="mb-0 {% if bond_doc.ai_accuracy >= 80 %}text-success{% elif bond_doc.ai_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                                {{ bond_doc.ai_accuracy }}%
+                                            </h5>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endif %}
+                                <tr>
+                                    <td><strong>特徴</strong></td>
+                                    <td>
+                                        <ul class="mb-0">
+                                            <li>オープンソース</li>
+                                            <li>高速処理</li>
+                                            <li>オフライン可能</li>
+                                        </ul>
+                                    </td>
+                                    <td>
+                                        <ul class="mb-0">
+                                            <li>高精度</li>
+                                            <li>文脈理解</li>
+                                            <li>構造化出力</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        
+                        {% if bond_doc.correct_text %}
+                        <div class="alert alert-success mt-3">
+                            <h6>✅ 正解テキストと比較した適合率</h6>
+                            <div class="row mt-3">
+                                <div class="col-md-6">
+                                    <div class="text-center">
+                                        <p class="mb-1"><strong>OCR適合率</strong></p>
+                                        {% if bond_doc.ocr_accuracy %}
+                                            <h3 class="{% if bond_doc.ocr_accuracy >= 80 %}text-success{% elif bond_doc.ocr_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                                {{ bond_doc.ocr_accuracy }}%
+                                            </h3>
+                                        {% else %}
+                                            <p class="text-muted">計算できませんでした</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="text-center">
+                                        <p class="mb-1"><strong>生成AI適合率</strong></p>
+                                        {% if bond_doc.ai_accuracy %}
+                                            <h3 class="{% if bond_doc.ai_accuracy >= 80 %}text-success{% elif bond_doc.ai_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                                {{ bond_doc.ai_accuracy }}%
+                                            </h3>
+                                        {% else %}
+                                            <p class="text-muted">計算できませんでした</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            <hr>
+                            <p class="mb-0"><strong>正解テキスト:</strong></p>
+                            <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: monospace; max-height: 150px; overflow-y: auto; background-color: white; padding: 10px; border-radius: 5px;">{{ bond_doc.correct_text }}</pre>
+                        </div>
+                        {% endif %}
+                        
+                        <div class="alert alert-info mt-3">
+                            <h6>💡 精度評価のポイント</h6>
+                            <ul class="mb-0">
+                                <li><strong>処理時間:</strong> より短い方が効率的</li>
+                                <li><strong>適合率:</strong> 80%以上で良好、60%以上で普通、60%未満で要改善</li>
+                                <li><strong>構造化:</strong> 生成AIは情報を整理して出力</li>
+                                <li><strong>コスト:</strong> OCRは無料、生成AIはAPIコストが発生</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% elif bond_doc.analysis_status == 'failed' %}
+    <div class="alert alert-danger mt-4">
+        <h5>❌ エラーが発生しました</h5>
+        <p class="mb-0">{{ bond_doc.error_message }}</p>
+    </div>
+    {% elif bond_doc.analysis_status == 'processing' %}
+    <div class="alert alert-info mt-4">
+        <h5>⏳ 処理中</h5>
+        <p class="mb-0">ファイルを解析しています。しばらくお待ちください...</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

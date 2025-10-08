@@ -66,7 +66,8 @@ INSTALLED_APPS = [
     'jra',
     'win5',
     'diary',
-    'generate_image'
+    'generate_image',
+    'bond_checker',
 ]
 
 MIDDLEWARE = [
@@ -165,3 +166,12 @@ STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
     'sass_processor.finders.CssFinder',  # これを追加
 ]
+
+# OpenAI API設定
+OPENAI_API_KEY = os.getenv('OPENAI_API_KEY', '')
+
+# Claude API設定
+ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY', '')
+
+# Gemini API設定
+GEMINI_API_KEY = os.getenv('GEMINI_API_KEY', '')
