@@ -64,10 +64,10 @@
     <div class="mt-4">
         <h5>⏱️ 処理時間の比較</h5>
         <div class="row">
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card">
                     <div class="card-body text-center">
-                        <h6>Tesseract OCR</h6>
+                        <h6>{% if bond_doc.file_type == 'pdf' %}pdfplumber{% else %}Tesseract OCR{% endif %}</h6>
                         {% if bond_doc.ocr_processing_time %}
                             <h3 class="text-primary">{{ bond_doc.ocr_processing_time|floatformat:2 }}秒</h3>
                             <span class="status-badge status-{{ bond_doc.ocr_status }}">{{ bond_doc.ocr_status }}</span>
@@ -77,13 +77,39 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-3">
                 <div class="card">
                     <div class="card-body text-center">
-                        <h6>生成AI ({{ bond_doc.ai_model_used|default:"GPT-4o" }})</h6>
+                        <h6>GPT-4o</h6>
                         {% if bond_doc.ai_processing_time %}
                             <h3 class="text-info">{{ bond_doc.ai_processing_time|floatformat:2 }}秒</h3>
                             <span class="status-badge status-{{ bond_doc.ai_status }}">{{ bond_doc.ai_status }}</span>
+                        {% else %}
+                            <p class="text-muted">未実行</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6>Gemini</h6>
+                        {% if bond_doc.gemini_processing_time %}
+                            <h3 class="text-success">{{ bond_doc.gemini_processing_time|floatformat:2 }}秒</h3>
+                            <span class="status-badge status-{{ bond_doc.gemini_status }}">{{ bond_doc.gemini_status }}</span>
+                        {% else %}
+                            <p class="text-muted">未実行</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6>Claude</h6>
+                        {% if bond_doc.claude_processing_time %}
+                            <h3 class="text-warning">{{ bond_doc.claude_processing_time|floatformat:2 }}秒</h3>
+                            <span class="status-badge status-{{ bond_doc.claude_status }}">{{ bond_doc.claude_status }}</span>
                         {% else %}
                             <p class="text-muted">未実行</p>
                         {% endif %}
@@ -99,12 +125,22 @@
         <ul class="nav nav-tabs" id="resultTabs" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="ocr-tab" data-bs-toggle="tab" data-bs-target="#ocr" type="button" role="tab">
-                    🔤 Tesseract OCR
+                    {% if bond_doc.file_type == 'pdf' %}� pdfplumber{% else %}�🔤 Tesseract OCR{% endif %}
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="ai-tab" data-bs-toggle="tab" data-bs-target="#ai" type="button" role="tab">
-                    🤖 生成AI ({{ bond_doc.ai_model_used|default:"GPT-4" }})
+                    🤖 GPT-4o
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="gemini-tab" data-bs-toggle="tab" data-bs-target="#gemini" type="button" role="tab">
+                    ✨ Gemini
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="claude-tab" data-bs-toggle="tab" data-bs-target="#claude" type="button" role="tab">
+                    🧠 Claude
                 </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -118,7 +154,7 @@
             <div class="tab-pane fade show active" id="ocr" role="tabpanel">
                 <div class="card">
                     <div class="card-header">
-                        <h6 class="mb-0">Tesseract OCR 抽出結果</h6>
+                        <h6 class="mb-0">{% if bond_doc.file_type == 'pdf' %}pdfplumber{% else %}Tesseract OCR{% endif %} 抽出結果</h6>
                     </div>
                     <div class="card-body" style="background-color: #f8f9fa;">
                         {% if bond_doc.ocr_result %}
@@ -137,11 +173,11 @@
                 </div>
             </div>
             
-            <!-- 生成AI結果 -->
+            <!-- GPT-4o結果 -->
             <div class="tab-pane fade" id="ai" role="tabpanel">
                 <div class="card">
                     <div class="card-header">
-                        <h6 class="mb-0">生成AI ({{ bond_doc.ai_model_used|default:"GPT-4" }}) 解析結果</h6>
+                        <h6 class="mb-0">GPT-4o 解析結果</h6>
                     </div>
                     <div class="card-body" style="background-color: #f8f9fa;">
                         {% if bond_doc.ai_result %}
@@ -152,6 +188,52 @@
                         {% elif bond_doc.ai_error %}
                             <div class="alert alert-danger">
                                 エラー: {{ bond_doc.ai_error }}
+                            </div>
+                        {% else %}
+                            <p class="text-muted">結果がありません</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gemini結果 -->
+            <div class="tab-pane fade" id="gemini" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">Gemini 解析結果</h6>
+                    </div>
+                    <div class="card-body" style="background-color: #f8f9fa;">
+                        {% if bond_doc.gemini_result %}
+                            <div class="mb-2">
+                                <strong>文字数:</strong> {{ bond_doc.gemini_result|length }} 文字
+                            </div>
+                            <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: monospace; max-height: 500px; overflow-y: auto;">{{ bond_doc.gemini_result }}</pre>
+                        {% elif bond_doc.gemini_status == 'failed' %}
+                            <div class="alert alert-danger">
+                                エラー: {{ bond_doc.gemini_result }}
+                            </div>
+                        {% else %}
+                            <p class="text-muted">結果がありません</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Claude結果 -->
+            <div class="tab-pane fade" id="claude" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">Claude 解析結果</h6>
+                    </div>
+                    <div class="card-body" style="background-color: #f8f9fa;">
+                        {% if bond_doc.claude_result %}
+                            <div class="mb-2">
+                                <strong>文字数:</strong> {{ bond_doc.claude_result|length }} 文字
+                            </div>
+                            <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: monospace; max-height: 500px; overflow-y: auto;">{{ bond_doc.claude_result }}</pre>
+                        {% elif bond_doc.claude_status == 'failed' %}
+                            <div class="alert alert-danger">
+                                エラー: {{ bond_doc.claude_result }}
                             </div>
                         {% else %}
                             <p class="text-muted">結果がありません</p>
