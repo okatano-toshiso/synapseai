@@ -6,5 +6,6 @@ app_name = 'bond_checker'
 urlpatterns = [
     path('', views.index, name='index'),
     path('detail/<int:pk>/', views.detail, name='detail'),
-    path('list/', views.document_list, name='document_list'),
+    path('documents/', views.document_list, name='document_list'),
+    path('test-gpt4o/', views.test_gpt4o, name='test_gpt4o'),
 ]

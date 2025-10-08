@@ -315,3 +315,40 @@ def document_list(request):
         'documents': documents,
     }
     return render(request, 'bond_checker/document_list.html', context)
+
+
+def test_gpt4o(request):
+    """GPT-4o API接続テスト"""
+    from django.http import JsonResponse
+    
+    try:
+        client = OpenAI(api_key=settings.OPENAI_API_KEY)
+        
+        # シンプルなテストリクエスト
+        response = client.chat.completions.create(
+            model="gpt-4o",
+            messages=[
+                {
+                    "role": "user",
+                    "content": "Hello! Please respond with 'API connection successful!'"
+                }
+            ],
+            max_tokens=50
+        )
+        
+        result = {
+            'status': 'success',
+            'api_key_prefix': settings.OPENAI_API_KEY[:20] if settings.OPENAI_API_KEY else 'NOT_SET',
+            'response': response.choices[0].message.content,
+            'model': response.model
+        }
+        
+    except Exception as e:
+        result = {
+            'status': 'error',
+            'api_key_prefix': settings.OPENAI_API_KEY[:20] if settings.OPENAI_API_KEY else 'NOT_SET',
+            'error': str(e),
+            'error_type': type(e).__name__
+        }
+    
+    return JsonResponse(result, json_dumps_params={'ensure_ascii': False, 'indent': 2})
