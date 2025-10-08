@@ -11,11 +11,21 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
 import os
-
+from dotenv import load_dotenv
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# .env ファイルを読み込み
+dotenv_path = BASE_DIR.parent / '.env'
+print(f"[DEBUG] Loading .env from: {dotenv_path}")
+print(f"[DEBUG] .env exists: {dotenv_path.exists()}")
+load_dotenv(dotenv_path=dotenv_path)
+
+# デバッグ: 環境変数の確認
+import os as _os
+print(f"[DEBUG] OPENAI_API_KEY loaded: {_os.getenv('OPENAI_API_KEY', 'NOT_FOUND')[:20]}..." if _os.getenv('OPENAI_API_KEY') else "[DEBUG] OPENAI_API_KEY: NOT_FOUND")
 
 
 # Quick-start development settings - unsuitable for production

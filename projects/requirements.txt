@@ -67,3 +67,7 @@ pdfplumber==0.11.0
 pytesseract==0.3.10
 pdf2image==1.17.0
 PyMuPDF==1.24.0
+
+# LLM SDKs required by bond_checker
+google-generativeai
+anthropic
