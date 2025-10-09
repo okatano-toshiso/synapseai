@@ -48,12 +48,30 @@ class BondDocument(models.Model):
     vision_processing_time = models.FloatField(null=True, blank=True, verbose_name='Vision処理時間(秒)')
     vision_error = models.TextField(blank=True, null=True, verbose_name='Visionエラー')
     
-    # 生成AI解析結果（GPT/Claude）
+    # 生成AI解析結果（GPT/Claude）- 後方互換性のため残す
     ai_result = models.TextField(blank=True, null=True, verbose_name='生成AI解析結果')
     ai_status = models.CharField(max_length=20, default='pending', verbose_name='AIステータス')
     ai_processing_time = models.FloatField(null=True, blank=True, verbose_name='AI処理時間(秒)')
     ai_error = models.TextField(blank=True, null=True, verbose_name='AIエラー')
     ai_model_used = models.CharField(max_length=50, blank=True, null=True, verbose_name='使用AIモデル')
+    
+    # OpenAI GPT-4o解析結果
+    gpt4o_result = models.TextField(blank=True, null=True, verbose_name='GPT-4o解析結果')
+    gpt4o_status = models.CharField(max_length=20, default='pending', verbose_name='GPT-4oステータス')
+    gpt4o_processing_time = models.FloatField(null=True, blank=True, verbose_name='GPT-4o処理時間(秒)')
+    gpt4o_accuracy = models.FloatField(null=True, blank=True, verbose_name='GPT-4o適合率(%)')
+    
+    # OpenAI o1解析結果
+    o1_result = models.TextField(blank=True, null=True, verbose_name='o1解析結果')
+    o1_status = models.CharField(max_length=20, default='pending', verbose_name='o1ステータス')
+    o1_processing_time = models.FloatField(null=True, blank=True, verbose_name='o1処理時間(秒)')
+    o1_accuracy = models.FloatField(null=True, blank=True, verbose_name='o1適合率(%)')
+    
+    # OpenAI GPT-3.5解析結果
+    gpt35_result = models.TextField(blank=True, null=True, verbose_name='GPT-3.5解析結果')
+    gpt35_status = models.CharField(max_length=20, default='pending', verbose_name='GPT-3.5ステータス')
+    gpt35_processing_time = models.FloatField(null=True, blank=True, verbose_name='GPT-3.5処理時間(秒)')
+    gpt35_accuracy = models.FloatField(null=True, blank=True, verbose_name='GPT-3.5適合率(%)')
     
     # 債券書類分類結果
     document_category = models.CharField(max_length=100, blank=True, null=True, verbose_name='書類カテゴリー')

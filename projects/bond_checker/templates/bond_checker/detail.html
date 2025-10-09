@@ -64,12 +64,12 @@
     <div class="mt-4">
         <h5>⏱️ 処理時間の比較</h5>
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="card">
                     <div class="card-body text-center">
-                        <h6>{% if bond_doc.file_type == 'pdf' %}pdfplumber{% else %}Tesseract OCR{% endif %}</h6>
+                        <h6 style="font-size: 0.9rem;">{% if bond_doc.file_type == 'pdf' %}pdfplumber{% else %}Tesseract OCR{% endif %}</h6>
                         {% if bond_doc.ocr_processing_time %}
-                            <h3 class="text-primary">{{ bond_doc.ocr_processing_time|floatformat:2 }}秒</h3>
+                            <h4 class="text-primary">{{ bond_doc.ocr_processing_time|floatformat:2 }}秒</h4>
                             <span class="status-badge status-{{ bond_doc.ocr_status }}">{{ bond_doc.ocr_status }}</span>
                         {% else %}
                             <p class="text-muted">未実行</p>
@@ -77,25 +77,38 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="card">
                     <div class="card-body text-center">
-                        <h6>GPT-4o</h6>
-                        {% if bond_doc.ai_processing_time %}
-                            <h3 class="text-info">{{ bond_doc.ai_processing_time|floatformat:2 }}秒</h3>
-                            <span class="status-badge status-{{ bond_doc.ai_status }}">{{ bond_doc.ai_status }}</span>
+                        <h6 style="font-size: 0.9rem;">GPT-4o</h6>
+                        {% if bond_doc.gpt4o_processing_time %}
+                            <h4 class="text-info">{{ bond_doc.gpt4o_processing_time|floatformat:2 }}秒</h4>
+                            <span class="status-badge status-{{ bond_doc.gpt4o_status }}">{{ bond_doc.gpt4o_status }}</span>
                         {% else %}
                             <p class="text-muted">未実行</p>
                         {% endif %}
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="card">
                     <div class="card-body text-center">
-                        <h6>Gemini</h6>
+                        <h6 style="font-size: 0.9rem;">GPT-4-turbo</h6>
+                        {% if bond_doc.gpt35_processing_time %}
+                            <h4 class="text-info">{{ bond_doc.gpt35_processing_time|floatformat:2 }}秒</h4>
+                            <span class="status-badge status-{{ bond_doc.gpt35_status }}">{{ bond_doc.gpt35_status }}</span>
+                        {% else %}
+                            <p class="text-muted">未実行</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="card">
+                    <div class="card-body text-center">
+                        <h6 style="font-size: 0.9rem;">Gemini</h6>
                         {% if bond_doc.gemini_processing_time %}
-                            <h3 class="text-success">{{ bond_doc.gemini_processing_time|floatformat:2 }}秒</h3>
+                            <h4 class="text-success">{{ bond_doc.gemini_processing_time|floatformat:2 }}秒</h4>
                             <span class="status-badge status-{{ bond_doc.gemini_status }}">{{ bond_doc.gemini_status }}</span>
                         {% else %}
                             <p class="text-muted">未実行</p>
@@ -103,12 +116,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3">
+            <div class="col-md-2">
                 <div class="card">
                     <div class="card-body text-center">
-                        <h6>Claude</h6>
+                        <h6 style="font-size: 0.9rem;">Claude</h6>
                         {% if bond_doc.claude_processing_time %}
-                            <h3 class="text-warning">{{ bond_doc.claude_processing_time|floatformat:2 }}秒</h3>
+                            <h4 class="text-warning">{{ bond_doc.claude_processing_time|floatformat:2 }}秒</h4>
                             <span class="status-badge status-{{ bond_doc.claude_status }}">{{ bond_doc.claude_status }}</span>
                         {% else %}
                             <p class="text-muted">未実行</p>
@@ -125,12 +138,17 @@
         <ul class="nav nav-tabs" id="resultTabs" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="ocr-tab" data-bs-toggle="tab" data-bs-target="#ocr" type="button" role="tab">
-                    {% if bond_doc.file_type == 'pdf' %}� pdfplumber{% else %}�🔤 Tesseract OCR{% endif %}
+                    {% if bond_doc.file_type == 'pdf' %}📄 pdfplumber{% else %}🔤 Tesseract OCR{% endif %}
                 </button>
             </li>
             <li class="nav-item" role="presentation">
-                <button class="nav-link" id="ai-tab" data-bs-toggle="tab" data-bs-target="#ai" type="button" role="tab">
+                <button class="nav-link" id="gpt4o-tab" data-bs-toggle="tab" data-bs-target="#gpt4o" type="button" role="tab">
                     🤖 GPT-4o
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="gpt35-tab" data-bs-toggle="tab" data-bs-target="#gpt35" type="button" role="tab">
+                    💬 GPT-4-turbo
                 </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -174,20 +192,59 @@
             </div>
             
             <!-- GPT-4o結果 -->
-            <div class="tab-pane fade" id="ai" role="tabpanel">
+            <div class="tab-pane fade" id="gpt4o" role="tabpanel">
                 <div class="card">
                     <div class="card-header">
                         <h6 class="mb-0">GPT-4o 解析結果</h6>
                     </div>
                     <div class="card-body" style="background-color: #f8f9fa;">
-                        {% if bond_doc.ai_result %}
+                        {% if bond_doc.gpt4o_result %}
                             <div class="mb-2">
-                                <strong>文字数:</strong> {{ bond_doc.ai_result|length }} 文字
+                                <strong>文字数:</strong> {{ bond_doc.gpt4o_result|length }} 文字
                             </div>
-                            <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: monospace; max-height: 500px; overflow-y: auto;">{{ bond_doc.ai_result }}</pre>
-                        {% elif bond_doc.ai_error %}
+                            {% if bond_doc.gpt4o_accuracy %}
+                            <div class="mb-2">
+                                <strong>適合率:</strong> 
+                                <span class="{% if bond_doc.gpt4o_accuracy >= 80 %}text-success{% elif bond_doc.gpt4o_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                    {{ bond_doc.gpt4o_accuracy }}%
+                                </span>
+                            </div>
+                            {% endif %}
+                            <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: monospace; max-height: 500px; overflow-y: auto;">{{ bond_doc.gpt4o_result }}</pre>
+                        {% elif bond_doc.gpt4o_status == 'failed' %}
                             <div class="alert alert-danger">
-                                エラー: {{ bond_doc.ai_error }}
+                                エラー: GPT-4oの解析に失敗しました
+                            </div>
+                        {% else %}
+                            <p class="text-muted">結果がありません</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <!-- GPT-4-turbo結果 -->
+            <div class="tab-pane fade" id="gpt35" role="tabpanel">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="mb-0">GPT-4-turbo 解析結果</h6>
+                    </div>
+                    <div class="card-body" style="background-color: #f8f9fa;">
+                        {% if bond_doc.gpt35_result %}
+                            <div class="mb-2">
+                                <strong>文字数:</strong> {{ bond_doc.gpt35_result|length }} 文字
+                            </div>
+                            {% if bond_doc.gpt35_accuracy %}
+                            <div class="mb-2">
+                                <strong>適合率:</strong> 
+                                <span class="{% if bond_doc.gpt35_accuracy >= 80 %}text-success{% elif bond_doc.gpt35_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                    {{ bond_doc.gpt35_accuracy }}%
+                                </span>
+                            </div>
+                            {% endif %}
+                            <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: monospace; max-height: 500px; overflow-y: auto;">{{ bond_doc.gpt35_result }}</pre>
+                        {% elif bond_doc.gpt35_status == 'failed' %}
+                            <div class="alert alert-danger">
+                                エラー: GPT-4-turboの解析に失敗しました
                             </div>
                         {% else %}
                             <p class="text-muted">結果がありません</p>
@@ -207,6 +264,14 @@
                             <div class="mb-2">
                                 <strong>文字数:</strong> {{ bond_doc.gemini_result|length }} 文字
                             </div>
+                            {% if bond_doc.gemini_accuracy %}
+                            <div class="mb-2">
+                                <strong>適合率:</strong> 
+                                <span class="{% if bond_doc.gemini_accuracy >= 80 %}text-success{% elif bond_doc.gemini_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                    {{ bond_doc.gemini_accuracy }}%
+                                </span>
+                            </div>
+                            {% endif %}
                             <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: monospace; max-height: 500px; overflow-y: auto;">{{ bond_doc.gemini_result }}</pre>
                         {% elif bond_doc.gemini_status == 'failed' %}
                             <div class="alert alert-danger">
@@ -230,6 +295,14 @@
                             <div class="mb-2">
                                 <strong>文字数:</strong> {{ bond_doc.claude_result|length }} 文字
                             </div>
+                            {% if bond_doc.claude_accuracy %}
+                            <div class="mb-2">
+                                <strong>適合率:</strong> 
+                                <span class="{% if bond_doc.claude_accuracy >= 80 %}text-success{% elif bond_doc.claude_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                    {{ bond_doc.claude_accuracy }}%
+                                </span>
+                            </div>
+                            {% endif %}
                             <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: monospace; max-height: 500px; overflow-y: auto;">{{ bond_doc.claude_result }}</pre>
                         {% elif bond_doc.claude_status == 'failed' %}
                             <div class="alert alert-danger">
@@ -246,32 +319,44 @@
             <div class="tab-pane fade" id="comparison" role="tabpanel">
                 <div class="card">
                     <div class="card-header">
-                        <h6 class="mb-0">精度比較分析</h6>
+                        <h6 class="mb-0">精度比較分析（5つのツール/モデル）</h6>
                     </div>
                     <div class="card-body">
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     <th>項目</th>
-                                    <th>Tesseract OCR</th>
-                                    <th>生成AI</th>
+                                    <th>{% if bond_doc.file_type == 'pdf' %}pdfplumber{% else %}Tesseract OCR{% endif %}</th>
+                                    <th>GPT-4o</th>
+                                    <th>GPT-4-turbo</th>
+                                    <th>Gemini</th>
+                                    <th>Claude</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td><strong>ステータス</strong></td>
                                     <td><span class="status-badge status-{{ bond_doc.ocr_status }}">{{ bond_doc.ocr_status }}</span></td>
-                                    <td><span class="status-badge status-{{ bond_doc.ai_status }}">{{ bond_doc.ai_status }}</span></td>
+                                    <td><span class="status-badge status-{{ bond_doc.gpt4o_status }}">{{ bond_doc.gpt4o_status }}</span></td>
+                                    <td><span class="status-badge status-{{ bond_doc.gpt35_status }}">{{ bond_doc.gpt35_status }}</span></td>
+                                    <td><span class="status-badge status-{{ bond_doc.gemini_status }}">{{ bond_doc.gemini_status }}</span></td>
+                                    <td><span class="status-badge status-{{ bond_doc.claude_status }}">{{ bond_doc.claude_status }}</span></td>
                                 </tr>
                                 <tr>
                                     <td><strong>処理時間</strong></td>
                                     <td>{{ bond_doc.ocr_processing_time|floatformat:2|default:"-" }} 秒</td>
-                                    <td>{{ bond_doc.ai_processing_time|floatformat:2|default:"-" }} 秒</td>
+                                    <td>{{ bond_doc.gpt4o_processing_time|floatformat:2|default:"-" }} 秒</td>
+                                    <td>{{ bond_doc.gpt35_processing_time|floatformat:2|default:"-" }} 秒</td>
+                                    <td>{{ bond_doc.gemini_processing_time|floatformat:2|default:"-" }} 秒</td>
+                                    <td>{{ bond_doc.claude_processing_time|floatformat:2|default:"-" }} 秒</td>
                                 </tr>
                                 <tr>
                                     <td><strong>抽出文字数</strong></td>
                                     <td>{{ bond_doc.ocr_result|length|default:"0" }} 文字</td>
-                                    <td>{{ bond_doc.ai_result|length|default:"0" }} 文字</td>
+                                    <td>{{ bond_doc.gpt4o_result|length|default:"0" }} 文字</td>
+                                    <td>{{ bond_doc.gpt35_result|length|default:"0" }} 文字</td>
+                                    <td>{{ bond_doc.gemini_result|length|default:"0" }} 文字</td>
+                                    <td>{{ bond_doc.claude_result|length|default:"0" }} 文字</td>
                                 </tr>
                                 {% if bond_doc.correct_text %}
                                 <tr>
@@ -286,9 +371,36 @@
                                         {% endif %}
                                     </td>
                                     <td>
-                                        {% if bond_doc.ai_accuracy %}
-                                            <h5 class="mb-0 {% if bond_doc.ai_accuracy >= 80 %}text-success{% elif bond_doc.ai_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
-                                                {{ bond_doc.ai_accuracy }}%
+                                        {% if bond_doc.gpt4o_accuracy %}
+                                            <h5 class="mb-0 {% if bond_doc.gpt4o_accuracy >= 80 %}text-success{% elif bond_doc.gpt4o_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                                {{ bond_doc.gpt4o_accuracy }}%
+                                            </h5>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if bond_doc.gpt35_accuracy %}
+                                            <h5 class="mb-0 {% if bond_doc.gpt35_accuracy >= 80 %}text-success{% elif bond_doc.gpt35_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                                {{ bond_doc.gpt35_accuracy }}%
+                                            </h5>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if bond_doc.gemini_accuracy %}
+                                            <h5 class="mb-0 {% if bond_doc.gemini_accuracy >= 80 %}text-success{% elif bond_doc.gemini_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                                {{ bond_doc.gemini_accuracy }}%
+                                            </h5>
+                                        {% else %}
+                                            <span class="text-muted">-</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {% if bond_doc.claude_accuracy %}
+                                            <h5 class="mb-0 {% if bond_doc.claude_accuracy >= 80 %}text-success{% elif bond_doc.claude_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                                {{ bond_doc.claude_accuracy }}%
                                             </h5>
                                         {% else %}
                                             <span class="text-muted">-</span>
@@ -296,23 +408,6 @@
                                     </td>
                                 </tr>
                                 {% endif %}
-                                <tr>
-                                    <td><strong>特徴</strong></td>
-                                    <td>
-                                        <ul class="mb-0">
-                                            <li>オープンソース</li>
-                                            <li>高速処理</li>
-                                            <li>オフライン可能</li>
-                                        </ul>
-                                    </td>
-                                    <td>
-                                        <ul class="mb-0">
-                                            <li>高精度</li>
-                                            <li>文脈理解</li>
-                                            <li>構造化出力</li>
-                                        </ul>
-                                    </td>
-                                </tr>
                             </tbody>
                         </table>
                         
@@ -320,27 +415,63 @@
                         <div class="alert alert-success mt-3">
                             <h6>✅ 正解テキストと比較した適合率</h6>
                             <div class="row mt-3">
-                                <div class="col-md-6">
+                                <div class="col">
                                     <div class="text-center">
-                                        <p class="mb-1"><strong>OCR適合率</strong></p>
+                                        <p class="mb-1"><strong>{% if bond_doc.file_type == 'pdf' %}pdfplumber{% else %}OCR{% endif %}</strong></p>
                                         {% if bond_doc.ocr_accuracy %}
-                                            <h3 class="{% if bond_doc.ocr_accuracy >= 80 %}text-success{% elif bond_doc.ocr_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                            <h4 class="{% if bond_doc.ocr_accuracy >= 80 %}text-success{% elif bond_doc.ocr_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
                                                 {{ bond_doc.ocr_accuracy }}%
-                                            </h3>
+                                            </h4>
                                         {% else %}
-                                            <p class="text-muted">計算できませんでした</p>
+                                            <p class="text-muted">-</p>
                                         {% endif %}
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col">
                                     <div class="text-center">
-                                        <p class="mb-1"><strong>生成AI適合率</strong></p>
-                                        {% if bond_doc.ai_accuracy %}
-                                            <h3 class="{% if bond_doc.ai_accuracy >= 80 %}text-success{% elif bond_doc.ai_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
-                                                {{ bond_doc.ai_accuracy }}%
-                                            </h3>
+                                        <p class="mb-1"><strong>GPT-4o</strong></p>
+                                        {% if bond_doc.gpt4o_accuracy %}
+                                            <h4 class="{% if bond_doc.gpt4o_accuracy >= 80 %}text-success{% elif bond_doc.gpt4o_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                                {{ bond_doc.gpt4o_accuracy }}%
+                                            </h4>
                                         {% else %}
-                                            <p class="text-muted">計算できませんでした</p>
+                                            <p class="text-muted">-</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="text-center">
+                                        <p class="mb-1"><strong>GPT-4-turbo</strong></p>
+                                        {% if bond_doc.gpt35_accuracy %}
+                                            <h4 class="{% if bond_doc.gpt35_accuracy >= 80 %}text-success{% elif bond_doc.gpt35_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                                {{ bond_doc.gpt35_accuracy }}%
+                                            </h4>
+                                        {% else %}
+                                            <p class="text-muted">-</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="text-center">
+                                        <p class="mb-1"><strong>Gemini</strong></p>
+                                        {% if bond_doc.gemini_accuracy %}
+                                            <h4 class="{% if bond_doc.gemini_accuracy >= 80 %}text-success{% elif bond_doc.gemini_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                                {{ bond_doc.gemini_accuracy }}%
+                                            </h4>
+                                        {% else %}
+                                            <p class="text-muted">-</p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="text-center">
+                                        <p class="mb-1"><strong>Claude</strong></p>
+                                        {% if bond_doc.claude_accuracy %}
+                                            <h4 class="{% if bond_doc.claude_accuracy >= 80 %}text-success{% elif bond_doc.claude_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
+                                                {{ bond_doc.claude_accuracy }}%
+                                            </h4>
+                                        {% else %}
+                                            <p class="text-muted">-</p>
                                         {% endif %}
                                     </div>
                                 </div>

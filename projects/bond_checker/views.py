@@ -62,7 +62,7 @@ def extract_text_from_image_tesseract(file_path):
         raise Exception(f"Tesseract OCRエラー: {str(e)}")
 
 
-def extract_text_with_openai_vision(file_path, file_type):
+def extract_text_with_openai_vision(file_path, file_type, model_name="gpt-4o"):
     """OpenAI Vision APIでテキスト抽出と債券書類分析"""
     try:
         client = OpenAI(api_key=settings.OPENAI_API_KEY)
@@ -84,16 +84,7 @@ def extract_text_with_openai_vision(file_path, file_type):
             with open(file_path, "rb") as image_file:
                 base64_image = base64.b64encode(image_file.read()).decode('utf-8')
         
-        # OpenAI Vision APIで分析
-        response = client.chat.completions.create(
-            model="gpt-4o",
-            messages=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": """この画像を詳細に分析して、以下の情報を抽出してください：
+        prompt_text = """この画像を詳細に分析して、以下の情報を抽出してください：
 
 1. 画像に含まれる全てのテキスト（日本語・英語含む）
 2. 債券書類の種類（もし債券関連書類の場合）
@@ -101,14 +92,89 @@ def extract_text_with_openai_vision(file_path, file_type):
 4. 書類の適正性評価
 
 分析結果を構造化された形式で提供してください。"""
-                        },
+        
+        # OpenAI Vision APIで分析
+        # o1モデルはvision機能が異なるため、テキストのみの分析を行う
+        if model_name.startswith("o1"):
+            # o1モデルの場合は画像を直接処理できないため、エラーを返す
+            # 将来的にo1がvisionをサポートした場合はここを更新
+            raise Exception(f"{model_name}モデルは現在vision機能に対応していません")
+        else:
+            # gpt-5モデルの場合はmax_completion_tokensを使用
+            if model_name.startswith("gpt-5"):
+                response = client.chat.completions.create(
+                    model=model_name,
+                    messages=[
                         {
-                            "type": "image_url",
-                            "image_url": {
-                                "url": f"data:image/png;base64,{base64_image}"
-                            }
+                            "role": "user",
+                            "content": [
+                                {
+                                    "type": "text",
+                                    "text": prompt_text
+                                },
+                                {
+                                    "type": "image_url",
+                                    "image_url": {
+                                        "url": f"data:image/png;base64,{base64_image}"
+                                    }
+                                }
+                            ]
                         }
-                    ]
+                    ],
+                    max_completion_tokens=2000
+                )
+            else:
+                response = client.chat.completions.create(
+                    model=model_name,
+                    messages=[
+                        {
+                            "role": "user",
+                            "content": [
+                                {
+                                    "type": "text",
+                                    "text": prompt_text
+                                },
+                                {
+                                    "type": "image_url",
+                                    "image_url": {
+                                        "url": f"data:image/png;base64,{base64_image}"
+                                    }
+                                }
+                            ]
+                        }
+                    ],
+                    max_tokens=2000
+                )
+        
+        return response.choices[0].message.content
+    except Exception as e:
+        raise Exception(f"OpenAI Vision API ({model_name}) エラー: {str(e)}")
+
+
+def analyze_text_with_openai(extracted_text, model_name="gpt-3.5-turbo"):
+    """OpenAI APIでテキストを分析（vision不要）"""
+    try:
+        client = OpenAI(api_key=settings.OPENAI_API_KEY)
+        
+        prompt_text = f"""以下のテキストを詳細に分析して、以下の情報を抽出してください：
+
+【抽出テキスト】
+{extracted_text}
+
+【分析項目】
+1. テキストの要約
+2. 債券書類の種類（もし債券関連書類の場合）
+3. 重要な情報（金額、日付、名称など）
+4. 書類の適正性評価
+
+分析結果を構造化された形式で提供してください。"""
+        
+        response = client.chat.completions.create(
+            model=model_name,
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt_text
                 }
             ],
             max_tokens=2000
@@ -116,7 +182,7 @@ def extract_text_with_openai_vision(file_path, file_type):
         
         return response.choices[0].message.content
     except Exception as e:
-        raise Exception(f"OpenAI Vision APIエラー: {str(e)}")
+        raise Exception(f"OpenAI API ({model_name}) エラー: {str(e)}")
 
 
 def calculate_accuracy(correct_text, extracted_text):
@@ -154,34 +220,70 @@ def analyze_with_multiple_methods(bond_doc):
         bond_doc.ocr_status = 'failed'
         bond_doc.ocr_error = str(e)
     
-    # 2. OpenAI Vision API解析（GPT-4o）
+    # 2. OpenAI GPT-4o解析
     try:
         start_time = time.time()
-        ai_text = extract_text_with_openai_vision(file_path, bond_doc.file_type)
-        bond_doc.ai_result = ai_text
+        gpt4o_text = extract_text_with_openai_vision(file_path, bond_doc.file_type, model_name="gpt-4o")
+        bond_doc.gpt4o_result = gpt4o_text
+        bond_doc.gpt4o_status = 'completed'
+        bond_doc.gpt4o_processing_time = time.time() - start_time
+        # 後方互換性のため、ai_resultにも保存
+        bond_doc.ai_result = gpt4o_text
         bond_doc.ai_status = 'completed'
         bond_doc.ai_processing_time = time.time() - start_time
         bond_doc.ai_model_used = 'gpt-4o'
     except Exception as e:
+        bond_doc.gpt4o_status = 'failed'
         bond_doc.ai_status = 'failed'
         bond_doc.ai_error = str(e)
+    
+    # 2-3. OpenAI gpt-4-turbo解析
+    start_time = time.time()
+    try:
+        gpt4turbo_text = extract_text_with_openai_vision(file_path, bond_doc.file_type, model_name="gpt-4-turbo")
+        bond_doc.gpt35_result = gpt4turbo_text
+        bond_doc.gpt35_status = 'completed'
+        bond_doc.gpt35_processing_time = time.time() - start_time
+    except Exception as e:
+        bond_doc.gpt35_status = 'failed'
+        bond_doc.gpt35_result = f'GPT-4-turboエラー: {str(e)}'
+        bond_doc.gpt35_processing_time = time.time() - start_time
 
     # 3. Gemini解析
     try:
         start_time = time.time()
         genai.configure(api_key=settings.GEMINI_API_KEY)
-        model = genai.GenerativeModel("gemini-1.5-pro")
-        with open(file_path, "rb") as f:
-            image_data = f.read()
-        base64_image = base64.b64encode(image_data).decode("utf-8")
+        
+        # 画像データの準備
+        if bond_doc.file_type == 'pdf':
+            # PDFの場合は最初のページを画像に変換
+            from pdf2image import convert_from_path
+            images = convert_from_path(file_path, first_page=1, last_page=1)
+            if images:
+                img_byte_arr = io.BytesIO()
+                images[0].save(img_byte_arr, format='PNG')
+                image_data = img_byte_arr.getvalue()
+            else:
+                raise Exception("PDFから画像への変換に失敗しました")
+        else:
+            # 画像の場合
+            with open(file_path, "rb") as f:
+                image_data = f.read()
+        
+        # Gemini 2.5 Flashモデルを使用（最新モデル）
+        model = genai.GenerativeModel("gemini-2.0-flash-exp")
+        
+        # PIL Imageオブジェクトに変換
+        from PIL import Image
+        image = Image.open(io.BytesIO(image_data))
+        
         prompt = """この画像を詳細に分析して、以下の情報を抽出してください：
 1. 画像に含まれる全てのテキスト（日本語・英語含む）
 2. 債券書類の種類（もし債券関連書類の場合）
 3. 重要な情報（金額、日付、名称など）
 4. 書類の適正性評価"""
-        response = model.generate_content(
-            [prompt, {"mime_type": "image/png", "data": base64_image}]
-        )
+        
+        response = model.generate_content([prompt, image])
         bond_doc.gemini_result = response.text
         bond_doc.gemini_status = "completed"
         bond_doc.gemini_processing_time = time.time() - start_time
@@ -193,9 +295,39 @@ def analyze_with_multiple_methods(bond_doc):
     try:
         start_time = time.time()
         client = Anthropic(api_key=settings.ANTHROPIC_API_KEY)
-        with open(file_path, "rb") as f:
-            image_data = f.read()
+        
+        # 画像データの準備
+        if bond_doc.file_type == 'pdf':
+            # PDFの場合は最初のページを画像に変換
+            from pdf2image import convert_from_path
+            images = convert_from_path(file_path, first_page=1, last_page=1)
+            if images:
+                img_byte_arr = io.BytesIO()
+                images[0].save(img_byte_arr, format='PNG')
+                image_data = img_byte_arr.getvalue()
+                media_type = "image/png"
+            else:
+                raise Exception("PDFから画像への変換に失敗しました")
+        else:
+            # 画像の場合
+            with open(file_path, "rb") as f:
+                image_data = f.read()
+            
+            # ファイル拡張子からメディアタイプを判定
+            file_ext = os.path.splitext(file_path)[1].lower()
+            if file_ext in ['.jpg', '.jpeg']:
+                media_type = "image/jpeg"
+            elif file_ext == '.png':
+                media_type = "image/png"
+            elif file_ext == '.gif':
+                media_type = "image/gif"
+            elif file_ext == '.webp':
+                media_type = "image/webp"
+            else:
+                media_type = "image/png"  # デフォルト
+        
         base64_image = base64.b64encode(image_data).decode("utf-8")
+        
         message = client.messages.create(
             model="claude-3-opus-20240229",
             max_tokens=2000,
@@ -213,7 +345,7 @@ def analyze_with_multiple_methods(bond_doc):
                         },
                         {
                             "type": "image",
-                            "source": {"type": "base64", "media_type": "image/png", "data": base64_image},
+                            "source": {"type": "base64", "media_type": media_type, "data": base64_image},
                         },
                     ],
                 }
@@ -232,6 +364,12 @@ def analyze_with_multiple_methods(bond_doc):
             bond_doc.ocr_accuracy = calculate_accuracy(bond_doc.correct_text, bond_doc.ocr_result)
         if bond_doc.ai_result:
             bond_doc.ai_accuracy = calculate_accuracy(bond_doc.correct_text, bond_doc.ai_result)
+        if bond_doc.gpt4o_result:
+            bond_doc.gpt4o_accuracy = calculate_accuracy(bond_doc.correct_text, bond_doc.gpt4o_result)
+        if bond_doc.o1_result and not bond_doc.o1_result.startswith('GPT-4-vision-previewエラー:'):
+            bond_doc.o1_accuracy = calculate_accuracy(bond_doc.correct_text, bond_doc.o1_result)
+        if bond_doc.gpt35_result and not bond_doc.gpt35_result.startswith('GPT-4-turboエラー:'):
+            bond_doc.gpt35_accuracy = calculate_accuracy(bond_doc.correct_text, bond_doc.gpt35_result)
         if bond_doc.gemini_result:
             bond_doc.gemini_accuracy = calculate_accuracy(bond_doc.correct_text, bond_doc.gemini_result)
         if bond_doc.claude_result:
@@ -352,3 +490,20 @@ def test_gpt4o(request):
         }
     
     return JsonResponse(result, json_dumps_params={'ensure_ascii': False, 'indent': 2})
+
+
+def clear_all(request):
+    """全てのドキュメントを削除"""
+    if request.method == 'POST':
+        # アップロードされたファイルも削除
+        for doc in BondDocument.objects.all():
+            if doc.uploaded_file and os.path.exists(doc.uploaded_file.path):
+                os.remove(doc.uploaded_file.path)
+        
+        # データベースから全て削除
+        count = BondDocument.objects.count()
+        BondDocument.objects.all().delete()
+        
+        messages.success(request, f'{count}件のドキュメントを削除しました。')
+    
+    return redirect('bond_checker:index')
