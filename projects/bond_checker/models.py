@@ -6,6 +6,19 @@ import json
 class BondDocument(models.Model):
     """債券ドキュメントモデル"""
     
+    # 指示プロンプト
+    instruction_prompt = models.TextField(
+        default="""この画像を詳細に分析して、以下の情報を抽出してください：
+
+1. 画像に含まれる全てのテキスト（日本語・英語含む）
+2. 債券書類の種類（もし債券関連書類の場合）
+3. 重要な情報（金額、日付、名称など）
+4. 書類の適正性評価
+
+分析結果を構造化された形式で提供してください。""",
+        verbose_name='指示プロンプト'
+    )
+    
     # ファイル情報
     uploaded_file = models.FileField(
         upload_to='bond_documents/%Y/%m/%d/',

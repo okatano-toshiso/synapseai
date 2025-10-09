@@ -21,6 +21,19 @@
         </div>
         
         <div class="mb-4">
+            {{ form.instruction_prompt.label_tag }}
+            {{ form.instruction_prompt }}
+            {% if form.instruction_prompt.errors %}
+                <div class="text-danger mt-2">
+                    {{ form.instruction_prompt.errors }}
+                </div>
+            {% endif %}
+            <div class="form-text">
+                ※ LLMに送信する指示プロンプトを入力してください。全てのモデル（GPT-4o、GPT-4-turbo、Gemini、Claude）に適用されます
+            </div>
+        </div>
+        
+        <div class="mb-4">
             {{ form.correct_text.label_tag }}
             {{ form.correct_text }}
             {% if form.correct_text.errors %}

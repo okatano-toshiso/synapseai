@@ -62,7 +62,7 @@ def extract_text_from_image_tesseract(file_path):
         raise Exception(f"Tesseract OCRエラー: {str(e)}")
 
 
-def extract_text_with_openai_vision(file_path, file_type, model_name="gpt-4o"):
+def extract_text_with_openai_vision(file_path, file_type, model_name="gpt-4o", instruction_prompt=None):
     """OpenAI Vision APIでテキスト抽出と債券書類分析"""
     try:
         client = OpenAI(api_key=settings.OPENAI_API_KEY)
@@ -84,7 +84,9 @@ def extract_text_with_openai_vision(file_path, file_type, model_name="gpt-4o"):
             with open(file_path, "rb") as image_file:
                 base64_image = base64.b64encode(image_file.read()).decode('utf-8')
         
-        prompt_text = """この画像を詳細に分析して、以下の情報を抽出してください：
+        # 指示プロンプトが指定されていない場合はデフォルト値を使用
+        if instruction_prompt is None:
+            prompt_text = """この画像を詳細に分析して、以下の情報を抽出してください：
 
 1. 画像に含まれる全てのテキスト（日本語・英語含む）
 2. 債券書類の種類（もし債券関連書類の場合）
@@ -92,6 +94,8 @@ def extract_text_with_openai_vision(file_path, file_type, model_name="gpt-4o"):
 4. 書類の適正性評価
 
 分析結果を構造化された形式で提供してください。"""
+        else:
+            prompt_text = instruction_prompt
         
         # OpenAI Vision APIで分析
         # o1モデルはvision機能が異なるため、テキストのみの分析を行う
@@ -223,7 +227,7 @@ def analyze_with_multiple_methods(bond_doc):
     # 2. OpenAI GPT-4o解析
     try:
         start_time = time.time()
-        gpt4o_text = extract_text_with_openai_vision(file_path, bond_doc.file_type, model_name="gpt-4o")
+        gpt4o_text = extract_text_with_openai_vision(file_path, bond_doc.file_type, model_name="gpt-4o", instruction_prompt=bond_doc.instruction_prompt)
         bond_doc.gpt4o_result = gpt4o_text
         bond_doc.gpt4o_status = 'completed'
         bond_doc.gpt4o_processing_time = time.time() - start_time
@@ -240,7 +244,7 @@ def analyze_with_multiple_methods(bond_doc):
     # 2-3. OpenAI gpt-4-turbo解析
     start_time = time.time()
     try:
-        gpt4turbo_text = extract_text_with_openai_vision(file_path, bond_doc.file_type, model_name="gpt-4-turbo")
+        gpt4turbo_text = extract_text_with_openai_vision(file_path, bond_doc.file_type, model_name="gpt-4-turbo", instruction_prompt=bond_doc.instruction_prompt)
         bond_doc.gpt35_result = gpt4turbo_text
         bond_doc.gpt35_status = 'completed'
         bond_doc.gpt35_processing_time = time.time() - start_time
@@ -277,11 +281,8 @@ def analyze_with_multiple_methods(bond_doc):
         from PIL import Image
         image = Image.open(io.BytesIO(image_data))
         
-        prompt = """この画像を詳細に分析して、以下の情報を抽出してください：
-1. 画像に含まれる全てのテキスト（日本語・英語含む）
-2. 債券書類の種類（もし債券関連書類の場合）
-3. 重要な情報（金額、日付、名称など）
-4. 書類の適正性評価"""
+        # 指示プロンプトを使用
+        prompt = bond_doc.instruction_prompt
         
         response = model.generate_content([prompt, image])
         bond_doc.gemini_result = response.text
@@ -328,6 +329,7 @@ def analyze_with_multiple_methods(bond_doc):
         
         base64_image = base64.b64encode(image_data).decode("utf-8")
         
+        # 指示プロンプトを使用
         message = client.messages.create(
             model="claude-3-opus-20240229",
             max_tokens=2000,
@@ -337,11 +339,7 @@ def analyze_with_multiple_methods(bond_doc):
                     "content": [
                         {
                             "type": "text",
-                            "text": """この画像を詳細に分析して、以下の情報を抽出してください：
-1. 画像に含まれる全てのテキスト（日本語・英語含む）
-2. 債券書類の種類（もし債券関連書類の場合）
-3. 重要な情報（金額、日付、名称など）
-4. 書類の適正性評価"""
+                            "text": bond_doc.instruction_prompt
                         },
                         {
                             "type": "image",

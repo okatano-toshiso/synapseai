@@ -106,7 +106,7 @@
             <div class="col-md-2">
                 <div class="card">
                     <div class="card-body text-center">
-                        <h6 style="font-size: 0.9rem;">Gemini</h6>
+                        <h6 style="font-size: 0.9rem;">Gemini 2.0 Flash Exp</h6>
                         {% if bond_doc.gemini_processing_time %}
                             <h4 class="text-success">{{ bond_doc.gemini_processing_time|floatformat:2 }}秒</h4>
                             <span class="status-badge status-{{ bond_doc.gemini_status }}">{{ bond_doc.gemini_status }}</span>
@@ -119,7 +119,7 @@
             <div class="col-md-2">
                 <div class="card">
                     <div class="card-body text-center">
-                        <h6 style="font-size: 0.9rem;">Claude</h6>
+                        <h6 style="font-size: 0.9rem;">Claude 3 Opus</h6>
                         {% if bond_doc.claude_processing_time %}
                             <h4 class="text-warning">{{ bond_doc.claude_processing_time|floatformat:2 }}秒</h4>
                             <span class="status-badge status-{{ bond_doc.claude_status }}">{{ bond_doc.claude_status }}</span>
@@ -153,12 +153,12 @@
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="gemini-tab" data-bs-toggle="tab" data-bs-target="#gemini" type="button" role="tab">
-                    ✨ Gemini
+                    ✨ Gemini 2.0 Flash Exp
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="claude-tab" data-bs-toggle="tab" data-bs-target="#claude" type="button" role="tab">
-                    🧠 Claude
+                    🧠 Claude 3 Opus
                 </button>
             </li>
             <li class="nav-item" role="presentation">
@@ -257,7 +257,7 @@
             <div class="tab-pane fade" id="gemini" role="tabpanel">
                 <div class="card">
                     <div class="card-header">
-                        <h6 class="mb-0">Gemini 解析結果</h6>
+                        <h6 class="mb-0">Gemini 2.0 Flash Exp 解析結果</h6>
                     </div>
                     <div class="card-body" style="background-color: #f8f9fa;">
                         {% if bond_doc.gemini_result %}
@@ -288,7 +288,7 @@
             <div class="tab-pane fade" id="claude" role="tabpanel">
                 <div class="card">
                     <div class="card-header">
-                        <h6 class="mb-0">Claude 解析結果</h6>
+                        <h6 class="mb-0">Claude 3 Opus 解析結果</h6>
                     </div>
                     <div class="card-body" style="background-color: #f8f9fa;">
                         {% if bond_doc.claude_result %}
@@ -329,8 +329,8 @@
                                     <th>{% if bond_doc.file_type == 'pdf' %}pdfplumber{% else %}Tesseract OCR{% endif %}</th>
                                     <th>GPT-4o</th>
                                     <th>GPT-4-turbo</th>
-                                    <th>Gemini</th>
-                                    <th>Claude</th>
+                                    <th>Gemini 2.0 Flash Exp</th>
+                                    <th>Claude 3 Opus</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -453,7 +453,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="text-center">
-                                        <p class="mb-1"><strong>Gemini</strong></p>
+                                        <p class="mb-1"><strong>Gemini 2.0 Flash Exp</strong></p>
                                         {% if bond_doc.gemini_accuracy %}
                                             <h4 class="{% if bond_doc.gemini_accuracy >= 80 %}text-success{% elif bond_doc.gemini_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
                                                 {{ bond_doc.gemini_accuracy }}%
@@ -465,7 +465,7 @@
                                 </div>
                                 <div class="col">
                                     <div class="text-center">
-                                        <p class="mb-1"><strong>Claude</strong></p>
+                                        <p class="mb-1"><strong>Claude 3 Opus</strong></p>
                                         {% if bond_doc.claude_accuracy %}
                                             <h4 class="{% if bond_doc.claude_accuracy >= 80 %}text-success{% elif bond_doc.claude_accuracy >= 60 %}text-warning{% else %}text-danger{% endif %}">
                                                 {{ bond_doc.claude_accuracy }}%

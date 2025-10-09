@@ -7,11 +7,16 @@ class BondDocumentUploadForm(forms.ModelForm):
     
     class Meta:
         model = BondDocument
-        fields = ['uploaded_file', 'correct_text']
+        fields = ['uploaded_file', 'instruction_prompt', 'correct_text']
         widgets = {
             'uploaded_file': forms.FileInput(attrs={
                 'class': 'form-control',
                 'accept': '.pdf,.jpg,.jpeg,.png,.gif',
+            }),
+            'instruction_prompt': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 10,
+                'placeholder': 'LLMに送信する指示プロンプトを入力してください',
             }),
             'correct_text': forms.Textarea(attrs={
                 'class': 'form-control',
@@ -21,6 +26,7 @@ class BondDocumentUploadForm(forms.ModelForm):
         }
         labels = {
             'uploaded_file': 'PDFまたは画像ファイルを選択',
+            'instruction_prompt': '指示プロンプト',
             'correct_text': '正解テキスト（任意）',
         }
     
