@@ -31,6 +31,7 @@
             <article class="result">
                 <h3>After Calibration</h3>
                 <p class="result_box_text copy-target">{{ chat_results|safe }}</p>
+                <p class="char-count" id="charCount" style="margin-top: 10px; font-size: 14px; color: #666;"></p>
                 <div class="button_area">
                     <button id="copyButton">COPY</button>
                     <p class="sns_btn">
@@ -42,5 +43,23 @@
     </section>
 </main>
 <script type="text/javascript" src="{% static 'js/click_copy.js' %}" rel="stylesheet"></script>
+<script type="text/javascript">
+    // 文字数カウント機能
+    document.addEventListener('DOMContentLoaded', function() {
+        const resultText = document.querySelector('.result_box_text');
+        const charCountElement = document.getElementById('charCount');
+        
+        if (resultText && charCountElement) {
+            // HTMLタグを除去してテキストのみを取得
+            const textContent = resultText.textContent || resultText.innerText || '';
+            const charCount = textContent.trim().length;
+            
+            // 文字数を表示（結果がある場合のみ）
+            if (charCount > 0) {
+                charCountElement.textContent = `文字数: ${charCount}文字`;
+            }
+        }
+    });
+</script>
 
 {% endblock %}
