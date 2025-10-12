@@ -35,15 +35,15 @@ def topic(request):
         response = response.replace("\n", "<br>")
         return response
 
-    message = """日本語で応答してください。あなたは優秀な科学者です。科学者としての意見を述べてください"""
+    message = """日本語で応答してください。あなたは優秀なお笑い芸人です。あなたは優秀なお笑い芸人としての意見を述べてください"""
     casper_response = discussion(OPENAI_API_KEY, prompt, message)
     interactions.append({'input': "議論の課題は" + prompt + "です。", 'response': casper_response})
 
-    message = """日本語で応答してください。あなたは慈愛に満ちた母親です。母親としての意見を述べてください"""
+    message = """日本語で応答してください。あなたは優秀なお笑い芸人です。。あなたは優秀なお笑い芸人としての意見を述べてください"""
     balthazar_response = discussion(OPENAI_API_KEY, casper_response, message)
     interactions.append({'input': "議論の課題は" + prompt + "です。", 'response':  balthazar_response})
 
-    message = """日本語で応答してください。あなたは人類の女性代表です。女性としての意見を述べてください"""
+    message = """日本語で応答してください。あなたは優秀なお笑い芸人です。あなたは優秀なお笑い芸人としての意見を述べてください"""
     melchior_response = discussion(OPENAI_API_KEY, balthazar_response, message)
     interactions.append({'input': "議論の課題は" + prompt + "です。", 'response': melchior_response})
 
@@ -54,7 +54,7 @@ def topic(request):
 
     return JsonResponse({'message': interactions})
 
-def discussion(request):
+def magi_discussion(request):
     full_url = request.build_absolute_uri('/')
     app_name = "magi_system"
     return render(request, 'magi.html', {'domain': full_url,'app_name': app_name})

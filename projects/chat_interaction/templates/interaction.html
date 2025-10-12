@@ -28,6 +28,92 @@
             <div class="chatbot-header">
                 <p>Chat_interaction 議題のテーマをつぶやいてください。AI同士で議論を始めます。</p>
             </div>
+            <div class="model-selection" style="padding: 15px; background-color: #333333; border-bottom: 1px solid #ddd;">
+                <div style="margin-bottom: 10px; display: flex; align-items: center;">
+                    <label style="display: inline-block; width: 150px; font-weight: bold;">肯定意見AI:</label>
+                    <select id="model1" style="padding: 5px; width: 200px; margin-right: 20px;">
+                        <option value="gpt-3.5-turbo" selected>gpt-3.5-turbo</option>
+                        <option value="gpt-4">gpt-4</option>
+                        <option value="gpt-4o">gpt-4o</option>
+                        <option value="gpt-4o-mini">gpt-4o-mini</option>
+                        <option value="gpt-4.1">gpt-4.1</option>
+                        <option value="gpt-4.1-mini">gpt-4.1-mini</option>
+                        <option value="o1">o1</option>
+                        <option value="gpt-5">gpt-5</option>
+                    </select>
+                    <label style="display: inline-block; width: 80px; font-weight: bold;">役割:</label>
+                    <select id="role1" style="padding: 5px; width: 150px;">
+                        <option value="scientist">科学者</option>
+                        <option value="parent">親</option>
+                        <option value="doctor">医者</option>
+                        <option value="teacher">先生</option>
+                        <option value="professor">大学教授</option>
+                        <option value="police">警察</option>
+                        <option value="lawyer">弁護士</option>
+                        <option value="criminal">犯罪者</option>
+                        <option value="left_wing">左翼</option>
+                        <option value="right_wing">右翼</option>
+                        <option value="athlete">アスリート</option>
+                        <option value="warlord">戦国武将</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 10px; display: flex; align-items: center;">
+                    <label style="display: inline-block; width: 150px; font-weight: bold;">反論意見AI:</label>
+                    <select id="model2" style="padding: 5px; width: 200px; margin-right: 20px;">
+                        <option value="gpt-3.5-turbo" selected>gpt-3.5-turbo</option>
+                        <option value="gpt-4">gpt-4</option>
+                        <option value="gpt-4o">gpt-4o</option>
+                        <option value="gpt-4o-mini">gpt-4o-mini</option>
+                        <option value="gpt-4.1">gpt-4.1</option>
+                        <option value="gpt-4.1-mini">gpt-4.1-mini</option>
+                        <option value="o1">o1</option>
+                        <option value="gpt-5">gpt-5</option>
+                    </select>
+                    <label style="display: inline-block; width: 80px; font-weight: bold;">役割:</label>
+                    <select id="role2" style="padding: 5px; width: 150px;">
+                        <option value="scientist">科学者</option>
+                        <option value="parent">親</option>
+                        <option value="doctor">医者</option>
+                        <option value="teacher">先生</option>
+                        <option value="professor">大学教授</option>
+                        <option value="police">警察</option>
+                        <option value="lawyer">弁護士</option>
+                        <option value="criminal">犯罪者</option>
+                        <option value="left_wing">左翼</option>
+                        <option value="right_wing">右翼</option>
+                        <option value="athlete">アスリート</option>
+                        <option value="warlord">戦国武将</option>
+                    </select>
+                </div>
+                <div style="margin-bottom: 10px; display: flex; align-items: center;">
+                    <label style="display: inline-block; width: 150px; font-weight: bold;">まとめAI:</label>
+                    <select id="model3" style="padding: 5px; width: 200px; margin-right: 20px;">
+                        <option value="gpt-3.5-turbo" selected>gpt-3.5-turbo</option>
+                        <option value="gpt-4">gpt-4</option>
+                        <option value="gpt-4o">gpt-4o</option>
+                        <option value="gpt-4o-mini">gpt-4o-mini</option>
+                        <option value="gpt-4.1">gpt-4.1</option>
+                        <option value="gpt-4.1-mini">gpt-4.1-mini</option>
+                        <option value="o1">o1</option>
+                        <option value="gpt-5">gpt-5</option>
+                    </select>
+                    <label style="display: inline-block; width: 80px; font-weight: bold;">役割:</label>
+                    <select id="role3" style="padding: 5px; width: 150px;">
+                        <option value="scientist">科学者</option>
+                        <option value="parent">親</option>
+                        <option value="doctor">医者</option>
+                        <option value="teacher">先生</option>
+                        <option value="professor">大学教授</option>
+                        <option value="police">警察</option>
+                        <option value="lawyer">弁護士</option>
+                        <option value="criminal">犯罪者</option>
+                        <option value="left_wing">左翼</option>
+                        <option value="right_wing">右翼</option>
+                        <option value="athlete">アスリート</option>
+                        <option value="warlord">戦国武将</option>
+                    </select>
+                </div>
+            </div>
             <div class="chatbot-messages" id="messages">
                 {% for interaction in interactions %}
                 <div>
@@ -41,6 +127,7 @@
                 <div class="chatbot-input">
                     <input type="text" id="userInput" placeholder="テキスト">
                     <button id="sendMessage">send</button>
+                    <button id="resetChat">リセット</button>
                 </div>
             </div>
         </div>
@@ -50,8 +137,24 @@
         $(document).ready(function() {
             $('#sendMessage').click(function() {
                 let message = $('#userInput').val();
+                let model1 = $('#model1').val();
+                let model2 = $('#model2').val();
+                let model3 = $('#model3').val();
+                let role1 = $('#role1').val();
+                let role2 = $('#role2').val();
+                let role3 = $('#role3').val();
+                
                 $('#messages').append('<div class="left">' + message + '</div><div class="clearfix"></div>');
-                $.post( "{% url 'topic' %}" , { message: message, csrfmiddlewaretoken: '{{ csrf_token }}' }, function(data) {
+                $.post( "{% url 'chat_interaction_topic' %}" , { 
+                    message: message, 
+                    model1: model1,
+                    model2: model2,
+                    model3: model3,
+                    role1: role1,
+                    role2: role2,
+                    role3: role3,
+                    csrfmiddlewaretoken: '{{ csrf_token }}' 
+                }, function(data) {
                     console.log(data.message);
                     $('#messages').append('<div class="right casper">' + data.message[0].response + '</div><div class="clearfix"></div>');
                     $('#messages').append('<div class="left balthazar">' + data.message[1].response + '</div><div class="clearfix"></div>');
@@ -60,6 +163,14 @@
                 $('#userInput').val(''); // clear input
             });
         });
-    </script>
+
+        $('#resetChat').click(function() {
+            $.post("{% url 'reset_chat' %}", {csrfmiddlewaretoken: '{{ csrf_token }}'}, function() {
+                $('#messages').empty(); // 表示をクリア
+                $('#userInput').val(''); // 入力欄をクリア
+            });
+        });
+
+</script>
 </body>
 </html>
