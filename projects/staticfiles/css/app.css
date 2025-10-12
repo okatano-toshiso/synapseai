@@ -1,5 +1,5 @@
 body.chat_bot {
-    background-color: #7595c4;
+    background-color: #1f1f1f;
     font-family: Arial, sans-serif;
 }
 p {
@@ -29,7 +29,7 @@ p {
 .chatbot-window {
     width: auto;
     height: auto;
-    background-color: #7595c4;
+    background-color: #1f1f1f;
     display: block; /* initially hidden */
 }
 .chatbot-area {
@@ -41,7 +41,7 @@ p {
 }
 .chatbot-header {
     padding: 10px;
-    background-color: #263147;
+    background-color: #000000;
     color: white;
     display: flex;
     justify-content: center;
@@ -53,28 +53,28 @@ p {
     height: 100%;
     max-height: 750px;
     padding: 10px;
-    background-color: #7595c4;
+    background-color: #1f1f1f;
 
 }
 .chatbot-messages::-webkit-scrollbar {
     width: 5px;
     height: 8px;
-    background-color: #7595c4;/* またはトラックに追加 */
+    background-color: #1f1f1f;/* またはトラックに追加 */
   }
 
 .chatbot-input {
     position: fixed;
     bottom: 0;
-    padding: 30px;
-    width: 100%;
+    padding: 30px 0;
+    width: calc(100% - 60px);
     display: flex;
     justify-content: center;
-    background-color: #7595c4;
+    background-color: #1f1f1f;
 }
 .chatbot-input input {
     width: 80%;
     padding: 5px;
-    border: 1px solid #7595c4;
+    border: 1px solid #1f1f1f;
     border-radius: 5px;
 }
 #sendMessage {
@@ -90,9 +90,9 @@ p {
     width: 80px;
 }
 main.area {
-    width: 100%;
+    width: calc(100% - 64px);
     height: 100%;
-    background-color: #7595c4;
+    background-color: #1f1f1f;
 }
 .left {
     position: relative;

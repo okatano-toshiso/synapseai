@@ -1,9 +1,56 @@
 body.chat_bot {
-    background-color: #7595c4;
+    background-color: #1f1f1f;
     font-family: Arial, sans-serif;
 }
 p {
     margin: 0px;
+}
+.app-description {
+    padding: 30px 20px;
+    background-color: #2a2a2a;
+    color: white;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.app-description h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+    color: #FFA500;
+}
+.app-description p {
+    font-size: 16px;
+    line-height: 1.6;
+    color: #ccc;
+}
+.model-selector-area {
+    padding: 20px;
+    background-color: #2a2a2a;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+.model-selector-area label {
+    font-size: 16px;
+    font-weight: bold;
+}
+.model-selector-area select {
+    padding: 8px 15px;
+    font-size: 14px;
+    border: 1px solid #444;
+    border-radius: 5px;
+    background-color: #1f1f1f;
+    color: white;
+    cursor: pointer;
+    min-width: 200px;
+}
+.model-selector-area select:focus {
+    outline: none;
+    border-color: #FFA500;
 }
 .chatbot-button {
     position: fixed;
@@ -29,7 +76,7 @@ p {
 .chatbot-window {
     width: auto;
     height: auto;
-    background-color: #7595c4;
+    background-color: #1f1f1f;
     display: block; /* initially hidden */
 }
 .chatbot-area {
@@ -41,7 +88,7 @@ p {
 }
 .chatbot-header {
     padding: 10px;
-    background-color: #263147;
+    background-color:#000000;
     color: white;
     display: flex;
     justify-content: center;
@@ -53,28 +100,27 @@ p {
     height: 100%;
     max-height: 750px;
     padding: 10px;
-    background-color: #7595c4;
-
+    background-color: #1f1f1f;
 }
 .chatbot-messages::-webkit-scrollbar {
     width: 5px;
     height: 8px;
-    background-color: #7595c4;/* またはトラックに追加 */
+    background-color: #1f1f1f;/* またはトラックに追加 */
   }
 
 .chatbot-input {
     position: fixed;
     bottom: 0;
-    padding: 30px;
-    width: 100%;
+    padding: 30px 0 ;
+    width: calc(100% - 60px);
     display: flex;
     justify-content: center;
-    background-color: #7595c4;
+    background-color: #1f1f1f;
 }
 .chatbot-input input {
     width: 80%;
     padding: 5px;
-    border: 1px solid #7595c4;
+    border: 1px solid #1f1f1f;
     border-radius: 5px;
 }
 #sendMessage {
@@ -90,9 +136,9 @@ p {
     width: 80px;
 }
 main.area {
-    width: 100%;
+    width: calc(100% - 64px);
     height: 100%;
-    background-color: #7595c4;
+    background-color: #1f1f1f;
 }
 .left {
     position: relative;

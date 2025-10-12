@@ -22,6 +22,22 @@
         </div>
     </header>
     <main class="area">
+        <div class="app-description">
+            <p>このアプリは、複数のAIモデルと会話ができるチャットボットです。下のセレクトボックスから使用するモデルを選択し、メッセージを入力してAIと対話してください。</p>
+        </div>
+        <div class="model-selector-area">
+            <label for="modelSelect">モデル選択:</label>
+            <select name="model" id="modelSelect">
+                <option value="gpt-3.5-turbo" selected="">gpt-3.5-turbo</option>
+                <option value="gpt-4">gpt-4</option>
+                <option value="gpt-4o">gpt-4o</option>
+                <option value="gpt-4o-mini">gpt-4o-mini</option>
+                <option value="gpt-4.1">gpt-4.1</option>
+                <option value="gpt-4.1-mini">gpt-4.1-mini</option>
+                <option value="o1">o1</option>
+                <option value="gpt-5">gpt-5</option>
+            </select>
+        </div>
         <div class="chatbot-window">
             <div class="chatbot-header">
                 <p>Chat_bot</p>
@@ -40,8 +56,9 @@
         $(document).ready(function() {
             $('#sendMessage').click(function() {
                 let message = $('#userInput').val();
+                let model = $('#modelSelect').val();
                 $('#messages').append('<div class="left">' + message + '</div><div class="clearfix"></div>');
-                $.post( "{% url 'ask' %}" , { message: message, csrfmiddlewaretoken: '{{ csrf_token }}' }, function(data) {
+                $.post( "{% url 'ask' %}" , { message: message, model: model, csrfmiddlewaretoken: '{{ csrf_token }}' }, function(data) {
                     $('#messages').append('<div class="right">' + data.message + '</div><div class="clearfix"></div>');
                 });
                 $('#userInput').val(''); // clear input
