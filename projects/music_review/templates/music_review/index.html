@@ -8,12 +8,28 @@
     <p class="description">
         Generate insightful music reviews effortlessly with our AI-powered tool. Perfect for critics, content creators, and music enthusiasts looking for quick, quality analysis.
     </p>
-    <article class="review-editor">
-        <h3 class="label">EDITER AREA</h3>
-        <form method="POST">
-            {% csrf_token %}
+    <form method="POST">
+        {% csrf_token %}
+        <article class="model-selector">
+            <h3 class="label">MODEL SELECTION</h3>
+            <div class="model-select-wrapper">
+                <label for="{{ form.model.id_for_label }}">{{ form.model.label }}</label>
+                {{ form.model }}
+            </div>
+        </article>
+        <article class="review-editor">
+            <h3 class="label">EDITER AREA</h3>
             <ul class="lists">
-                {{ form.as_ul }}
+                <li>{{ form.title.label_tag }} {{ form.title }}</li>
+                <li>{{ form.artist.label_tag }} {{ form.artist }}</li>
+                <li>{{ form.comment.label_tag }} {{ form.comment }}</li>
+                <li>{{ form.recommend.label_tag }} {{ form.recommend }}</li>
+                <li>{{ form.wiki_discography.label_tag }} {{ form.wiki_discography }}</li>
+                <li>{{ form.wiki_biography.label_tag }} {{ form.wiki_biography }}</li>
+                <li>{{ form.source1.label_tag }} {{ form.source1 }}</li>
+                <li>{{ form.source2.label_tag }} {{ form.source2 }}</li>
+                <li>{{ form.spotyfi.label_tag }} {{ form.spotyfi }}</li>
+                <li>{{ form.youtube.label_tag }} {{ form.youtube }}</li>
             </ul>
             <div class="submit_area">
                 <button type="submit" class="output">OUTPUT</button>

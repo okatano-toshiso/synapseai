@@ -1,15 +1,88 @@
+// ダークモード用のカラー設定
+$dark-bg-primary: #1a1a1a;
+$dark-bg-secondary: #0f0f0f;
+$dark-text-primary: #e0e0e0;
+$dark-text-secondary: #b0b0b0;
+$dark-border: #444444;
+$dark-accent: #4a9eff;
+
 h2.title {
     font-size: 28px;
     font-weight: 700;
+    color: $dark-text-primary;
 }
 h3.label {
     font-size: 21px;
     font-weight: 700;
+    color: $dark-text-primary;
+}
+p.description {
+    color: $dark-text-secondary;
+    margin-bottom: 20px;
+}
+article.model-selector {
+    width: calc(100% - 30px);
+    margin: 0 auto 20px;
+    padding: 15px;
+    background-color: $dark-bg-secondary;
+    border-radius: 8px;
+
+    .model-select-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-top: 10px;
+
+        label {
+            color: $dark-text-primary;
+            font-weight: 600;
+            min-width: 80px;
+        }
+
+        select {
+            flex: 1;
+            max-width: 300px;
+            padding: 8px 12px;
+            background-color: $dark-bg-primary;
+            color: $dark-text-primary;
+            border: 1px solid $dark-border;
+            border-radius: 4px;
+            font-size: 14px;
+            cursor: pointer;
+
+            &:focus {
+                outline: none;
+                border-color: $dark-accent;
+            }
+        }
+    }
+
+    @media (max-width: 768px) {
+        width: 100%;
+        padding: 10px;
+
+        .model-select-wrapper {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
+
+            label {
+                min-width: auto;
+            }
+
+            select {
+                width: 100%;
+                max-width: 100%;
+            }
+        }
+    }
 }
 article.review-editor, article.result {
     width: calc(100% - 30px);
     margin: 0 auto;
     padding: 15px 0;
+    background-color: $dark-bg-secondary;
+    border-radius: 8px;
 
     .submit_area, .copy_area {
         width: 100%;
@@ -19,6 +92,32 @@ article.review-editor, article.result {
             width: 150px;
             margin: 0 auto;
             padding: 5px 0;
+            background-color: $dark-accent;
+            color: $dark-text-primary;
+            border: 1px solid $dark-border;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            
+            &:hover {
+                background-color: darken($dark-accent, 10%);
+            }
+        }
+        
+        .reset, .title-reset {
+            width: 150px;
+            margin: 0 5px;
+            padding: 5px 0;
+            background-color: #555555;
+            color: $dark-text-primary;
+            border: 1px solid $dark-border;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            
+            &:hover {
+                background-color: #666666;
+            }
         }
     }
 
@@ -27,7 +126,10 @@ article.review-editor, article.result {
         min-height: 150px;
         margin: 0 auto 15px;
         padding: 10px;
-        border: 2px #cccccc solid;
+        border: 2px $dark-border solid;
+        background-color: $dark-bg-primary;
+        color: $dark-text-primary;
+        border-radius: 4px;
     }
 
     // スマホサイズ用のブレイクポイント（最大幅 768px 以下）
@@ -66,9 +168,20 @@ ul.lists {
             max-width: 250px;
             padding-right: 15px;
             text-align: right;
+            color: $dark-text-primary;
         }
         input, textarea {
             width: 80%;
+            background-color: $dark-bg-primary;
+            color: $dark-text-primary;
+            border: 1px solid $dark-border;
+            border-radius: 4px;
+            padding: 8px;
+            
+            &:focus {
+                outline: none;
+                border-color: $dark-accent;
+            }
         }
         textarea {
             height: 50px;
@@ -86,6 +199,7 @@ ul.lists {
                 max-width: 100%;
                 padding-right: 0;
                 text-align: left;
+                color: $dark-text-primary;
             }
             input, textarea {
                 width: calc(100% - 20px);

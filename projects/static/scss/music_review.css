@@ -1,28 +1,100 @@
 h2.title {
   font-size: 28px;
-  font-weight: 700; }
+  font-weight: 700;
+  color: #e0e0e0; }
 
 h3.label {
   font-size: 21px;
-  font-weight: 700; }
+  font-weight: 700;
+  color: #e0e0e0; }
 
+p.description {
+  color: #b0b0b0;
+  margin-bottom: 20px; }
+
+article.model-selector {
+  width: calc(100% - 30px);
+  margin: 0 auto 20px;
+  padding: 15px;
+  background-color: #0f0f0f;
+  border-radius: 8px; }
+  article.model-selector .model-select-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 10px; }
+    article.model-selector .model-select-wrapper label {
+      color: #e0e0e0;
+      font-weight: 600;
+      min-width: 80px; }
+    article.model-selector .model-select-wrapper select {
+      flex: 1;
+      max-width: 300px;
+      padding: 8px 12px;
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+      border: 1px solid #444444;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer; }
+      article.model-selector .model-select-wrapper select:focus {
+        outline: none;
+        border-color: #4a9eff; }
+  @media (max-width: 768px) {
+    article.model-selector {
+      width: 100%;
+      padding: 10px; }
+      article.model-selector .model-select-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px; }
+        article.model-selector .model-select-wrapper label {
+          min-width: auto; }
+        article.model-selector .model-select-wrapper select {
+          width: 100%;
+          max-width: 100%; } }
 article.review-editor, article.result {
   width: calc(100% - 30px);
   margin: 0 auto;
-  padding: 15px 0; }
+  padding: 15px 0;
+  background-color: #0f0f0f;
+  border-radius: 8px; }
   article.review-editor .submit_area, article.review-editor .copy_area, article.result .submit_area, article.result .copy_area {
     width: 100%;
     text-align: center; }
     article.review-editor .submit_area .output, article.review-editor .submit_area .copy, article.review-editor .copy_area .output, article.review-editor .copy_area .copy, article.result .submit_area .output, article.result .submit_area .copy, article.result .copy_area .output, article.result .copy_area .copy {
       width: 150px;
       margin: 0 auto;
-      padding: 5px 0; }
+      padding: 5px 0;
+      background-color: #4a9eff;
+      color: #e0e0e0;
+      border: 1px solid #444444;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease; }
+      article.review-editor .submit_area .output:hover, article.review-editor .submit_area .copy:hover, article.review-editor .copy_area .output:hover, article.review-editor .copy_area .copy:hover, article.result .submit_area .output:hover, article.result .submit_area .copy:hover, article.result .copy_area .output:hover, article.result .copy_area .copy:hover {
+        background-color: #1783ff; }
+    article.review-editor .submit_area .reset, article.review-editor .submit_area .title-reset, article.review-editor .copy_area .reset, article.review-editor .copy_area .title-reset, article.result .submit_area .reset, article.result .submit_area .title-reset, article.result .copy_area .reset, article.result .copy_area .title-reset {
+      width: 150px;
+      margin: 0 5px;
+      padding: 5px 0;
+      background-color: #555555;
+      color: #e0e0e0;
+      border: 1px solid #444444;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.3s ease; }
+      article.review-editor .submit_area .reset:hover, article.review-editor .submit_area .title-reset:hover, article.review-editor .copy_area .reset:hover, article.review-editor .copy_area .title-reset:hover, article.result .submit_area .reset:hover, article.result .submit_area .title-reset:hover, article.result .copy_area .reset:hover, article.result .copy_area .title-reset:hover {
+        background-color: #666666; }
   article.review-editor .result_area, article.result .result_area {
     width: calc(100% - 20px);
     min-height: 150px;
     margin: 0 auto 15px;
     padding: 10px;
-    border: 2px #cccccc solid; }
+    border: 2px #444444 solid;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    border-radius: 4px; }
   @media (max-width: 768px) {
     article.review-editor, article.result {
       width: 100%;
@@ -50,9 +122,18 @@ ul.lists {
       width: calc(20% - 15px);
       max-width: 250px;
       padding-right: 15px;
-      text-align: right; }
+      text-align: right;
+      color: #e0e0e0; }
     ul.lists li input, ul.lists li textarea {
-      width: 80%; }
+      width: 80%;
+      background-color: #1a1a1a;
+      color: #e0e0e0;
+      border: 1px solid #444444;
+      border-radius: 4px;
+      padding: 8px; }
+      ul.lists li input:focus, ul.lists li textarea:focus {
+        outline: none;
+        border-color: #4a9eff; }
     ul.lists li textarea {
       height: 50px; }
   @media (max-width: 768px) {
@@ -65,7 +146,8 @@ ul.lists {
         width: calc(100% - 20px);
         max-width: 100%;
         padding-right: 0;
-        text-align: left; }
+        text-align: left;
+        color: #e0e0e0; }
       ul.lists li input, ul.lists li textarea {
         width: calc(100% - 20px); } }
 

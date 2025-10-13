@@ -1,9 +1,76 @@
-$primary-color: #fefefe;
+// ダークモード用のカラー設定
+$primary-color: #0f0f0f;
+$text-color: #e0e0e0;
+$header-bg: #1a1a1a;
+$border-color: #333333;
+$link-color: #4a9eff;
 
 body {
     background-color: $primary-color;
+    color: $text-color;
     font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
 }
+
+header.header {
+    background-color: $header-bg;
+    border-bottom: 2px solid $border-color;
+    padding: 15px 0;
+    
+    .header_area {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        width: calc(100% - 60px);
+        max-width: 1280px;
+        margin: 0 auto;
+        
+        .logo_title {
+            display: flex;
+            align-items: center;
+            
+            .logo_size {
+                height: 50px;
+                width: auto;
+            }
+        }
+        
+        .site_title {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 700;
+            
+            .link {
+                color: $text-color;
+                text-decoration: none;
+                transition: color 0.3s ease;
+                
+                &:hover {
+                    color: $link-color;
+                }
+            }
+        }
+    }
+    
+    @media (max-width: 768px) {
+        padding: 10px 0;
+        
+        .header_area {
+            width: calc(100% - 30px);
+            gap: 15px;
+            
+            .logo_title .logo_size {
+                height: 40px;
+            }
+            
+            .site_title {
+                font-size: 18px;
+            }
+        }
+    }
+}
+
 main {
     display:block;
     position: relative;

@@ -27,6 +27,7 @@ def index(request):
     if request.method == "POST":
         form = ChatForm(request.POST)
         if form.is_valid():
+            model = form.cleaned_data['model']
             title = form.cleaned_data['title']
             artist = form.cleaned_data['artist']
             # print(artist)
@@ -295,7 +296,7 @@ def index(request):
                     api_key = OPENAI_API_KEY,
                 )
                 review = client.chat.completions.create(
-                    model="gpt-4o",
+                    model=model,
                     messages=[
                         {
                             "role": "system",

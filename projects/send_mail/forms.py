@@ -3,6 +3,17 @@ from django import forms
 class ChatForm(forms.Form):
     company = forms.CharField(label='会社', widget=forms.TextInput(), required=False)
     name = forms.CharField(label='名前', widget=forms.TextInput(), required=False)
+    MODEL_CHOICES = [
+        ('gpt-3.5-turbo', 'gpt-3.5-turbo'),
+        ('gpt-4', 'gpt-4'),
+        ('gpt-4o', 'gpt-4o'),
+        ('gpt-4o-mini', 'gpt-4o-mini'),
+        ('gpt-4.1', 'gpt-4.1'),
+        ('gpt-4.1-mini', 'gpt-4.1-mini'),
+        ('o1', 'o1'),
+        ('gpt-5', 'gpt-5'),
+    ]
+    model = forms.ChoiceField(label='モデル', choices=MODEL_CHOICES, required=True, initial='gpt-3.5-turbo')
     CHOICES1 = [
         ('営業', '営業'),
         ('採用', '採用'),

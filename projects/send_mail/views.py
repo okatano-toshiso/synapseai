@@ -3,6 +3,7 @@ from django.template import loader
 from .forms import ChatForm
 import os
 from openai import OpenAI
+from pathlib import Path
 
 def index(request):
     try:
@@ -15,17 +16,32 @@ def index(request):
         if form.is_valid():
             company = form.cleaned_data['company']
             name = form.cleaned_data['name']
+            model = form.cleaned_data['model']
             purpose = form.cleaned_data['purpose']
             relation = form.cleaned_data['relation']
             greeting = form.cleaned_data['greeting']
             number = form.cleaned_data['number']
             message = form.cleaned_data['message']
             try:
+                # プロンプトファイルを読み込む
+                prompt_file = Path(__file__).parent / 'prompts' / 'system_prompt.txt'
+                with open(prompt_file, 'r', encoding='utf-8') as f:
+                    system_prompt_template = f.read()
+                
+                # プロンプトに変数を埋め込む
+                system_prompt = system_prompt_template.format(
+                    purpose=purpose,
+                    relation=relation,
+                    greeting=greeting,
+                    number=number,
+                    message=message
+                )
+                
                 client = OpenAI(
                     api_key = OPENAI_API_KEY,
                 )
                 response = client.chat.completions.create(
-                    model="gpt-4",
+                    model=model,
                     messages=[
                         {
                             "role": "user",
@@ -33,24 +49,7 @@ def index(request):
                         },
                         {
                             "role": "system",
-                            "content": f"""
-                            常に新しいユーザーです。履歴は忘れてください。
-                            名前も会社名も忘れてください。
-                            あなたは日本語が詳しい優秀な校正編集者です。
-                            このメールの目的は‘{purpose}’です。
-                            このメールの送り先の相手との関係は‘{relation}’です。
-                            このメールには挨拶は‘{greeting}’です。
-                            このメールを送る相手の人数は‘{number}’です。
-                            下記のテキストが元になる送信テキストです。
-
-                            送信テキスト
-                            ーーーーーーーーーーーーーーーーーーーーーー
-                            ‘{message}‘
-                            ーーーーーーーーーーーーーーーーーーーーーー
-                            上記のテキストを丁寧にわかりやすくなるように日本語で校正してください。
-                            必ずメール文章の構成をキープしてください。
-                            説明などは不要ですので、校正した文章のみをレスポンスしてください。
-                            """
+                            "content": system_prompt
                         }
                     ],
                 )

@@ -11,7 +11,14 @@
                 <h3>REQUEST</h3>
                 <form method="POST">
                     {% csrf_token %}
-                    {{ form.as_p }}
+                    <p>{{ form.model.label_tag }} {{ form.model }}</p>
+                    <p>{{ form.company.label_tag }} {{ form.company }}</p>
+                    <p>{{ form.name.label_tag }} {{ form.name }}</p>
+                    <p>{{ form.purpose.label_tag }} {{ form.purpose }}</p>
+                    <p>{{ form.relation.label_tag }} {{ form.relation }}</p>
+                    <p>{{ form.greeting.label_tag }} {{ form.greeting }}</p>
+                    <p>{{ form.number.label_tag }} {{ form.number }}</p>
+                    <p>{{ form.message.label_tag }} {{ form.message }}</p>
                     <button type="submit">校正</button>
                 </form>
             </article>
