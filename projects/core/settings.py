@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     'book_review',
     'movie_review',
     'music_review',
+    'music_search',
     'aphorism',
     'jra_scraping',
     'jra',

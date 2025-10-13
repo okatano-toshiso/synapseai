@@ -42,6 +42,7 @@ urlpatterns = [
     path('book_review/', include('book_review.urls')),
     path('movie_review/', include('movie_review.urls')),
     path('music_review/', include('music_review.urls')),
+    path('music_search/', include('music_search.urls')),
     path('aphorism/', include('aphorism.urls')),
     path('diary/', include('diary.urls')),
     path('jra/', include('jra.urls')),

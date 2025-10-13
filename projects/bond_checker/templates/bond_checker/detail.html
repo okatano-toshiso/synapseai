@@ -10,7 +10,7 @@
 </div>
 
 <div class="upload-area">
-    <h2 class="mb-4">📄 ドキュメント詳細</h2>
+    <h2 class="mb-4">ドキュメント詳細</h2>
     
     <div class="row mb-4">
         <div class="col-md-6">
@@ -24,9 +24,9 @@
                     <th>ファイルタイプ:</th>
                     <td>
                         {% if bond_doc.file_type == 'pdf' %}
-                            📄 PDF
+                            PDF
                         {% else %}
-                            🖼️ 画像
+                            画像
                         {% endif %}
                     </td>
                 </tr>
@@ -38,11 +38,11 @@
                     <th>解析状況:</th>
                     <td>
                         {% if bond_doc.analysis_status == 'completed' %}
-                            <span class="status-badge status-completed">✓ 完了</span>
+                            <span class="status-badge status-completed">完了</span>
                         {% elif bond_doc.analysis_status == 'processing' %}
-                            <span class="status-badge status-processing">⏳ 処理中</span>
+                            <span class="status-badge status-processing">処理中</span>
                         {% elif bond_doc.analysis_status == 'failed' %}
-                            <span class="status-badge status-failed">✗ 失敗</span>
+                            <span class="status-badge status-failed">失敗</span>
                         {% else %}
                             <span class="status-badge status-pending">待機中</span>
                         {% endif %}
@@ -56,13 +56,21 @@
                 {% endif %}
             </table>
         </div>
+        <div class="col-md-6">
+            <h5>指示プロンプト</h5>
+            <div class="card">
+                <div class="card-body">
+                    <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: monospace; max-height: 200px; overflow-y: auto; margin: 0; font-size: 0.85rem;">{{ bond_doc.instruction_prompt }}</pre>
+                </div>
+            </div>
+        </div>
     </div>
 
     {% if bond_doc.analysis_status == 'completed' %}
     
     <!-- 処理時間の比較 -->
     <div class="mt-4">
-        <h5>⏱️ 処理時間の比較</h5>
+        <h5>処理時間の比較</h5>
         <div class="row">
             <div class="col-md-2">
                 <div class="card">
@@ -134,36 +142,36 @@
 
     <!-- タブで切り替え可能な結果表示 -->
     <div class="mt-4">
-        <h5>📊 認識結果の比較</h5>
+        <h5>認識結果の比較</h5>
         <ul class="nav nav-tabs" id="resultTabs" role="tablist">
             <li class="nav-item" role="presentation">
                 <button class="nav-link active" id="ocr-tab" data-bs-toggle="tab" data-bs-target="#ocr" type="button" role="tab">
-                    {% if bond_doc.file_type == 'pdf' %}📄 pdfplumber{% else %}🔤 Tesseract OCR{% endif %}
+                    {% if bond_doc.file_type == 'pdf' %}pdfplumber{% else %}Tesseract OCR{% endif %}
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="gpt4o-tab" data-bs-toggle="tab" data-bs-target="#gpt4o" type="button" role="tab">
-                    🤖 GPT-4o
+                    GPT-4o
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="gpt35-tab" data-bs-toggle="tab" data-bs-target="#gpt35" type="button" role="tab">
-                    💬 GPT-4-turbo
+                    GPT-4-turbo
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="gemini-tab" data-bs-toggle="tab" data-bs-target="#gemini" type="button" role="tab">
-                    ✨ Gemini 2.0 Flash Exp
+                    Gemini 2.0 Flash Exp
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="claude-tab" data-bs-toggle="tab" data-bs-target="#claude" type="button" role="tab">
-                    🧠 Claude 3 Opus
+                    Claude 3 Opus
                 </button>
             </li>
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="comparison-tab" data-bs-toggle="tab" data-bs-target="#comparison" type="button" role="tab">
-                    📈 比較分析
+                    比較分析
                 </button>
             </li>
         </ul>
@@ -174,7 +182,7 @@
                     <div class="card-header">
                         <h6 class="mb-0">{% if bond_doc.file_type == 'pdf' %}pdfplumber{% else %}Tesseract OCR{% endif %} 抽出結果</h6>
                     </div>
-                    <div class="card-body" style="background-color: #f8f9fa;">
+                    <div class="card-body">
                         {% if bond_doc.ocr_result %}
                             <div class="mb-2">
                                 <strong>文字数:</strong> {{ bond_doc.ocr_result|length }} 文字
@@ -197,7 +205,7 @@
                     <div class="card-header">
                         <h6 class="mb-0">GPT-4o 解析結果</h6>
                     </div>
-                    <div class="card-body" style="background-color: #f8f9fa;">
+                    <div class="card-body">
                         {% if bond_doc.gpt4o_result %}
                             <div class="mb-2">
                                 <strong>文字数:</strong> {{ bond_doc.gpt4o_result|length }} 文字
@@ -228,7 +236,7 @@
                     <div class="card-header">
                         <h6 class="mb-0">GPT-4-turbo 解析結果</h6>
                     </div>
-                    <div class="card-body" style="background-color: #f8f9fa;">
+                    <div class="card-body">
                         {% if bond_doc.gpt35_result %}
                             <div class="mb-2">
                                 <strong>文字数:</strong> {{ bond_doc.gpt35_result|length }} 文字
@@ -259,7 +267,7 @@
                     <div class="card-header">
                         <h6 class="mb-0">Gemini 2.0 Flash Exp 解析結果</h6>
                     </div>
-                    <div class="card-body" style="background-color: #f8f9fa;">
+                    <div class="card-body">
                         {% if bond_doc.gemini_result %}
                             <div class="mb-2">
                                 <strong>文字数:</strong> {{ bond_doc.gemini_result|length }} 文字
@@ -290,7 +298,7 @@
                     <div class="card-header">
                         <h6 class="mb-0">Claude 3 Opus 解析結果</h6>
                     </div>
-                    <div class="card-body" style="background-color: #f8f9fa;">
+                    <div class="card-body">
                         {% if bond_doc.claude_result %}
                             <div class="mb-2">
                                 <strong>文字数:</strong> {{ bond_doc.claude_result|length }} 文字
@@ -413,7 +421,7 @@
                         
                         {% if bond_doc.correct_text %}
                         <div class="alert alert-success mt-3">
-                            <h6>✅ 正解テキストと比較した適合率</h6>
+                            <h6>正解テキストと比較した適合率</h6>
                             <div class="row mt-3">
                                 <div class="col">
                                     <div class="text-center">
@@ -478,12 +486,12 @@
                             </div>
                             <hr>
                             <p class="mb-0"><strong>正解テキスト:</strong></p>
-                            <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: monospace; max-height: 150px; overflow-y: auto; background-color: white; padding: 10px; border-radius: 5px;">{{ bond_doc.correct_text }}</pre>
+                            <pre style="white-space: pre-wrap; word-wrap: break-word; font-family: monospace; max-height: 150px; overflow-y: auto; background-color: #1a1a1a; padding: 10px; border-radius: 5px;">{{ bond_doc.correct_text }}</pre>
                         </div>
                         {% endif %}
                         
                         <div class="alert alert-info mt-3">
-                            <h6>💡 精度評価のポイント</h6>
+                            <h6>精度評価のポイント</h6>
                             <ul class="mb-0">
                                 <li><strong>処理時間:</strong> より短い方が効率的</li>
                                 <li><strong>適合率:</strong> 80%以上で良好、60%以上で普通、60%未満で要改善</li>
@@ -499,12 +507,12 @@
 
     {% elif bond_doc.analysis_status == 'failed' %}
     <div class="alert alert-danger mt-4">
-        <h5>❌ エラーが発生しました</h5>
+        <h5>エラーが発生しました</h5>
         <p class="mb-0">{{ bond_doc.error_message }}</p>
     </div>
     {% elif bond_doc.analysis_status == 'processing' %}
     <div class="alert alert-info mt-4">
-        <h5>⏳ 処理中</h5>
+        <h5>処理中</h5>
         <p class="mb-0">ファイルを解析しています。しばらくお待ちください...</p>
     </div>
     {% endif %}
