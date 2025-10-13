@@ -33,7 +33,16 @@ def topic(request):
             'left_wing': 'left_wing.txt',
             'right_wing': 'right_wing.txt',
             'athlete': 'athlete.txt',
-            'warlord': 'warlord.txt'
+            'warlord': 'warlord.txt',
+            'mother': 'mother.txt',
+            'female': 'female.txt',
+            'male': 'male.txt',
+            'senior_male': 'senior_male.txt',
+            'senior_female': 'senior_female.txt',
+            'toddler': 'toddler.txt',
+            'doraemon': 'doraemon.txt',
+            'anpanman': 'anpanman.txt',
+            'great_demon_king': 'great_demon_king.txt'
         }
         
         # プロンプトファイルのパス

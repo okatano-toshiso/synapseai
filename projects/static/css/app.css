@@ -126,7 +126,7 @@ p {
     border-radius: 5px;
 }
 #sendMessage {
-    margin-left: 30px;
+    margin:0 15px;
 }
 .chatbot-input button {
     padding: 5px 15px;
