@@ -12,8 +12,6 @@ from PIL import Image
 import io
 from openai import OpenAI
 import difflib
-import google.generativeai as genai
-from anthropic import Anthropic
 
 
 def extract_text_from_pdf_ocr(file_path):

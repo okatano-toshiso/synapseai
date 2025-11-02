@@ -35,13 +35,19 @@ def index(request):
             source1 = form.cleaned_data['source1']
             source2 = form.cleaned_data['source2']
             wiki_discography = form.cleaned_data['wiki_discography']
+            release_date = form.cleaned_data['release_date']
+            label_manual = form.cleaned_data['label']
+            producer_name = form.cleaned_data['producer_name']
             wiki_biography = form.cleaned_data['wiki_biography']
             spotyfi  = form.cleaned_data['spotyfi']
             youtube  = form.cleaned_data['youtube']
             recommend = form.cleaned_data['recommend']
 
             def get_body_text(url):
-                if not url.strip():
+                if not url or not url.strip():
+                    return ""
+                url = url.strip()
+                if not url.startswith(('http://', 'https://')):
                     return ""
                 try:
                     response = requests.get(url)
@@ -53,6 +59,10 @@ def index(request):
 
             def wiki_scrape_article(url: str) -> str:
                 if not url or not url.strip():
+                    return ""
+                
+                url = url.strip()
+                if not url.startswith(('http://', 'https://')):
                     return ""
 
                 headers = {
@@ -119,9 +129,13 @@ def index(request):
             def wiki_get_data(url: str) -> dict:
                 if not url or not url.strip():
                     return {}
+                
+                url = url.strip()
+                if not url.startswith(('http://', 'https://')):
+                    return {}
 
                 # 取得（エラーコードは例外にする）
-                resp = SESSION.get(url.strip(), timeout=20, allow_redirects=True)
+                resp = SESSION.get(url, timeout=20, allow_redirects=True)
                 resp.raise_for_status()
 
                 data = {}
@@ -267,7 +281,10 @@ def index(request):
                 return data
 
             def scrape_tracklist(url):
-                if not url.strip():
+                if not url or not url.strip():
+                    return []
+                url = url.strip()
+                if not url.startswith(('http://', 'https://')):
                     return []
                 try:
                     response = requests.get(url)
@@ -355,10 +372,22 @@ def index(request):
                 print(data.get('genre', ''))
                 if data.get('genre'):
                     data['genre'] = ", ".join([f"#{genre.strip()}" for genre in data['genre'].split(",")])
-                if data.get('label'):
-                    data['label'] = ", ".join([f"#{genre.strip()}" for genre in data['label'].split(",")])
-                if data.get('producer'):
-                    data['producer'] = ", ".join([f"#{genre.strip()}" for genre in data['producer'].split(",")])
+                
+                # 手動入力値を優先して使用
+                final_label = label_manual if label_manual else data.get('label', '')
+                if final_label:
+                    final_label = ", ".join([f"#{genre.strip()}" for genre in final_label.split(",")])
+                
+                final_producer = producer_name if producer_name else data.get('producer', '')
+                if final_producer:
+                    final_producer = ", ".join([f"#{genre.strip()}" for genre in final_producer.split(",")])
+                
+                # 日付フォーマットを yyyy/mm/dd に統一
+                final_release = ''
+                if release_date:
+                    final_release = release_date.strftime('%Y/%m/%d')
+                elif data.get('release'):
+                    final_release = data.get('release', '')
                 format_title = ""
                 format_artist = ""
                 if title:
@@ -383,12 +412,12 @@ def index(request):
                     chat_results += "<br>ARTIST: #" + format_artist
                 if data.get('genre'):
                     chat_results += "<br>GENRE: " + data['genre']
-                if data.get('producer'):
-                    chat_results += "<br>PRODUCER: " + data['producer']
-                if data.get('label'):
-                    chat_results += "<br>LABEL: " + data['label']
-                if data.get('release'):
-                    chat_results += "<br>RELEASE: " + data['release']
+                if final_producer:
+                    chat_results += "<br>PRODUCER: " + final_producer
+                if final_label:
+                    chat_results += "<br>LABEL: " + final_label
+                if final_release:
+                    chat_results += "<br>RELEASE: " + final_release
                 if review_result:
                     chat_results += "<br><br>REVIEW<br>" + review
                 if recommend:

@@ -25,6 +25,10 @@
                 <li>{{ form.comment.label_tag }} {{ form.comment }}</li>
                 <li>{{ form.recommend.label_tag }} {{ form.recommend }}</li>
                 <li>{{ form.wiki_discography.label_tag }} {{ form.wiki_discography }}</li>
+                <li>{{ form.no_data.label_tag }} {{ form.no_data }}</li>
+                <li id="release-field" style="display: none;">{{ form.release_date.label_tag }} {{ form.release_date }}</li>
+                <li id="label-field" style="display: none;">{{ form.label.label_tag }} {{ form.label }}</li>
+                <li id="producer-field" style="display: none;">{{ form.producer_name.label_tag }} {{ form.producer_name }}</li>
                 <li>{{ form.wiki_biography.label_tag }} {{ form.wiki_biography }}</li>
                 <li>{{ form.source1.label_tag }} {{ form.source1 }}</li>
                 <li>{{ form.source2.label_tag }} {{ form.source2 }}</li>
@@ -53,6 +57,25 @@
 document.addEventListener('DOMContentLoaded', function() {
     const resetButton = document.querySelector('.reset');
     const titleResetButton = document.querySelector('.title-reset');
+    const noDataCheckbox = document.querySelector('[name="no_data"]');
+    const releaseField = document.getElementById('release-field');
+    const labelField = document.getElementById('label-field');
+    const producerField = document.getElementById('producer-field');
+    
+    // NO DATAチェックボックスの表示/非表示制御
+    if (noDataCheckbox) {
+        noDataCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                releaseField.style.display = '';
+                labelField.style.display = '';
+                producerField.style.display = '';
+            } else {
+                releaseField.style.display = 'none';
+                labelField.style.display = 'none';
+                producerField.style.display = 'none';
+            }
+        });
+    }
     
     // 全リセット機能
     resetButton.addEventListener('click', function(e) {
@@ -70,6 +93,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 input.selectedIndex = 0;
             }
         });
+        
+        // RELEASE、LABEL、PRODUCERフィールドを非表示にする
+        releaseField.style.display = 'none';
+        labelField.style.display = 'none';
+        producerField.style.display = 'none';
         
         const resultArea = document.querySelector('.result_area');
         if (resultArea) {
