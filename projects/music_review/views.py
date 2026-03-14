@@ -60,7 +60,7 @@ def index(request):
             def wiki_scrape_article(url: str) -> str:
                 if not url or not url.strip():
                     return ""
-                
+
                 url = url.strip()
                 if not url.startswith(('http://', 'https://')):
                     return ""
@@ -129,7 +129,6 @@ def index(request):
             def wiki_get_data(url: str) -> dict:
                 if not url or not url.strip():
                     return {}
-                
                 url = url.strip()
                 if not url.startswith(('http://', 'https://')):
                     return {}
@@ -309,65 +308,55 @@ def index(request):
             formatted_list = '<br>\n'.join([f"{i+1}. {track}" for i, track in enumerate(tracklists)]) + '<br>'
 
             try:
-                client = OpenAI(
-                    api_key = OPENAI_API_KEY,
+                client = OpenAI(api_key=OPENAI_API_KEY)
+
+                # --- レビュー生成 ---
+                review_prompt_path = os.path.join(os.path.dirname(__file__), 'prompts', 'review.txt')
+                with open(review_prompt_path, 'r', encoding='utf-8') as f:
+                    review_template = f.read()
+                review_prompt_content = review_template.format(
+                    comment=comment,
+                    recommend=recommend,
+                    wiki_biography_contents=wiki_biography_contents,
+                    wiki_discography_contents=wiki_discography_contents,
+                    source1_contents=source1_contents,
+                    source2_contents=source2_contents,
+                    artist_name=artist,
+                    album_title=title,
                 )
-                review = client.chat.completions.create(
+                review_response = client.chat.completions.create(
                     model=model,
                     messages=[
                         {
                             "role": "system",
-                            "content": f"""
-                            あなたは一流の音楽評論家です。以下の情報をもとに、日本語で構成された音楽レビュー記事を執筆してください。
-
-                            【ユーザーコメント】
-                            {comment}
-                            （お気に入りの曲：{recommend}）
-
-                            【アーティスト情報（Wikipedia）】
-                            {wiki_biography_contents}
-
-                            【ディスコグラフィ（Wikipedia）】
-                            {wiki_discography_contents}
-
-                            【アーティスト情報（公式サイト）】
-                            {source1_contents}
-
-                            【ディスコグラフィ（公式サイト）】
-                            {source2_contents}
-
-                            ---
-
-                            ◉ 執筆構成：
-
-                            記事は以下の3セクションで構成してください：
-
-                            ◆アーティストの紹介（200〜300文字程度）  
-                            - アーティストの出自、経歴、音楽スタイル、過去の代表作など  
-                            - Wikipedia・公式情報に基づき客観的かつ簡潔にまとめる  
-
-                            ◆アルバムの評論（700〜800文字程度）  
-                            - 【起】本作の立ち位置（転機、復帰作など）と全体印象  
-                            - 【承】サウンド、ジャンル、構成、プロダクション分析  
-                            - 【転】印象的な楽曲の解釈や歌詞の掘り下げ  
-                            - 【結】総評としての意義、リスナーへのメッセージ  
-
-
-                            ---
-
-                            ◉ 制約：
-                            - 「アーティストの紹介」というタイトルを入れてください 
-                            - 「アルバムの評論」というタイトルを入れてください 
-                            - 出力は**1000文字以内**に収めてください  
-                            - **日本語**で、評論文として自然で洗練された文体を使用してください  
-                            - ユーザーのコメントや推し曲情報も参考にしてください  
-                            """
-
+                            "content": review_prompt_content,
                         },
                     ],
                 )
-                review_result = review.choices[0].message.content
+                review_result = review_response.choices[0].message.content
+
+                # --- X投稿文生成 ---
+                x_prompt_path = os.path.join(os.path.dirname(__file__), 'prompts', 'x_post.txt')
+                with open(x_prompt_path, 'r', encoding='utf-8') as f:
+                    x_template = f.read()
+                x_prompt_content = x_template.format(
+                    review_result=review_result,
+                    artist_name=artist,
+                    album_title=title,
+                )
+                x_response = client.chat.completions.create(
+                    model=model,
+                    messages=[
+                        {
+                            "role": "system",
+                            "content": x_prompt_content,
+                        },
+                    ],
+                )
+                x_post_result = x_response.choices[0].message.content
+
                 review = review_result.replace("\n", "<br>")
+                x_post = x_post_result.replace("\n", "<br>")
 
                 print(data.get('genre', ''))
                 if data.get('genre'):
@@ -425,6 +414,8 @@ def index(request):
                 if formatted_list:
                     # chat_results += "<br><br>TRACKLISTS<br>" + renumbered_tracks
                     chat_results += "<br><br>TRACKLISTS<br>" + formatted_list
+                if x_post_result:
+                    chat_results += "<br><br>X POST<br>" + x_post
                 # if members:
                 #     chat_results += "<br><br>PERSONAL<br>" + formatted_member_list
 

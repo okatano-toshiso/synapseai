@@ -60,6 +60,7 @@ python3 -m pip install --upgrade pip
 pip install django
 pip freeze > requirements.txt
 pip install -r requirements.txt
+cd projects
 ```
 
 ### 2️⃣ サーバー起動
