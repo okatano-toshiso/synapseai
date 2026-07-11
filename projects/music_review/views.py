@@ -388,13 +388,13 @@ def index(request):
                 if title and artist:
                     chat_results += title + "／" + artist + "<br><br>"
                 if source1:
-                    chat_results += source1 + "<br>"
+                    chat_results += "<br><code>" + source1 + "</code><br>"
                 if source2:
-                    chat_results += source2 + "<br>"
+                    chat_results += "<br><code>" + source2 + "</code><br>"
                 if spotyfi:
-                    chat_results += spotyfi
+                    chat_results += "<br><code>" + spotyfi + "</code><br>"
                 if youtube:
-                    chat_results += "<br>YOUTUBE: " + youtube
+                    chat_results += "<br><code>" + youtube + "</code><br><br>"
                 if format_title:
                     chat_results += "<br><br>TITLE: #" + format_title
                 if format_artist:

@@ -2,30 +2,32 @@ from django import forms
 
 class ChatForm(forms.Form):
     MODEL_CHOICES = [
-        ('gpt-5.4', 'GPT-5.4'),
-        ('gpt-5', 'GPT-5'),
-        ('o3', 'o3'),
-        ('o4-mini', 'o4 Mini'),
-        ('gpt-4.1', 'GPT-4.1'),
+        ('gpt-5.5',      'GPT-5.5'),        # ← 追加・デフォルト
+        ('gpt-5.4',      'GPT-5.4'),
+        ('gpt-5',        'GPT-5'),
+        ('o3',           'o3'),
+        # ('o4-mini',    'o4 Mini'),         # 2026年2月に廃止済み → 削除
+        # ('gpt-5.5-pro','GPT-5.5 Pro'),    # Responses API専用 → 削除
+        ('gpt-4.1',      'GPT-4.1'),
         ('gpt-4.1-mini', 'GPT-4.1 Mini'),
-        ('o1', 'o1'),
-        ('o1-mini', 'o1 Mini'),
-        ('gpt-4o', 'GPT-4o'),
-        ('gpt-4o-mini', 'GPT-4o Mini'),
-        ('gpt-4-turbo', 'GPT-4 Turbo'),
-        ('gpt-3.5-turbo', 'GPT-3.5 Turbo'),
+        ('o1',           'o1'),
+        ('o1-mini',      'o1 Mini'),
+        ('gpt-4o',       'GPT-4o'),
+        ('gpt-4o-mini',  'GPT-4o Mini'),
+        ('gpt-4-turbo',  'GPT-4 Turbo'),
+        ('gpt-3.5-turbo','GPT-3.5 Turbo'),
     ]
-    
+
     model = forms.ChoiceField(
         label='MODEL',
         choices=MODEL_CHOICES,
-        initial='gpt-5.4',
+        initial='gpt-5.5',
         widget=forms.Select(attrs={'class': 'model-select'}),
         required=True
     )
     title = forms.CharField(label='TITLE', widget=forms.TextInput(), required=False)
     artist = forms.CharField(label='ARTIST', widget=forms.TextInput(), required=False)
-    comment = forms.CharField(label='COMMENT',widget=forms.Textarea(attrs={'placeholder': 'review'}),required=False)
+    comment = forms.CharField(label='COMMENT', widget=forms.Textarea(attrs={'placeholder': 'review'}), required=False)
     recommend = forms.CharField(label='RECOMMEND', widget=forms.TextInput(), required=False)
     wiki_discography = forms.CharField(label='WIKI_DISC', widget=forms.TextInput(), required=False)
     no_data = forms.BooleanField(label='NO DATA', required=False)
