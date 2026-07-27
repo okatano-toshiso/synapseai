@@ -1,0 +1,53 @@
+{% extends 'study/base.html' %}
+{% block content %}
+<h1>E資格 判断トレーナー</h1>
+<p>「見た」ではなく、正答率・回答時間・忘却間隔で定着を測ります。</p>
+<div class="grid">
+  <div class="panel"><div class="metric">{{ due_count }}</div><div>今日の復習</div></div>
+  <div class="panel"><div class="metric">{{ total_cards }}</div><div>カード総数</div></div>
+  <div class="panel"><div class="metric">{{ mastered_count }}</div><div>3回以上正答</div></div>
+</div>
+<h2>学習開始</h2>
+<form method="get" action="{% url 'study:study' %}">
+  <input type="hidden" name="new" value="1">
+  <p class="muted">カテゴリで絞り込む</p>
+  <div class="radio-group">
+    <input type="radio" name="chapter" value="" id="chapter_all" checked>
+    <label for="chapter_all">すべて</label>
+    {% for ch in chapters %}
+    <input type="radio" name="chapter" value="{{ ch }}" id="chapter_{{ forloop.counter }}">
+    <label for="chapter_{{ forloop.counter }}">{{ ch }}</label>
+    {% endfor %}
+  </div>
+  <p class="muted">種類で絞り込む</p>
+  <div class="radio-group">
+    <input type="radio" name="category" value="" id="category_all" checked>
+    <label for="category_all">すべて</label>
+    {% for value, label in categories %}
+    <input type="radio" name="category" value="{{ value }}" id="category_{{ value }}">
+    <label for="category_{{ value }}">{{ label }}</label>
+    {% endfor %}
+  </div>
+  <p><button type="submit" class="primary">出題</button></p>
+</form>
+<div class="panel">
+<h2>回答履歴</h2>
+<table>
+<tr><th>回答日時</th><th>問題カテゴリー</th><th>種類</th><th>正答率</th><th>平均回答速度</th></tr>
+{% for s in recent_sessions %}
+<tr>
+  <td>{{ s.started_at|date:"Y-m-d H:i" }}</td>
+  <td>{{ s.chapters }}</td>
+  <td>{{ s.categories }}</td>
+  <td>{{ s.accuracy }}%</td>
+  <td>{{ s.avg_seconds }}秒</td>
+</tr>
+{% empty %}
+<tr><td colspan="5">まだ履歴がありません。</td></tr>
+{% endfor %}
+</table>
+<p><a href="{% url 'study:history' %}">詳細（全履歴）を見る</a></p>
+</div>
+<form method="post" action="{% url 'study:reset' %}" onsubmit="return confirm('学習履歴を初期化しますか？')">{% csrf_token %}<button>履歴をリセット</button></form>
+<p><a href="{% url 'study:stats' %}"><button>成績を見る</button></a></p>
+{% endblock %}

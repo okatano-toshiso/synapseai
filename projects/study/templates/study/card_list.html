@@ -1,0 +1,25 @@
+{% extends 'study/base.html' %}
+{% block content %}
+<h1>カード管理</h1>
+<p><a href="{% url 'study:card_create' %}"><button>新規カード追加</button></a></p>
+<div class="panel">
+<table>
+<tr><th>問題</th><th>章</th><th>論点</th><th>種類</th><th>有効</th><th></th></tr>
+{% for card in cards %}
+<tr>
+  <td>{{ card.front }}</td>
+  <td>{{ card.chapter }}</td>
+  <td>{{ card.topic }}</td>
+  <td>{{ card.get_category_display }}</td>
+  <td>{{ card.is_active|yesno:"○,×" }}</td>
+  <td style="white-space:nowrap">
+    <a href="{% url 'study:card_update' card.id %}">編集</a>
+    <form method="post" action="{% url 'study:card_delete' card.id %}" style="display:inline" onsubmit="return confirm('このカードを削除しますか？')">{% csrf_token %}<button type="submit">削除</button></form>
+  </td>
+</tr>
+{% empty %}
+<tr><td colspan="6">カードがありません。</td></tr>
+{% endfor %}
+</table>
+</div>
+{% endblock %}

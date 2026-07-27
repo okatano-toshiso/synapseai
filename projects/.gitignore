@@ -26,3 +26,6 @@ token.pickle
 
 # 環境設定ファイル
 .env
+
+# E資格 学習資料（サーバーにはアップしない）
+e_shikaku_cards/learning/

@@ -1,0 +1,20 @@
+{% extends 'study/base.html' %}
+{% block content %}
+<h1>成績</h1>
+<p class="muted">カテゴリーごとの正答率・平均回答速度です。カテゴリー名をクリックするとカードごとの詳細が見られます。</p>
+<div class="panel">
+<table>
+<tr><th>カテゴリー</th><th>回答回数</th><th>正答率</th><th>平均秒</th></tr>
+{% for row in rows %}
+<tr>
+  <td><a href="{% url 'study:stats_detail' row.chapter %}">{{ row.chapter }}</a></td>
+  <td>{{ row.total_reviews }}</td>
+  <td>{{ row.accuracy }}%</td>
+  <td>{% if row.avg_speed %}{{ row.avg_speed|floatformat:1 }}{% else %}-{% endif %}</td>
+</tr>
+{% empty %}
+<tr><td colspan="4">まだ履歴がありません。</td></tr>
+{% endfor %}
+</table>
+</div>
+{% endblock %}

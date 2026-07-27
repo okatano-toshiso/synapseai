@@ -1,0 +1,21 @@
+{% extends 'study/base.html' %}
+{% block content %}
+<h1>回答履歴（全件）</h1>
+<p><a href="{% url 'study:dashboard' %}">← ダッシュボードへ戻る</a></p>
+<div class="panel">
+<table>
+<tr><th>回答日時</th><th>問題カテゴリー</th><th>種類</th><th>正答率</th><th>平均回答速度</th></tr>
+{% for s in sessions %}
+<tr>
+  <td>{{ s.started_at|date:"Y-m-d H:i" }}</td>
+  <td>{{ s.chapters }}</td>
+  <td>{{ s.categories }}</td>
+  <td>{{ s.accuracy }}%</td>
+  <td>{{ s.avg_seconds }}秒</td>
+</tr>
+{% empty %}
+<tr><td colspan="5">まだ履歴がありません。</td></tr>
+{% endfor %}
+</table>
+</div>
+{% endblock %}

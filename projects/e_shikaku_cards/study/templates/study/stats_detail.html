@@ -1,0 +1,22 @@
+{% extends 'study/base.html' %}
+{% block content %}
+<h1>成績：{{ chapter }}</h1>
+<p><a href="{% url 'study:stats' %}">← カテゴリー一覧へ戻る</a></p>
+<div class="panel">
+<table>
+<tr><th>問題</th><th>論点</th><th>回答回数</th><th>正答率</th><th>最短秒</th><th>平均秒</th></tr>
+{% for row in rows %}
+<tr>
+  <td>{{ row.card.front }}</td>
+  <td>{{ row.card.topic }}</td>
+  <td>{{ row.reviews }}</td>
+  <td>{{ row.accuracy }}%</td>
+  <td>{% if row.fastest %}{{ row.fastest|floatformat:1 }}{% else %}-{% endif %}</td>
+  <td>{% if row.avg_speed %}{{ row.avg_speed|floatformat:1 }}{% else %}-{% endif %}</td>
+</tr>
+{% empty %}
+<tr><td colspan="6">カードがありません。</td></tr>
+{% endfor %}
+</table>
+</div>
+{% endblock %}

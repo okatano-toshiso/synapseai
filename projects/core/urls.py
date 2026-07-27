@@ -49,6 +49,7 @@ urlpatterns = [
     path('jra_scraping/', include('jra_scraping.urls')),
     path('win5/', include('win5.urls')),
     path('bond_checker/', include('bond_checker.urls')),
+    path('e_shikaku_cards/', include('study.urls')),
 ]
 
 if settings.DEBUG:

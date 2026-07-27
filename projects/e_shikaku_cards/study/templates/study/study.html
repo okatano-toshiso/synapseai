@@ -1,0 +1,63 @@
+{% extends 'study/base.html' %}
+{% block content %}
+{% if session_done %}
+<div class="panel">
+  <h1>お疲れ様でした！</h1>
+  <p>{{ progress_total }}問終了しました。</p>
+  <p>
+    <a href="{% url 'study:study' %}?new=1"><button>もう{{ progress_total }}問</button></a>
+    <a href="{% url 'study:dashboard' %}"><button>ダッシュボードへ</button></a>
+  </p>
+</div>
+{% elif item %}
+<div class="panel">
+  <p class="muted">{{ progress_current }} / {{ progress_total }} 問目</p>
+  {% if item.card.chapter %}<span class="badge">{{ item.card.chapter }}</span>{% endif %}
+  <span class="badge">{{ item.card.get_category_display }}</span> <span class="badge">{{ item.card.topic }}</span>
+  <h1>{{ item.card.front }}</h1>
+  <p class="muted">正しい「答え・判断基準」を選んでください。</p>
+  <div class="choices" id="choices">
+    {% for c in choices %}
+    <button type="button" class="choice" data-correct="{{ c.correct|yesno:'1,0' }}">{{ c.text }}</button>
+    {% endfor %}
+  </div>
+  <p class="result" id="result"></p>
+  <div class="answer" id="answer">
+    {% if item.card.trap %}<h3>解説</h3><div style="white-space:pre-wrap">{{ item.card.trap }}</div>{% endif %}
+    <form method="post" action="{% url 'study:review' item.card.id %}">{% csrf_token %}
+      <input type="hidden" name="seconds" id="seconds" value="0">
+      <input type="hidden" name="correct" id="correct" value="0">
+      <button type="submit">次の問題へ</button>
+    </form>
+  </div>
+</div>
+<script>
+const started = performance.now();
+document.querySelectorAll('.choice').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const wasCorrect = btn.dataset.correct === '1';
+    document.querySelectorAll('.choice').forEach(b => {
+      b.disabled = true;
+      if (b.dataset.correct === '1') b.classList.add('correct');
+    });
+    if (!wasCorrect) btn.classList.add('incorrect');
+
+    const seconds = (performance.now() - started) / 1000;
+    let label;
+    if (!wasCorrect) label = '不正解 → Again';
+    else if (seconds <= {{ easy_seconds }}) label = `正解・${seconds.toFixed(1)}秒 → Easy（反射的）`;
+    else if (seconds <= {{ good_seconds }}) label = `正解・${seconds.toFixed(1)}秒 → Good（即答）`;
+    else label = `正解・${seconds.toFixed(1)}秒 → Hard（時間がかかった）`;
+
+    const result = document.getElementById('result');
+    result.textContent = (wasCorrect ? '✅ 正解です　' : '❌ 不正解です　') + label;
+    result.classList.add(wasCorrect ? 'correct' : 'incorrect');
+
+    document.getElementById('seconds').value = seconds.toFixed(1);
+    document.getElementById('correct').value = wasCorrect ? '1' : '0';
+    document.getElementById('answer').style.display = 'block';
+  });
+});
+</script>
+{% else %}<p>カードがありません。管理画面または seed_cards で追加してください。</p>{% endif %}
+{% endblock %}

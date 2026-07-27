@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>E資格 判断トレーナー</title>
+  <style>
+    :root { font-family: system-ui, -apple-system, sans-serif; color-scheme: light dark; }
+    body { max-width: 920px; margin: 0 auto; padding: 24px; }
+    nav { display:flex; gap:16px; margin-bottom:24px; }
+    a { color: inherit; }
+    .panel { border:1px solid #8885; border-radius:14px; padding:22px; margin:14px 0; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; }
+    .metric { font-size:2rem; font-weight:700; }
+    button { padding:12px 18px; border-radius:10px; border:1px solid #8886; cursor:pointer; font-weight:700; }
+    .answer { display:none; border-top:1px solid #8885; margin-top:18px; padding-top:18px; }
+    .choices { display:grid; gap:10px; margin:18px 0; }
+    .choice { text-align:left; white-space:pre-wrap; line-height:1.4; }
+    .choice.correct { border-color:#2e7d32; background:#2e7d3222; }
+    .choice.incorrect { border-color:#c62828; background:#c6282822; }
+    .choice:disabled { cursor:default; }
+    .result { font-weight:700; font-size:1.1rem; min-height:1.4em; }
+    .result.correct { color:#2e7d32; }
+    .result.incorrect { color:#c62828; }
+    .grades { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+    .muted { opacity:.7; }
+    .badge { display:inline-block; padding:4px 9px; border:1px solid #8886; border-radius:999px; font-size:.85rem; }
+    table { width:100%; border-collapse:collapse; }
+    th, td { text-align:left; padding:9px; border-bottom:1px solid #8884; }
+    .input { width:100%; padding:10px; border-radius:8px; border:1px solid #8886; background:transparent; color:inherit; font:inherit; box-sizing:border-box; }
+    .field { margin:14px 0; }
+    .field label { display:block; margin-bottom:6px; font-weight:700; }
+    .actions { display:flex; gap:10px; margin-top:18px; }
+    .radio-group { display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 20px; }
+    .radio-group input[type=radio] { position:absolute; opacity:0; width:0; height:0; }
+    .radio-group label { padding:10px 16px; border-radius:10px; border:1px solid #8886; cursor:pointer; font-weight:700; }
+    .radio-group input[type=radio]:checked + label { border-color:#2e7d32; background:#2e7d3222; }
+    .radio-group input[type=radio]:focus-visible + label { outline:2px solid #2e7d32; outline-offset:2px; }
+    button.primary { background:#2e7d32; color:#fff; border-color:#2e7d32; font-size:1.05rem; padding:14px 28px; }
+  </style>
+</head>
+<body>
+<nav><a href="{% url 'study:dashboard' %}">ダッシュボード</a><a href="{% url 'study:study' %}">学習開始</a><a href="{% url 'study:card_list' %}">カード管理</a></nav>
+{% block content %}{% endblock %}
+</body>
+</html>

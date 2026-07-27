@@ -78,6 +78,7 @@ INSTALLED_APPS = [
     'diary',
     'generate_image',
     'bond_checker',
+    'study',
 ]
 
 MIDDLEWARE = [
