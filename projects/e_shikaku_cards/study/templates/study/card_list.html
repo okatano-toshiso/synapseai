@@ -2,11 +2,59 @@
 {% block content %}
 <h1>カード管理</h1>
 <p><a href="{% url 'study:card_create' %}"><button>新規カード追加</button></a></p>
-<div class="panel">
+
+<form method="get" class="panel">
+  <div class="grid">
+    <div class="field">
+      <label for="id_q">フリーワード</label>
+      <input class="input" id="id_q" type="search" name="q" value="{{ query }}" placeholder="問題・答え・解説・IDを検索">
+    </div>
+    <div class="field">
+      <label for="id_chapter">章</label>
+      <select class="input" id="id_chapter" name="chapter">
+        <option value="">すべて</option>
+        {% for chapter in chapters %}
+        <option value="{{ chapter }}"{% if chapter == selected_chapter %} selected{% endif %}>{{ chapter }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="id_topic">論点</label>
+      <select class="input" id="id_topic" name="topic">
+        <option value="">すべて</option>
+        {% for topic in topics %}
+        <option value="{{ topic }}"{% if topic == selected_topic %} selected{% endif %}>{{ topic }}</option>
+        {% endfor %}
+      </select>
+    </div>
+    <div class="field">
+      <label for="id_category">種類</label>
+      <select class="input" id="id_category" name="category">
+        <option value="">すべて</option>
+        {% for value, label in categories %}
+        <option value="{{ value }}"{% if value == selected_category %} selected{% endif %}>{{ label }}</option>
+        {% endfor %}
+      </select>
+    </div>
+  </div>
+  <div class="actions">
+    <button type="submit">検索・絞り込み</button>
+    <a href="{% url 'study:card_list' %}">条件をクリア</a>
+  </div>
+</form>
+
+<p class="muted">
+  {{ page_obj.paginator.count }}件中
+  {{ page_obj.start_index }}〜{{ page_obj.end_index }}件を表示
+  （1ページ最大20件）
+</p>
+
+<div class="panel" style="overflow-x:auto">
 <table>
-<tr><th>問題</th><th>章</th><th>論点</th><th>種類</th><th>有効</th><th></th></tr>
+<tr><th>ID</th><th>問題</th><th>章</th><th>論点</th><th>種類</th><th>有効</th><th></th></tr>
 {% for card in cards %}
 <tr>
+  <td style="white-space:nowrap">#{{ card.id }}</td>
   <td>{{ card.front }}</td>
   <td>{{ card.chapter }}</td>
   <td>{{ card.topic }}</td>
@@ -18,8 +66,24 @@
   </td>
 </tr>
 {% empty %}
-<tr><td colspan="6">カードがありません。</td></tr>
+<tr><td colspan="7">条件に一致するカードがありません。</td></tr>
 {% endfor %}
 </table>
 </div>
+
+{% if page_obj.paginator.num_pages > 1 %}
+<div class="actions" style="align-items:center; justify-content:center">
+  {% if page_obj.has_previous %}
+  <a href="?{% if filter_query %}{{ filter_query }}&amp;{% endif %}page=1">先頭</a>
+  <a href="?{% if filter_query %}{{ filter_query }}&amp;{% endif %}page={{ page_obj.previous_page_number }}">前へ</a>
+  {% endif %}
+
+  <span class="badge">{{ page_obj.number }} / {{ page_obj.paginator.num_pages }}ページ</span>
+
+  {% if page_obj.has_next %}
+  <a href="?{% if filter_query %}{{ filter_query }}&amp;{% endif %}page={{ page_obj.next_page_number }}">次へ</a>
+  <a href="?{% if filter_query %}{{ filter_query }}&amp;{% endif %}page={{ page_obj.paginator.num_pages }}">最後</a>
+  {% endif %}
+</div>
+{% endif %}
 {% endblock %}

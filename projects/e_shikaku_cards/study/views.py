@@ -1,5 +1,8 @@
 import random
 from datetime import timedelta
+from urllib.parse import urlencode
+
+from django.core.paginator import Paginator
 from django.db.models import Avg, Count, Min, Q, Sum
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -11,6 +14,7 @@ from .models import Card, Progress, ReviewLog, StudySession
 EASY_SECONDS = 3
 GOOD_SECONDS = 60
 SESSION_SIZE = 10
+CARD_LIST_PAGE_SIZE = 20
 
 
 def _grade_from_speed(is_correct: bool, seconds: float) -> int:
@@ -245,8 +249,71 @@ def stats_detail(request: HttpRequest, chapter: str) -> HttpResponse:
 
 
 def card_list(request: HttpRequest) -> HttpResponse:
-    cards = Card.objects.order_by("-created_at")
-    return render(request, "study/card_list.html", {"cards": cards})
+    query = request.GET.get("q", "").strip()
+    chapter = request.GET.get("chapter", "").strip()
+    topic = request.GET.get("topic", "").strip()
+    category = request.GET.get("category", "").strip()
+
+    cards = Card.objects.all()
+    if query:
+        search_condition = (
+            Q(front__icontains=query)
+            | Q(back__icontains=query)
+            | Q(trap__icontains=query)
+            | Q(chapter__icontains=query)
+            | Q(topic__icontains=query)
+        )
+        matching_categories = [
+            value
+            for value, label in Card.CATEGORY_CHOICES
+            if query.casefold() in value.casefold() or query.casefold() in str(label).casefold()
+        ]
+        if matching_categories:
+            search_condition |= Q(category__in=matching_categories)
+        if query.isascii() and query.isdecimal() and len(query) <= 18:
+            search_condition |= Q(id=int(query))
+        cards = cards.filter(search_condition)
+    if chapter:
+        cards = cards.filter(chapter=chapter)
+    if topic:
+        cards = cards.filter(topic=topic)
+    if category:
+        cards = cards.filter(category=category)
+
+    cards = cards.order_by("-created_at", "-id")
+    paginator = Paginator(cards, CARD_LIST_PAGE_SIZE)
+    page_obj = paginator.get_page(request.GET.get("page"))
+    filter_values = {
+        "q": query,
+        "chapter": chapter,
+        "topic": topic,
+        "category": category,
+    }
+    filter_query = urlencode({key: value for key, value in filter_values.items() if value})
+
+    context = {
+        "cards": page_obj,
+        "page_obj": page_obj,
+        "chapters": (
+            Card.objects.exclude(chapter="")
+            .values_list("chapter", flat=True)
+            .distinct()
+            .order_by("chapter")
+        ),
+        "topics": (
+            Card.objects.exclude(topic="")
+            .values_list("topic", flat=True)
+            .distinct()
+            .order_by("topic")
+        ),
+        "categories": Card.CATEGORY_CHOICES,
+        "query": query,
+        "selected_chapter": chapter,
+        "selected_topic": topic,
+        "selected_category": category,
+        "filter_query": filter_query,
+    }
+    return render(request, "study/card_list.html", context)
 
 
 def card_create(request: HttpRequest) -> HttpResponse:
