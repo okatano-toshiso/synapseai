@@ -1,8 +1,17 @@
+from io import StringIO
 from urllib.parse import urlencode
 
+from django.core.management import call_command
 from django.test import TestCase
 from django.urls import reverse
 
+from .management.commands.seed_cards import (
+    CARDS,
+    CNN_CARDS,
+    RNN_AVILEN_DETAIL_CARDS,
+    RNN_CARDS,
+    RNN_EXPANSION_CARDS,
+)
 from .models import Card
 
 
@@ -121,3 +130,93 @@ class CardListViewTests(TestCase):
 
         self.assertEqual(response.context["page_obj"].paginator.count, 0)
         self.assertContains(response, "条件に一致するカードがありません。")
+
+
+class StudyPageTypographyTests(TestCase):
+    def test_choices_and_explanation_use_large_shared_typography(self):
+        Card.objects.create(
+            front="文字サイズ確認問題",
+            back="読みやすい選択肢",
+            trap="読みやすい解説",
+            chapter="表示確認",
+            topic="文字サイズ",
+            category="instant",
+        )
+
+        response = self.client.get(reverse("study:study"), {"new": 1})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'class="choice"')
+        self.assertContains(response, '<div class="explanation">読みやすい解説</div>', html=True)
+        self.assertContains(response, "font-size:1.125rem", count=2)
+        self.assertContains(response, "overflow-wrap:anywhere", count=2)
+        self.assertContains(response, "word-break:break-word", count=2)
+        self.assertContains(response, 'class="answer-actions"')
+        self.assertContains(response, "justify-content:center")
+        self.assertContains(response, "margin-top:32px")
+
+
+class StudyPageNavigationLabelTests(TestCase):
+    def setUp(self):
+        self.cards = [
+            Card.objects.create(
+                front=f"進行確認問題 {index}",
+                back=f"進行確認回答 {index}",
+                trap=f"進行確認解説 {index}",
+                chapter="表示確認",
+                topic="進行ボタン",
+                category="instant",
+            )
+            for index in range(2)
+        ]
+
+    def set_queue(self, card_ids, total=10):
+        session = self.client.session
+        session["study_queue"] = card_ids
+        session["study_total"] = total
+        session.save()
+
+    def test_final_question_uses_answer_label(self):
+        self.set_queue([self.cards[0].id])
+
+        response = self.client.get(reverse("study:study"))
+
+        self.assertContains(response, "<button type=\"submit\">回答</button>", html=True)
+        self.assertNotContains(response, "<button type=\"submit\">次の問題へ</button>", html=True)
+
+    def test_non_final_question_keeps_next_question_label(self):
+        self.set_queue([card.id for card in self.cards])
+
+        response = self.client.get(reverse("study:study"))
+
+        self.assertContains(response, "<button type=\"submit\">次の問題へ</button>", html=True)
+        self.assertNotContains(response, "<button type=\"submit\">回答</button>", html=True)
+
+
+class SeedCardsCommandTests(TestCase):
+    def test_seed_is_idempotent_and_preserves_primary_keys(self):
+        call_command("seed_cards", stdout=StringIO())
+        first_ids = dict(Card.objects.values_list("front", "id"))
+
+        call_command("seed_cards", stdout=StringIO())
+        second_ids = dict(Card.objects.values_list("front", "id"))
+
+        self.assertEqual(Card.objects.count(), len(CARDS))
+        self.assertEqual(len(CNN_CARDS), 130)
+        self.assertEqual(len(RNN_AVILEN_DETAIL_CARDS), 42)
+        self.assertEqual(len(RNN_EXPANSION_CARDS), 98)
+        self.assertEqual(len(RNN_CARDS), 420)
+        self.assertEqual(first_ids, second_ids)
+
+    def test_seed_rolls_back_all_changes_when_an_upsert_fails(self):
+        original = Card.objects.create(front=CARDS[0][0], back="管理画面で編集中の答え")
+        duplicate_front = CARDS[-1][0]
+        Card.objects.create(front=duplicate_front, back="重複1")
+        Card.objects.create(front=duplicate_front, back="重複2")
+
+        with self.assertRaises(Card.MultipleObjectsReturned):
+            call_command("seed_cards", stdout=StringIO())
+
+        original.refresh_from_db()
+        self.assertEqual(original.back, "管理画面で編集中の答え")
+        self.assertEqual(Card.objects.count(), 3)

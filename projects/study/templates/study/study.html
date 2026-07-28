@@ -23,11 +23,11 @@
   </div>
   <p class="result" id="result"></p>
   <div class="answer" id="answer">
-    {% if item.card.trap %}<h3>解説</h3><div style="white-space:pre-wrap">{{ item.card.trap }}</div>{% endif %}
-    <form method="post" action="{% url 'study:review' item.card.id %}">{% csrf_token %}
+    {% if item.card.trap %}<h3>解説</h3><div class="explanation">{{ item.card.trap }}</div>{% endif %}
+    <form class="answer-actions" method="post" action="{% url 'study:review' item.card.id %}">{% csrf_token %}
       <input type="hidden" name="seconds" id="seconds" value="0">
       <input type="hidden" name="correct" id="correct" value="0">
-      <button type="submit">次の問題へ</button>
+      <button type="submit">{% if progress_current == progress_total %}回答{% else %}次の問題へ{% endif %}</button>
     </form>
   </div>
 </div>

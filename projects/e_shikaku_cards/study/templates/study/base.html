@@ -14,11 +14,13 @@
     .metric { font-size:2rem; font-weight:700; }
     button { padding:12px 18px; border-radius:10px; border:1px solid #8886; cursor:pointer; font-weight:700; }
     .answer { display:none; border-top:1px solid #8885; margin-top:18px; padding-top:18px; }
-    .choices { display:grid; gap:10px; margin:18px 0; }
-    .choice { text-align:left; white-space:pre-wrap; line-height:1.4; }
+    .choices { display:grid; gap:10px; margin:18px 0; min-width:0; }
+    .choice { width:100%; min-width:0; box-sizing:border-box; text-align:left; white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word; font-size:1.125rem; line-height:1.65; padding:16px 18px; }
     .choice.correct { border-color:#2e7d32; background:#2e7d3222; }
     .choice.incorrect { border-color:#c62828; background:#c6282822; }
     .choice:disabled { cursor:default; }
+    .explanation { max-width:100%; white-space:pre-wrap; overflow-wrap:anywhere; word-break:break-word; font-size:1.125rem; line-height:1.75; }
+    .answer-actions { display:flex; justify-content:center; margin-top:32px; }
     .result { font-weight:700; font-size:1.1rem; min-height:1.4em; }
     .result.correct { color:#2e7d32; }
     .result.incorrect { color:#c62828; }
