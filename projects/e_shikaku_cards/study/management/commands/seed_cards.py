@@ -788,6 +788,59 @@ RNN_CARDS += RNN_EXPANSION_CARDS
 
 CARDS += RNN_CARDS
 
+FORWARD_QUICK_CARDS = [
+("ニューロンの順伝播の式は？", "y = xW + b（x:入力, W:重み, b:バイアス）", "formula", "ニューロン", "", CH_FORWARD),
+("全結合層のパラメータ数の求め方（略式）は？", "xs+b（入力数×出力ユニット数＋出力ユニット数）", "formula", "パラメータ数", "", CH_FORWARD),
+("Sigmoidの数式は？", "σ(x)=1/(1+e^-x)", "formula", "Sigmoid", "", CH_FORWARD),
+("Sigmoidの微分は？", "σ(x)(1-σ(x))", "formula", "Sigmoid", "", CH_FORWARD),
+("Sigmoidの出力範囲と用途・欠点は？", "出力は0〜1で二値分類に用いる。欠点は勾配消失。", "instant", "Sigmoid", "", CH_FORWARD),
+("ReLUの数式は？", "max(0,x)", "formula", "ReLU", "", CH_FORWARD),
+("ReLUの微分は？", "x>0で1、x<=0で0", "formula", "ReLU", "", CH_FORWARD),
+("ReLUの特徴は？", "勾配消失を緩和する", "instant", "ReLU", "", CH_FORWARD),
+("Leaky ReLUの数式は？", "max(αx,x)", "formula", "Leaky ReLU", "", CH_FORWARD),
+("Leaky ReLUの微分は？", "x>0で1、x<=0でα", "formula", "Leaky ReLU", "", CH_FORWARD),
+("Leaky ReLUの特徴は？", "負の入力でも勾配が残る", "instant", "Leaky ReLU", "", CH_FORWARD),
+("tanhの数式は？", "(e^x-e^-x)/(e^x+e^-x)", "formula", "tanh", "", CH_FORWARD),
+("tanhの微分は？", "1-tanh²", "formula", "tanh", "", CH_FORWARD),
+("tanhの出力範囲は？", "-1〜1", "instant", "tanh", "", CH_FORWARD),
+("Softmaxで覚えるべきことは？", "出力は確率で、合計は1になる。", "instant", "Softmax", "", CH_FORWARD),
+("Affine層の順伝播は？", "xW+b", "formula", "Affine", "", CH_FORWARD),
+("Affine層の逆伝播dxは？", "dx=dout・Wᵀ", "formula", "Affine", "", CH_FORWARD),
+("Affine層の逆伝播dWは？", "dW=xᵀ・dout", "formula", "Affine", "", CH_FORWARD),
+("Affine層の逆伝播dbは？", "db=Σdout", "formula", "Affine", "", CH_FORWARD),
+("SoftmaxWithLossのforwardの流れは？", "Softmax → CrossEntropy", "instant", "SoftmaxWithLoss", "", CH_FORWARD),
+("SoftmaxWithLossのbackwardは？", "(y-t)/batch_size", "formula", "SoftmaxWithLoss", "", CH_FORWARD),
+("出力層：回帰の活性化関数は？", "恒等関数", "instant", "出力層", "", CH_FORWARD),
+("出力層：二値分類の活性化関数は？", "Sigmoid", "instant", "出力層", "", CH_FORWARD),
+("出力層：多クラス分類の活性化関数は？", "Softmax", "instant", "出力層", "", CH_FORWARD),
+("出力層：マルチラベル分類の活性化関数は？", "Sigmoid", "instant", "出力層", "", CH_FORWARD),
+("損失関数：回帰でよく使う2つは？", "MSE、MAE", "instant", "損失関数", "", CH_FORWARD),
+("損失関数：二値分類は？", "Binary Cross Entropy", "instant", "損失関数", "", CH_FORWARD),
+("損失関数：多クラス分類は？", "Cross Entropy", "instant", "損失関数", "", CH_FORWARD),
+("one-hotベクトルの特徴は？", "1つの要素だけが1になる（例：0 1 0）", "instant", "one-hot", "", CH_FORWARD),
+("バイナリベクトルの特徴は？", "複数の要素が同時に1になり得る（例：1 0 1）", "instant", "バイナリベクトル", "", CH_FORWARD),
+("NumPyのnp.dotは？", "行列積", "instant", "NumPy", "", CH_FORWARD),
+("NumPyのnp.sumは？", "総和", "instant", "NumPy", "", CH_FORWARD),
+("NumPyのreshapeは？", "形状変更", "instant", "NumPy", "", CH_FORWARD),
+("NumPyのaxis=1は？", "行方向の集計", "instant", "NumPy", "", CH_FORWARD),
+("NumPyのkeepdims=Trueは？", "次元を維持する", "instant", "NumPy", "", CH_FORWARD),
+("Pythonでpredictメソッドを呼ぶ書き方は？", "model.predict(x)（selfは呼び出し時に明示しない）", "instant", "Python", "", CH_FORWARD),
+("Pythonのインスタンスメソッド定義で必須の第一引数は？", "self", "instant", "Python", "", CH_FORWARD),
+("即答：回帰の出力層は？", "恒等関数", "instant", "即答集", "", CH_FORWARD),
+("即答：二値分類の出力層は？", "Sigmoid", "instant", "即答集", "", CH_FORWARD),
+("即答：多クラスの出力層は？", "Softmax", "instant", "即答集", "", CH_FORWARD),
+("即答：Sigmoidの出力範囲？", "0〜1", "instant", "即答集", "", CH_FORWARD),
+("即答：tanhの出力範囲？", "-1〜1", "instant", "即答集", "", CH_FORWARD),
+("即答：Softmaxの合計は？", "1", "instant", "即答集", "", CH_FORWARD),
+("即答：Affineの式は？", "xW+b", "instant", "即答集", "", CH_FORWARD),
+("即答：Sigmoidの微分は？", "σ(1-σ)", "instant", "即答集", "", CH_FORWARD),
+("即答：tanhの微分は？", "1-tanh²", "instant", "即答集", "", CH_FORWARD),
+("即答：ReLUの式は？", "max(0,x)", "instant", "即答集", "", CH_FORWARD),
+("即答：SoftmaxWithLossの逆伝播は？", "y-t", "instant", "即答集", "", CH_FORWARD),
+]
+
+CARDS += FORWARD_QUICK_CARDS
+
 class Command(BaseCommand):
     help = "E資格の初期カードを登録します"
 
